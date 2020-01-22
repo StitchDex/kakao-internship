@@ -8,7 +8,7 @@ public class User{
     private Integer user_key;
     private boolean isadmin = false;
 
-    public String getUser_id() {
+    /*public String getUser_id() {
         return user_id;
     }
 
@@ -30,5 +30,5 @@ public class User{
 
     public void setUser_key(Integer user_key) {
         this.user_key = user_key;
-    }
+    }*/
 }
