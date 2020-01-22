@@ -1,5 +1,6 @@
 //for ckeditor
 var doc_editor;
+
 //document ready
 $(function () {
     $('#jstree').jstree({
@@ -7,54 +8,65 @@ $(function () {
             'multiple': false,
             "check_callback": true,
             'themes': {
+                'name' : 'default',
                 'responsive': true
             },
             'data':  {
                 'url' : '/guide/tree',
                 'type': "GET",
                 'dataType' : 'json',
-
             }
         } ,
         'plugins' : ['wholerow']
     }).on('ready.jstree', function(){ $(this).jstree('open_all') });
 
-    ClassicEditor
-        .create(document.querySelector('#Guide_Doc'),
-        )
-        .then(editor => {
-            editor.set('ReadOnly',true);
-            doc_editor=editor;
-        })
-        .catch(error => {
-                console.error(error);
-            }
-        );
+
 
 });
 
+//click tree_node
 $('#jstree').on('select_node.jstree', function (e, data) {
-    var selectedData = data.node.id;
+    let selectedData = data.node.id;
+    //click dir_node
     if(selectedData.startsWith("DIR")){
 
     }
+    //click page_node
     else {
         selectedData = selectedData.substring(3,selectedData.length);
-        if (!isNaN(selectedData)) { //숫자일때
+        if (!isNaN(selectedData)) {
             $.ajax({
                 url: '/guide/menu?doc_Key=' + selectedData,
                 method: 'GET',
                 success: function (res) {
-                    doc_editor.setData(res);
+                    //set DOCUMENT_TEXT in editor area
+                    make_editor(res);
                 }, error: function (error) {
                     console.log(error);
-                    //에러처리
                 }
             });
-        } else { //숫자아닐때
-            //에러처리
+        } else {
             console.log("not document");
         }
     }
 });
 
+//editor생성+setdata
+function make_editor(res){
+    ClassicEditor
+        .create(document.querySelector('#Guide_Doc'),
+        )
+        .then(editor => {
+            editor.set('isReadOnly',true);
+            doc_editor=editor;
+            doc_editor.setData(res);
+            return clean_editor();
+        })
+        .catch(error => {
+                console.error(error);
+            }
+        );
+}
+function clean_editor(){
+    doc_editor.destroy();
+}
