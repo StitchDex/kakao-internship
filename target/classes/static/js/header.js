@@ -26,7 +26,7 @@ $('.select2-tag').on('select2:select', function(e){
     $.ajax
     ({
         'url':"/guide/menu",
-        'data': {'doc_Key' : e.params.data.doc_key},
+        'data': {'doc_key' : e.params.data.doc_key},
         'success': function(){
             console.log("tag request succ");
         },

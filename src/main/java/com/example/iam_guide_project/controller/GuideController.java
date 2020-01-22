@@ -34,7 +34,7 @@ public class GuideController {
     }
 
     @GetMapping("menu")
-    public @ResponseBody String readGuide_Doc(HttpServletRequest req, @RequestParam("doc_Key") String doc_key){
+    public @ResponseBody String readGuide_Doc(HttpServletRequest req, @RequestParam("doc_key") String doc_key){
         logger.info("{}", doc_key);
         return guideService.readGuide_Doc(doc_key);
     }

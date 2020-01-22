@@ -42,7 +42,7 @@ $('#jstree').on('select_node.jstree', function (e, data) {
         selectedData = selectedData.substring(3,selectedData.length);
         if (!isNaN(selectedData)) { //숫자일때
             $.ajax({
-                url: '/guide/menu?doc_Key=' + selectedData,
+                url: '/guide/menu?doc_key=' + selectedData,
                 method: 'GET',
                 success: function (res) {
                     doc_editor.setData(res);
