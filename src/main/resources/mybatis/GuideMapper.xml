@@ -4,22 +4,21 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="com.example.iam_guide_project.dao.GuideDAO">
+
     <select id="selectTreeDataForGuide" resultType="com.example.iam_guide_project.model.Guide_Doc">
-        select concat("DOC",gd.DOCUMENT_KEY) as id, gd.DOCUMENT_TITLE as text, concat("DIR",gdr.DIR_KEY) as parent
-        from test.GUIDE_DOCUMENT as gd
-        inner join test.GUIDE_DIR as gdr
-        on gd.DIRECTORY_KEY = gdr.DIR_KEY
-        union
-        select concat("DIR", gdr.DIR_KEY), gdr.DIR_NAME, if(gdr.DIR_KEY = gdr.DIR_PARENT_KEY , "#", concat("DIR",gdr.DIR_PARENT_KEY))
-        from test.GUIDE_DIR as gdr
-    </select>
-    <select id="selectTag" resultType="com.example.iam_guide_project.model.Tag">
-        select GT.TAG as tag, GT.CALL_COUNT as callCount, GT.DOCUMENT_KEY as doc_key, GD.DIRECTORY_KEY as parent
-        from GUIDE_TAG as GT join GUIDE_DOCUMENT as GD
-        on GT.DOCUMENT_KEY = GD.DOCUMENT_KEY
-        where GT.TAG like CONCAT("%", #{tag}, "%");
+    select concat("DOC",gd.DOCUMENT_KEY) as id, gd.DOCUMENT_TITLE as text, concat("DIR",gdr.DIR_KEY) as parent from test.GUIDE_DOCUMENT as gd inner join test.GUIDE_DIR as gdr  on gd.DIRECTORY_KEY = gdr.DIR_KEY
+    union
+    select concat("DIR", gdr.DIR_KEY), gdr.DIR_NAME, if(gdr.DIR_KEY = gdr.DIR_PARENT_KEY , "#", concat("DIR",gdr.DIR_PARENT_KEY)) from test.GUIDE_DIR as gdr
     </select>
     <select id="selectGuide" resultType="String">
-        select DOCUMENT_TEXT from GUIDE_DOCUMENT where DOCUMENT_KEY=#{id}
+    select DOCUMENT_TEXT from GUIDE_DOCUMENT where DOCUMENT_KEY=#{id}
     </select>
+    <select id="selectGuidewithTAG" resultType="String">
+    select GD.DOCUMENT_TEXT
+    from GUIDE_TAG as GT
+    join GUIDE_DOCUMENT as GD
+    on GT.DOCUMENT_KEY = GD.DOCUMENT_KEY
+    where GT.TAG = #{tag};
+    </select>
+
 </mapper>

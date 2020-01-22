@@ -94,10 +94,10 @@ a, a:hover {
 }
 
 .ck.ck-editor {
-    max-width: 1100px;
+    min-width: 1100px;
 }
 .ck-editor__editable {
-    min-height: 600px;
+    min-height: 800px;
 }
 
 #main_LDAP{

@@ -6,14 +6,14 @@ $(document).ready(function() {
                 return {'tag' : param.term}
             },
             'processResults': function (data) {
+<<<<<<< HEAD
                 Group(data); // grouping option
+=======
+                var _group;
+                var _option;
+>>>>>>> 3e8f2b2da293964703ca20a2dd6d7c04e4cdd80f
 
-                var ret = $.map(data, function(obj){
-                    obj.id = obj.id || obj.tag;
-                    obj.text = obj.text || obj.tag;
-                    return obj;
-                })
-                return {'results' : ret};
+                return data;
             }
         },
         'placeholder':"Search Tag"
@@ -21,6 +21,7 @@ $(document).ready(function() {
     });
 });
 
+<<<<<<< HEAD
 //tag select event
 $('.select2-tag').on('select2:select', function(e){
     $.ajax
@@ -45,3 +46,5 @@ function Group(data) {
 
     }
 }
+=======
+>>>>>>> 3e8f2b2da293964703ca20a2dd6d7c04e4cdd80f
