@@ -6,15 +6,21 @@ $(document).ready(function() {
                 return {'tag' : param.term}
             },
             'processResults': function (data) {
+<<<<<<< HEAD
                 Group(data); // grouping option
 
+=======
+>>>>>>> cae398edc50cb449d527c3f9920f332b23e7c100
                 var ret = $.map(data, function(obj){
                     obj.id = obj.id || obj.tag;
                     obj.text = obj.text || obj.tag;
                     return obj;
                 })
                 return {'results' : ret};
+<<<<<<< HEAD
 
+=======
+>>>>>>> cae398edc50cb449d527c3f9920f332b23e7c100
             }
         },
         'placeholder':"Search Tag"
@@ -36,6 +42,8 @@ $('.select2-tag').on('select2:select', function(e){
             console.log("tag request fail");
         }
     })
+
+    $('.select2-tag').val(null).trigger('change');
 });
 
 function Group(data) {
@@ -46,3 +54,7 @@ function Group(data) {
 
     }
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> cae398edc50cb449d527c3f9920f332b23e7c100
