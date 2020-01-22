@@ -6,6 +6,11 @@ $(document).ready(function() {
                 return {'tag' : param.term}
             },
             'processResults': function (data) {
+<<<<<<< HEAD
+                Group(data); // grouping option
+
+                return data;
+=======
                 var ret = $.map(data, function(obj){
                     obj.id = obj.id || obj.tag;
                     obj.text = obj.text || obj.tag;
@@ -13,6 +18,7 @@ $(document).ready(function() {
                 })
                 return {'results' : ret};
 
+>>>>>>> bfb5e942cf78973fbd72e72e522aefcb133dac1d
             }
         },
         'placeholder':"Search Tag"
