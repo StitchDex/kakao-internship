@@ -25,7 +25,8 @@ $('.select2-tag').on('select2:select', function(e){
     ({
         'url':"/guide/menu",
         'data': {'doc_key' : e.params.data.doc_key},
-        'success': function(){
+        'success': function(res){
+            make_editor(res);
             console.log("tag request succ");
         },
         'error' : function () {
