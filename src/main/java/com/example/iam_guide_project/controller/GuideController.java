@@ -39,9 +39,10 @@ public class GuideController {
         return guideService.readGuide_Doc(doc_key);
     }
 
-   /* @GetMapping("tag")
+    @GetMapping("tag")
     public @ResponseBody
-    Tag search_Doc_tag(@RequestParam String tag) {
+    List<Tag> search_Doc_tag(@RequestParam String tag) {
+        return guideService.getTagInfo(tag);
+    }
 
-    }*/
 }

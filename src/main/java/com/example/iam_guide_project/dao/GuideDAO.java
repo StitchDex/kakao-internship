@@ -1,6 +1,7 @@
 package com.example.iam_guide_project.dao;
 
 import com.example.iam_guide_project.model.Guide_Doc;
+import com.example.iam_guide_project.model.Tag;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.codehaus.groovy.util.ListHashMap;
@@ -14,5 +15,6 @@ import java.util.List;
 public interface GuideDAO {
     List<Guide_Doc> selectTreeDataForGuide();
     String selectGuide(@Param("id") String id); // doc_key
-    String selectGuidewithTag(@Param("tag") String tag); //select guide with tag
+    List<Tag> selectTag(@Param("tag") String tag); // select tag with search bar
+
 }
