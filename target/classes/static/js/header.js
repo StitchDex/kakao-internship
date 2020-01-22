@@ -6,14 +6,9 @@ $(document).ready(function() {
                 return {'tag' : param.term}
             },
             'processResults': function (data) {
-                search(data); // grouping option
+                Group(data); // grouping option
 
-                var ret = $.map(data, function(obj){
-                    obj.id = obj.id || obj.tag;
-                    obj.text = obj.text || obj.tag;
-                    return obj;
-                })
-                return {'results' : ret};
+                return data;
             }
         },
         'placeholder':"Search Tag"
@@ -36,9 +31,9 @@ $('.select2-tag').on('select2:select', function(e){
     })
 });
 
-function search(data) {
-    var optGroup;
-    var opts;
+function Group(data) {
+    var optGroup = [{}];
+    var opts = [];
 
     for(var i = 0; i < data.length; i ++)
     {
