@@ -1,3 +1,6 @@
+//for ckeditor
+var doc_editor;
+//document ready
 $(function () {
     $('#jstree').jstree({
         'core': {
@@ -15,6 +18,19 @@ $(function () {
         } ,
         'plugins' : ['wholerow']
     }).on('ready.jstree', function(){ $(this).jstree('open_all') });
+
+    ClassicEditor
+        .create(document.querySelector('#Guide_Doc'),
+        )
+        .then(editor => {
+            editor.set('ReadOnly',true);
+            doc_editor=editor;
+        })
+        .catch(error => {
+                console.error(error);
+            }
+        );
+
 });
 
 $('#jstree').on('select_node.jstree', function (e, data) {
@@ -29,8 +45,7 @@ $('#jstree').on('select_node.jstree', function (e, data) {
                 url: '/guide/menu?doc_Key=' + selectedData,
                 method: 'GET',
                 success: function (res) {
-                    console.log(res);
-                    //res = text 1)ckeditor(admin)  2)textarea(공통)
+                    doc_editor.setData(res);
                 }, error: function (error) {
                     console.log(error);
                     //에러처리
@@ -43,31 +58,3 @@ $('#jstree').on('select_node.jstree', function (e, data) {
     }
 });
 
-/*
-function pageSelect2() {
-    if(window.jQuery && jQuery.isFunction($().select2)) {
-        if ($('select.select2-ticket-id').length > 0) {
-            $('select.select2-ticket-id').select2({
-                'ajax': {
-                    'url': '/suggest/ticket-id',
-                    data: function (param) {
-                        // Query
-                        return {ticketCode: param.term}
-                    }, processResults: function (data, param) {
-                        // Results
-                        data = $.map(data, function (obj) {
-                            obj.id = obj.id || obj.ticketCode;
-                            obj.text = obj.text || obj.ticketCode;
-                            return obj;
-                        });
-                        return {results: data};
-                    }
-                }, //ajax end
-                'placeholder': '티켓 아이디 태그를 선택해 주세요.(티켓 아이디 생성에 사용됩니다.)',
-                'minimumInputLength': 2,
-                'language': 'ko',
-                'tags': true
-            });
-        }
-    }
-}*/

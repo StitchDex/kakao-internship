@@ -4,7 +4,7 @@ if (selectAccount.length > 0) {
         ajax : {
             url: '/admin/suggest',
             data: function(params) {
-                return {'userid' : params.term}
+                    return {'userid' : params.term}
             },
             processResults: function (data) {
                 var ret = $.map(data, function (obj) {
