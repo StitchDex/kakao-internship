@@ -33,6 +33,8 @@ $('.select2-tag').on('select2:select', function(e){
             console.log("tag request fail");
         }
     })
+
+    $('.select2-tag').val(null).trigger('change');
 });
 
 function Group(data) {
@@ -44,4 +46,3 @@ function Group(data) {
     }
 }
 
-$('.select2-tag').val(null).trigger('change');
