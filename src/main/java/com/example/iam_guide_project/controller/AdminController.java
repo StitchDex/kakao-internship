@@ -48,9 +48,9 @@ public class AdminController {
         }
         return new ArrayList<>();
     }
-
+/*
     @GetMapping("test")
     public String test(){
         return "TEST";
-    }
+    }*/
 }
