@@ -210,6 +210,7 @@ function create_node(sendData,what){
         dataType:'html',
         contentType:'application/json',
         success: function (res) {
+            set_Guide_update(selectedText);
             alert("create ok");
             self.close();
             location.reload();

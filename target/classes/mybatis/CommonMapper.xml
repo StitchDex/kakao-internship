@@ -3,14 +3,14 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
-<mapper namespace="com.example.iam_guide_project.dao.CommonMapper">
+<mapper namespace="com.kakaocorp.iamguide.dao.CommonMapper">
     <select id="isAdmin" resultType="String">
         SELECT ADMIN_ID FROM ADMIN WHERE ADMIN_ID = #{admin_id}
     </select>
-    <select id="suggest" resultType="com.example.iam_guide_project.model.User">
+    <select id="suggest" resultType="com.kakaocorp.iamguide.model.User">
         SELECT ADMIN_ID as user_id FROM ADMIN WHERE ADMIN_ID LIKE CONCAT('%',#{admin_id},'%')
     </select>
-    <select id="getAdminAll" resultType="com.example.iam_guide_project.model.User">
+    <select id="getAdminAll" resultType="com.kakaocorp.iamguide.model.User">
         SELECT ADMIN_ID as user_id FROM ADMIN;
     </select>
     <select id="insertAdmin">
