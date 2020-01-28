@@ -1,4 +1,4 @@
-/*
+
 package com.example.iam_guide_project.config;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -13,10 +13,10 @@ public class UploadConfiguration implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
-        registry.addResourceHandler("/guide/**")
-                .addResourceLocations("classpath:/guide_documents/")
+        registry.addResourceHandler("/Users/kakao/Desktop/upload/**")
+                .addResourceLocations("file:/Users/kakao/Desktop/upload/")
                 .setCachePeriod(20);
 
     }
 }
-*/
+

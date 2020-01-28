@@ -1,0 +1,338 @@
+//for ckeditor
+let doc_editor; // for users
+let admin_editor; // for admin
+let isReadOnly;
+let selectedData; //current guide_document id
+let selectedText;
+var hidden_num;
+var hidden = new Array();
+var beforeTags = new Set();
+var afterTags;
+//document ready
+$(function () {
+    isReadOnly = true;
+    hidden_num=0;
+
+    $('#jstree').jstree({
+        'core': {
+            'multiple': false,
+            "check_callback": true,
+            'themes': {
+                'icon' : true,
+                'responsive': true
+            },
+            'data':  {
+                'url' : '/guide/tree',
+                'type': "GET",
+                'dataType' : 'json',
+                'data' : function(node){
+                    return {"id": node.id == "#" ? "IAM" : node.id };
+                },
+                'success': function (data) {
+                    for(i=0;i<data.length;i++){
+                        var temp=(data[i].state);
+                        if(!temp) {
+                            hidden[hidden_num++] = data[i].id;
+                        }
+                    }
+                    console.log(data);
+                    },
+             }
+             },
+        'types' : {
+            "DIR": {
+                "icon" : "far fa-folder"
+            },
+            "DOC": {
+                "icon" : "far fa-file",
+                "max_children" : 0,
+            },
+        },
+        "cookies" : {
+            'save_selected' : false,
+            'save_opened' : false,
+            'auto_save': false
+        },
+        'plugins' : ["wholerow","types","state","cookies"]
+    })
+        .on('ready.jstree', function(){
+            make_hide();
+        $(this).jstree('open_all')
+    });
+
+
+    //admin editor
+    ClassicEditor
+        .create( document.querySelector( '#editor' ), {
+                extraPlugins:[MyCustomUploadAdapterPlugin],
+
+                toolbar: ["bold", "heading", "imageStyle:side", "imageUpload", "indent", "outdent",
+                    "italic", "link", "numberedList", "bulletedList", "insertTable", "tableColumn", "tableRow", "mergeTableCells", "alignment:left",
+                    "alignment:right", "alignment:center", "alignment:justify", "alignment", "code", "fontSize", "underline", "undo", "redo"],
+
+                heading: {
+                    options: [
+                        {model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph'},
+                        {model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1'},
+                        {model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2'},
+                        {model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3'}
+                    ]
+                }
+            }
+        )
+        .then( editor => {
+            editor.set('isReadOnly',true);
+            admin_editor=editor;
+
+        })
+        .catch( error => {
+                //console.error( error );
+            }
+        );
+});
+
+//click tree_node
+$('#jstree').on('select_node.jstree', function (e, data) {
+    selectedData = data.node.id;
+    selectedText = data.node.text;
+    //click dir_node
+    if(selectedData.startsWith("DIR")){
+
+    }
+    //click page_node
+    else {
+        selectedData = selectedData.substring(3,selectedData.length);
+        if (!isNaN(selectedData)) {
+            $.ajax({
+                url: '/guide/menu?doc_key=' + selectedData,
+                method: 'GET',
+                success: function (res) {//set DOCUMENT_TEXT in editor area
+                    //admin page
+                    if(admin_editor !=null){
+                        admin_editor.set('isReadOnly',true);
+                        admin_editor.setData(res);
+                        get_Guide_update(selectedText);
+                    }
+                    else{ //user page
+                        make_editor(res);
+                    }
+                }, error: function (error) {
+                    console.log(error);
+                }
+            });
+            init_select_tagging();
+        } else {
+            console.log("not document");
+        }
+    }
+});
+function make_hide() {
+    for(var i=0;i<hidden.length;i++) {
+        $("#jstree").jstree(true).hide_node(hidden[i]);
+        //console.log(hidden[i]);
+    }
+}
+//make user editor and set html data
+function make_editor(res){
+    ClassicEditor
+        .create(document.querySelector('#Guide_Doc'),
+        )
+        .then(editor => {
+            editor.set('isReadOnly',true);
+            doc_editor=editor;
+            doc_editor.setData(res);
+            return doc_editor.destroy();
+        })
+        .catch(error => {
+                console.error(error);
+            }
+        );
+}
+
+//admin_edit_button click
+function edit_button_click() {
+    isReadOnly = !isReadOnly;
+    $('select.select2-tagging').prop('disabled', isReadOnly);
+    admin_editor.set('isReadOnly',isReadOnly);
+}
+
+//admin edit_save_button click
+function edit_save_button_click() {
+
+    admin_editor.set('isReadOnly',true);
+    //+)check the doc is edit (if or editor method)
+    const edit_doc = admin_editor.getData();
+    edit_doc.startsWith('img<')
+    var sendData = JSON.stringify({"id": selectedData ,"content": edit_doc});
+    var token = $("meta[name='_csrf']").attr("content");
+    //var header = $("meta[name='_csrf_header']").attr("content");
+    $.ajax({
+        url: '/admin/edit_doc',
+        headers: {"X-CSRF-TOKEN": token},
+        data: sendData,
+        method: 'POST',
+        dataType:'html',
+        contentType:'application/json',
+        success: function (res) {
+            set_Guide_update(selectedText);
+             // refresh page
+        }, error: function (error) {
+            console.log(error);
+        }
+    });
+
+
+    afterTags = new Set();
+    $.each($('select.select2-tagging option:selected'), function(key, val){
+        afterTags.add(val.text);
+    });
+
+    var insertTags = [];
+    var deleteTags = [];
+
+    insertTags = substract(Array.from(afterTags), Array.from(beforeTags));
+    deleteTags = substract(Array.from(beforeTags), Array.from(afterTags));
+
+    var issuc = false;
+    $.ajax({
+        'url':'/admin/updateTags',
+        'contentType':'application/json',
+        'async':false,
+        'data': JSON.stringify({'insert':insertTags, 'delete':deleteTags, 'doc_key':selectedData}),
+        'headers': {"X-CSRF-TOKEN": token},
+        'method': 'POST',
+        'success': function() {
+            issuc=true;
+        }
+    });
+    if(issuc)
+    {
+        beforeTags = new Set(afterTags);
+    }
+    alert("save ok");
+    self.close();
+    location.reload();
+}
+
+//get guide_update when node is selected
+function get_Guide_update(title) {
+    console.log(title);
+    $.ajax({
+        url: '/admin/get_update?title=' + title,
+        method: 'GET',
+        success: function (res) {
+            //update_KEY: 1, admin_ID: "jun.3671", document_TITLE: "ex1", update_TIME: "2020-01-24T19:28:25.000+0000", update_TYPE_CUD: "update
+            var ttemp = new Array();
+            var ttext = " ";
+            for(var k=0;k<res.length;k++) {
+                ttemp = Object.values(res[k]);
+                for (var i = 1; i < ttemp.length; i++) {
+                    ttext += ttemp[i];
+                    ttext += " - ";
+                }
+                $('#update').val(ttext); // async 로 작동함
+            }
+
+        }, error: function (error) {
+            console.log(error);
+        }
+    });
+}
+
+
+//set guide_update when save button clicked
+function set_Guide_update(title) {
+    var sendData = JSON.stringify({"admin": $('#admin_name').val(),"title": title, "CRUD": "update"});
+    console.log(sendData);
+    var token = $("meta[name='_csrf']").attr("content");
+    $.ajax({
+        url: '/admin/set_update',
+        headers: {"X-CSRF-TOKEN": token},
+        data: sendData,
+        method: 'POST',
+        dataType:'html',
+        contentType:'application/json',
+        success: function (res) {
+            console.log("update");
+        }, error: function (error) {
+            console.log(error);
+        }
+    });
+}
+
+//get guide_tag when node is selected
+/*
+function get_Guide_tag(title) {
+    console.log(title);
+    $.ajax({
+        url: '/admin/get_tag?doc_key=' + title,
+        method: 'GET',
+        success: function (res) {
+            //update_KEY: 1, admin_ID: "jun.3671", document_TITLE: "ex1", update_TIME: "2020-01-24T19:28:25.000+0000", update_TYPE_CUD: "update
+            var ttemp = new Array(); var ttext = " ";
+            ttemp = Object.values(res);
+            for(var i=1;i<ttemp.length;i++) {
+                ttext += ttemp[i];
+                ttext += " - ";
+            }
+            $('#update').val(ttext);
+            console.log(res);
+        }, error: function (error) {
+            console.log(error);
+        }
+    });
+}*/
+function init_select_tagging(){
+    var ret = [];
+    $.ajax({
+        'async':false,
+        'url':'admin/getTags',
+        'data':{'doc_key':selectedData},
+        'success':function(data){
+            $.each(data, function(key, val){
+                ret.push({"id" : key, "text":val.tag, "selected":true});
+            });
+        }
+    });
+
+    $('select.select2-tagging').select2(
+        {
+            'ajax':{
+                'url':'admin/suggestTags',
+                'data':function(params) {
+                    return {'tag':params.term};
+                },
+                'processResults':function(data) {
+                    data = $.map(data, function (obj) {
+                        obj.id = obj.id || obj.tag; // replace pk with your identifier
+                        obj.text = obj.text || obj.tag; // replace pk with your identifier
+                        return obj;
+                    });
+                    return {results : data};
+                }
+            },
+            'tags':true,
+            'allowClear':true,
+            'disabled':true,
+            'tokenSeparators':[',',' '], //태그 구분자 추가
+            'createTag':function(params){ //태그 공백 제거
+                var term = $.trim(params.term);
+                if(term == '') {
+                    return null;
+                }
+                else {
+                    return {'id':term, 'text':term,'newTag':true};
+                }
+            }
+        }
+    );
+
+    var options = "";
+    $.each(ret, function(key, val){
+        options += "<option selected='selected' value='" + val.text + "'>" + val.text +"</option>"
+        beforeTags.add(val.text);
+    });
+    $('select.select2-tagging').html(options);
+}
+
+function substract(a,b) { return $(a).not(b).get(); }

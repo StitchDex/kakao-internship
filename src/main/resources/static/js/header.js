@@ -6,21 +6,14 @@ $(document).ready(function() {
                 return {'tag' : param.term}
             },
             'processResults': function (data) {
-<<<<<<< HEAD
-                Group(data); // grouping option
-
-=======
->>>>>>> cae398edc50cb449d527c3f9920f332b23e7c100
                 var ret = $.map(data, function(obj){
                     obj.id = obj.id || obj.tag;
                     obj.text = obj.text || obj.tag;
+                    console.log(obj);
                     return obj;
                 })
                 return {'results' : ret};
-<<<<<<< HEAD
 
-=======
->>>>>>> cae398edc50cb449d527c3f9920f332b23e7c100
             }
         },
         'placeholder':"Search Tag"
@@ -35,7 +28,12 @@ $('.select2-tag').on('select2:select', function(e){
         'url':"/guide/menu",
         'data': {'doc_key' : e.params.data.doc_key},
         'success': function(res){
-            make_editor(res);
+            if(admin_editor !=null){
+                admin_editor.setData(res);
+            }
+            else{
+                make_editor(res);
+            }
             console.log("tag request succ");
         },
         'error' : function () {
@@ -54,7 +52,3 @@ function Group(data) {
 
     }
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> cae398edc50cb449d527c3f9920f332b23e7c100

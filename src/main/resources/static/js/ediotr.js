@@ -18,7 +18,7 @@ class MyUploadAdapter {
     _initRequest() {
         const xhr = this.xhr = new XMLHttpRequest();
         //여기서는 POST 요청과 json으로 응답을 받지만 어떤 포맷으로 하든 너의 선택이다.
-        xhr.open( 'POST', 'http://localhost:8080/guide/imageupload', true );
+        xhr.open( 'POST', 'http://localhost:8080/admin/imageupload', true );
         console.log(this.xhr);
         xhr.responseType = 'json';
     }
@@ -61,7 +61,8 @@ class MyUploadAdapter {
         // 폼 데이터 준비
         const data = new FormData();
         data.append( 'upload', file );
-
+        var token = $("meta[name='_csrf']").attr("content");
+        this.xhr.setRequestHeader("X-CSRF-TOKEN",token);
         // 여기가 인증이나 CSRF 방어와 같은 방어 로직을 작성하기 좋은 곳이다.
         // 예를들어, XHR.setREquestHeader()를 사용해 요청 헤더에 CSRF 토큰을 넣을 수 있다.
 
@@ -69,39 +70,9 @@ class MyUploadAdapter {
     }
 }
 
-
 function MyCustomUploadAdapterPlugin( editor ) {
     editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader ) => {
-        // Configure the URL to the upload script in your back-end here!
-        // 결국엔 내가 구현해 주어야 할 것은,
-        // FileRepository가 어떤 업로드 어댑터를 사용하게 하느냐만 설정해주면 된다.
-        // 나머지 이미지 업로드 플러그인, 파일 로더, FileRepository등등은 이미 만들어져 있다.
         return new MyUploadAdapter( loader );
     };
 }
 
-ClassicEditor
-    .create( document.querySelector( '#editor' ), {
-            //extraPlugins:[MyCustomUploadAdapterPlugin],
-            toolbar: ["bold", "heading", "imageTextAlternative", "imageStyle:full", "imageStyle:side", "imageUpload", "indent", "outdent", "italic", "link", "numberedList", "bulletedList", "insertTable", "tableColumn", "tableRow", "mergeTableCells", "alignment:left", "alignment:right", "alignment:center", "alignment:justify", "alignment", "code", "fontSize", "underline", "undo", "redo"],
-
-            heading: {
-                options: [
-                    {model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph'},
-                    {model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1'},
-                    {model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2'},
-                    {model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3'}
-                ]
-            }
-        }
-     )
-    .then( editor => {
-        //console.log( Array.from( editor.ui.componentFactory.names() ) );
-        console.log(editor);
-    })
-    .catch( error => {
-        //console.error( error );
-    }
-    );
-
-//for read doc

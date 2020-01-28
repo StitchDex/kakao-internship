@@ -13,14 +13,19 @@
 
 </th:block>
 -->
+
 <div layout:fragment="content">
     <div class="container-fluid" style="margin-top: 100px">
         <h1>admin</h1>
-        <div id="Guide_Doc">
-
+        <div class="row" id="editor" style="margin-bottom: 30px"></div>
+        <div class="row">
+            <select class="custom-select col-sm-4 select2-tagging" name="tags" multiple="multiple"></select>
+            <input type="button" class="col-sm-2" id="edit_button" onclick="edit_button_click();" value = "편집"></input>  <!--editor readonly : false-->
+            <input type="button" class="col-sm-2" id="edit_save_button" onclick="edit_save_button_click();" value = "저장"></input>  <!--// ajax save guide_doc_text-->
         </div>
-        <a href="admin/admin_auth"> 관리자 권한으로</a>
+        <div class="doc_update">
+            <textarea id="update" rows="20" cols="50" readonly="readonly"></textarea>
+        </div>
     </div>
 </div>
-
 </html>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.example.iam_guide_project.dao.Guide_DirMapper">
+
+    <insert id="createGuide_Dir">
+        insert into GUIDE_DIR(DIR_NAME,DIR_PARENT_KEY,DIR_STATE)
+        values(#{text},#{parent},#{state})
+    </insert>
+
+    <update id="updateGuide_Dir">
+        update GUIDE_DIR SET DIR_NAME=#{text}, DIR_PARENT_KEY=#{parent}, DIR_STATE=#{state}
+        where DIR_KEY=#{key}
+    </update>
+
+    <delete id="deleteGuide_Dir">
+        delete from GUIDE_DIR where DIR_KEY=#{key}
+    </delete>
+</mapper>
