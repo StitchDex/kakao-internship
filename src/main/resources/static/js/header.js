@@ -3,6 +3,7 @@ $(document).ready(function() {
         'ajax' : {
             'url': '/guide/tag',
             'data': function (param) {
+                param.term = param.term || "";
                 return {'tag' : param.term}
             },
             'processResults': function (data) {
@@ -40,7 +41,6 @@ $('.select2-tag').on('select2:select', function(e){
             console.log("tag request fail");
         }
     })
-
     $('.select2-tag').val(null).trigger('change');
 });
 
