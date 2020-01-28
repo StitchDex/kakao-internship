@@ -1,5 +1,6 @@
 package com.kakaocorp.iamguide.security;
 
+import com.kakaocorp.iamguide.GuideDictionary;
 import com.kakaocorp.iamguide.model.User;
 import com.kakaocorp.iamguide.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,10 +48,10 @@ public class IamAuthentication implements AuthenticationProvider {
             String isAdmin = commonService.isAdmin(username);
             if(isAdmin != null) {
                 user.setIsadmin(true);
-                roles.add(new SimpleGrantedAuthority(ROLE + "ADMIN"));
+                roles.add(new SimpleGrantedAuthority(ROLE + GuideDictionary.ADMIN));
             }
             else
-                roles.add(new SimpleGrantedAuthority(ROLE + "USER"));
+                roles.add(new SimpleGrantedAuthority(ROLE + GuideDictionary.USER));
             UsernamePasswordAuthenticationToken result = new UsernamePasswordAuthenticationToken(username, password, roles);
             result.setDetails(user);
             System.out.println(username +"\n"+ password+"\n"+roles+"\n"+authentication.isAuthenticated());
