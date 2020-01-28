@@ -178,7 +178,7 @@ function edit_save_button_click() {
             dataType: 'html',
             contentType: 'application/json',
             success: function (res) {
-                set_Guide_update(selectedText);
+                set_Guide_update(selectedText,'update');
                 // refresh page
             }, error: function (error) {
                 console.log(error);
@@ -245,8 +245,8 @@ function get_Guide_update(title) {
 
 
 //set guide_update when save button clicked
-function set_Guide_update(title) {
-    var sendData = JSON.stringify({"admin": $('#admin_name').val(),"title": title, "CRUD": "update"});
+function set_Guide_update(title,type) {
+    var sendData = JSON.stringify({"admin": $('#admin_name').val(),"title": title, "CRUD": type});
     console.log(sendData);
     var token = $("meta[name='_csrf']").attr("content");
     $.ajax({

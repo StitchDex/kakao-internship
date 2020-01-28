@@ -60,7 +60,7 @@ $(function () {
                                 "label": "File",
                                 action: function (obj) {
                                 $node = tree.create_node($node, {
-                                    text: 'New DOC',
+                                    text: 'NewDOC',
                                     type: 'DOC',
                                     icon: 'far fa-file',
                                     state:{
@@ -80,7 +80,7 @@ $(function () {
                                 "label": "Folder",
                                 action: function (obj) {
                                 $node = tree.create_node($node, {
-                                    text: 'New DIR',
+                                    text: 'NewDIR',
                                     type: 'DIR',
                                     icon: 'far fa-folder',
                                     state:{
@@ -106,17 +106,18 @@ $(function () {
                     "label": "삭제",
                         "action": function (data) {
                             var delnode= $node.id;
+                            var title = $node.text;
                             var del = confirm('삭제?');
                             if (del) {
                                 if ($node.type != "DIR") {
                                     tree.delete_node($node);
-                                    delete_node(delnode, "DOC");
+                                    delete_node(delnode,title, "DOC");
                                 } else {
                                     if ($node.children.length > 0)
                                         alert('하위 파일이 존재합니다');
                                     else {
                                         tree.delete_node($node);
-                                        delete_node(delnode, "DIR");
+                                        delete_node(delnode,title, "DIR");
                                     }
                                 }
 
@@ -191,6 +192,7 @@ function get_json_data(tree,$node){
 }
 
 function create_node(sendData){
+    var title = sendData.text;
     sendData = JSON.stringify(sendData);
     $.ajax({
         url: 'admin/admin_tree/create',
@@ -200,7 +202,7 @@ function create_node(sendData){
         dataType:'html',
         contentType:'application/json',
         success: function (res) {
-            set_Guide_update(selectedText);
+            set_Guide_update(title,'create');
             alert("create ok");
             self.close();
             location.reload();
@@ -209,6 +211,7 @@ function create_node(sendData){
         }
     });
 }
+
 function create_root(){
     var json_data = {
         'parent': '#',
@@ -219,7 +222,7 @@ function create_root(){
     create_node(json_data);
 }
 function update_node(sendData,what){
-
+    var title = sendData.text;
     sendData = JSON.stringify(sendData);
     //var header = $("meta[name='_csrf_header']").attr("content");
     $.ajax({
@@ -230,6 +233,7 @@ function update_node(sendData,what){
         dataType:'html',
         contentType:'application/json',
         success: function (res) {
+            set_Guide_update(title,'change');
             alert("update ok");
             self.close();
             location.reload();
@@ -238,8 +242,7 @@ function update_node(sendData,what){
         }
     });
 }
-function delete_node(sendData,what){
-
+function delete_node(sendData,title,what){
 
     sendData = JSON.stringify({'id':sendData, 'type':what});
     //var header = $("meta[name='_csrf_header']").attr("content");
@@ -251,6 +254,7 @@ function delete_node(sendData,what){
         dataType:'html',
         contentType:'application/json',
         success: function (res) {
+            set_Guide_update(title,'delete');
             alert("delete ok");
             self.close();
             location.reload();
