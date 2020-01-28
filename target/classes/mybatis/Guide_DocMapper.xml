@@ -3,9 +3,9 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
-<mapper namespace="com.example.iam_guide_project.dao.Guide_DocMapper">
+<mapper namespace="com.kakaocorp.iamguide.dao.Guide_DocMapper">
 
-    <select id="selectTreeDataForGuide" resultType="com.example.iam_guide_project.model.Guide_Doc">
+    <select id="selectTreeDataForGuide" resultType="com.kakaocorp.iamguide.model.Guide_Doc">
         select concat("DOC",gd.DOCUMENT_KEY) as id, gd.DOCUMENT_TITLE as text, concat("DIR",gdr.DIR_KEY) as parent, gd.DOCUMENT_STATE as state
         from test.GUIDE_DOCUMENT as gd
         inner join test.GUIDE_DIR as gdr

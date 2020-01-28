@@ -3,13 +3,13 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
-<mapper namespace="com.example.iam_guide_project.dao.Guide_UpdateMapper">
+<mapper namespace="com.kakaocorp.iamguide.dao.Guide_UpdateMapper">
 <insert id="setGuide_Update" useGeneratedKeys="true" keyProperty="UPDATE_KEY">
                  insert into GUIDE_UPDATE(ADMIN_ID,DOCUMENT_TITLE,UPDATE_TIME,UPDATE_TYPE_CUD)
                  values(#{ADMIN_ID},#{DOCUMENT_TITLE},CURRENT_TIMESTAMP,#{UPDATE_TYPE_CUD})
          </insert>
 
-<select id="getGuide_Update" resultType="com.example.iam_guide_project.model.Guide_Update">
+<select id="getGuide_Update" resultType="com.kakaocorp.iamguide.model.Guide_Update">
         select * from GUIDE_UPDATE where DOCUMENT_TITLE=#{title}
 </select>
 

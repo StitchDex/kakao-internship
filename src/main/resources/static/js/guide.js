@@ -3,7 +3,7 @@ let doc_editor; // for users
 let admin_editor; // for admin
 let isReadOnly;
 let selectedData; //current guide_document id
-let selectedText;
+let selectedText; //current guide_document title
 var hidden_num;
 var hidden = new Array();
 var beforeTags = new Set();
