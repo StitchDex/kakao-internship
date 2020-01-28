@@ -1,6 +1,6 @@
 package com.kakaocorp.iamguide.service;
 
-import com.kakaocorp.iamguide.dao.Guide_UpdateMapper;
+import com.kakaocorp.iamguide.dao.GuideUpdateMapper;
 import com.kakaocorp.iamguide.model.Guide_Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,9 +9,9 @@ import java.util.List;
 
 
 @Service
-public class Guide_UpdateService {
+public class GuideUpdateService {
     @Autowired
-    Guide_UpdateMapper guide_updateMapper;
+    GuideUpdateMapper guide_updateMapper;
 
     public List<Guide_Update> getGuide_Update(String DOCUMENT_TITLE){
         return guide_updateMapper.getGuide_Update(DOCUMENT_TITLE);

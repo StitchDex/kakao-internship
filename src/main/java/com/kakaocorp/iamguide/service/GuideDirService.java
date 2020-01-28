@@ -1,13 +1,13 @@
 package com.kakaocorp.iamguide.service;
 
-import com.kakaocorp.iamguide.dao.Guide_DirMapper;
+import com.kakaocorp.iamguide.dao.GuideDirMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class Guide_DirService {
+public class GuideDirService {
     @Autowired
-    Guide_DirMapper guide_dirMapper;
+    GuideDirMapper guide_dirMapper;
 
     public void createGuide_Dir(String parent, String text,boolean state){
         if(parent.length()>1)
@@ -21,8 +21,12 @@ public class Guide_DirService {
     }
     public void updateGuide_Dir(String key,String parent, String text,boolean state){
         key=key.substring(3);
-        if(parent.length()>1)
+        if(parent.length()>1) {
             parent = parent.substring(3);
+        }
+        else{
+            parent = key;
+        }
         guide_dirMapper.updateGuide_Dir(key,parent,text,state);
     }
 }

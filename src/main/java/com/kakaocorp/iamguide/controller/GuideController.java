@@ -1,8 +1,8 @@
 package com.kakaocorp.iamguide.controller;
 
-import com.kakaocorp.iamguide.model.Guide_Doc;
-import com.kakaocorp.iamguide.service.Guide_DocService;
-import com.kakaocorp.iamguide.service.Guide_TagService;
+import com.kakaocorp.iamguide.model.GuideDoc;
+import com.kakaocorp.iamguide.service.GuideDocService;
+import com.kakaocorp.iamguide.service.GuideTagService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +21,13 @@ public class GuideController {
     private Logger logger = LoggerFactory.getLogger(CommonController.class);
 
     @Autowired
-    Guide_DocService guideDocService;
+    GuideDocService guideDocService;
     @Autowired
-    Guide_TagService guideTagService;
+    GuideTagService guideTagService;
 
     @GetMapping(value = "tree", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    List<Guide_Doc> getGuideTree(){
+    List<GuideDoc> getGuideTree(){
         logger.info("/guide/tree {}");
         return guideDocService.getGuideTreeList();
     }

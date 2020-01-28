@@ -1,7 +1,7 @@
 package com.kakaocorp.iamguide.service;
 
-import com.kakaocorp.iamguide.dao.Guide_TagMapper;
-import com.kakaocorp.iamguide.model.Guide_Tag;
+import com.kakaocorp.iamguide.dao.GuideTagMapper;
+import com.kakaocorp.iamguide.model.GuideTag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,15 +9,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 @Service
-public class Guide_TagService {
+public class GuideTagService {
     @Autowired
-    Guide_TagMapper guideTagMapper;
+    GuideTagMapper guideTagMapper;
 
-    public List<Guide_Tag> getGuide_Tag(String tag){
+    public List<GuideTag> getGuide_Tag(String tag){
         return guideTagMapper.getGuide_Tag(tag);
     }
-    public List<Guide_Tag> getTags(String doc_key) {return guideTagMapper.getTags(doc_key);}
-    public List<Guide_Tag> suggestTags(String tag) {return guideTagMapper.suggestTags(tag);}
+    public List<GuideTag> getTags(String doc_key) {return guideTagMapper.getTags(doc_key);}
+    public List<GuideTag> suggestTags(String tag) {return guideTagMapper.suggestTags(tag);}
 
     public void updateTags(Object tags) {
         HashMap temp = (HashMap) tags;
