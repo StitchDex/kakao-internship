@@ -29,6 +29,8 @@ public class AdminController {
     GuideTagService guide_tagService;
     @Autowired
     GuideDirService guide_dirService;
+    @Autowired
+    UploadService uploadService;
     /**
      * PAGE: admin (AUTHENTICATED)
      * @return
@@ -172,6 +174,12 @@ public class AdminController {
         guide_tagService.updateTags(tags);
     }
 
-
+    @RequestMapping(value = "set_image", method = RequestMethod.POST)
+    public @ResponseBody void setImage(@RequestBody Map<String,Object> parm) throws Exception {
+        String url = (String)parm.get("url");
+        String key = (String)parm.get("key");
+        String admin = (String)parm.get("user");
+        uploadService.setImage(url,key,admin);
+    }
 
 }

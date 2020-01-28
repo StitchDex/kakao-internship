@@ -42,7 +42,28 @@ class MyUploadAdapter {
             // 이 URL은 서버에 업로드된 이미지를 가리키며, 컨텐츠에 이미지를 표시하기 위해 사용된다.
             resolve( {
                 default: response.url
+
             } );
+            var json_data = {
+                'url' : response.url,
+                'key' : selectedData,
+                'user' : $('#admin_name').val()
+            };
+            var sendData = JSON.stringify(json_data);
+            console.log(sendData);
+            $.ajax({
+                url: '/admin/set_image',
+                headers: {"X-CSRF-TOKEN": token},
+                data: sendData,
+                method: 'POST',
+                dataType: 'html',
+                contentType: 'application/json',
+                success: function (res) {
+
+                }, error: function (error) {
+                    console.log(error);
+                }
+            });
         } );
 
         // 파일로더는 uploadTotal과 upload properties라는 속성 두개를 갖는다.

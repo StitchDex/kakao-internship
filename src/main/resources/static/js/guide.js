@@ -158,7 +158,7 @@ function edit_button_click() {
         );
     $('select.select2-tagging').prop('disabled', isReadOnly);
 }
-
+f
 //admin edit_save_button click
 function edit_save_button_click() {
     if (admin_editor == null) {
@@ -167,7 +167,6 @@ function edit_save_button_click() {
         admin_editor.set('isReadOnly', true);
         //+)check the doc is edit (if or editor method)
         const edit_doc = admin_editor.getData();
-        edit_doc.startsWith('img<')
         var sendData = JSON.stringify({"id": selectedData, "content": edit_doc});
         var token = $("meta[name='_csrf']").attr("content");
         $.ajax({
