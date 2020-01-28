@@ -1,7 +1,7 @@
 package com.kakaocorp.iamguide.service;
 
-import com.kakaocorp.iamguide.dao.Guide_DocMapper;
-import com.kakaocorp.iamguide.model.Guide_Doc;
+import com.kakaocorp.iamguide.dao.GuideDocMapper;
+import com.kakaocorp.iamguide.model.GuideDoc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,17 +11,17 @@ import java.util.List;
 
 
 @Service
-public class Guide_DocService {
-    private Logger logger = LoggerFactory.getLogger(Guide_DocService.class);
+public class GuideDocService {
+    private Logger logger = LoggerFactory.getLogger(GuideDocService.class);
 
     @Autowired
-    Guide_DocMapper guide_docMapper;
+    GuideDocMapper guide_docMapper;
 
 
-    public List<Guide_Doc> getGuideTreeList() {
-        List<Guide_Doc> temp = guide_docMapper.selectTreeDataForGuide();
+    public List<GuideDoc> getGuideTreeList() {
+        List<GuideDoc> temp = guide_docMapper.selectTreeDataForGuide();
         for(int i=0;i<temp.size();i++){
-            Guide_Doc doc = temp.get(i);
+            GuideDoc doc = temp.get(i);
             if(doc.getId().startsWith("DIR")){
                 doc.setType("DIR");
             }

@@ -22,13 +22,13 @@ public class AdminController {
     @Autowired
     CommonService common;
     @Autowired
-    Guide_DocService guide_docService;
+    GuideDocService guide_docService;
     @Autowired
-    Guide_UpdateService guide_updateService;
+    GuideUpdateService guide_updateService;
     @Autowired
-    Guide_TagService guide_tagService;
+    GuideTagService guide_tagService;
     @Autowired
-    Guide_DirService guide_dirService;
+    GuideDirService guide_dirService;
     /**
      * PAGE: admin (AUTHENTICATED)
      * @return

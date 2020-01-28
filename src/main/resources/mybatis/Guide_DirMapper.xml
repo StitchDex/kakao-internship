@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
-<mapper namespace="com.kakaocorp.iamguide.dao.Guide_DirMapper">
+<mapper namespace="com.kakaocorp.iamguide.dao.GuideDirMapper">
 
     <insert id="createGuide_Dir">
         insert into GUIDE_DIR(DIR_NAME,DIR_PARENT_KEY,DIR_STATE)

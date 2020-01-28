@@ -100,33 +100,3 @@ a, a:hover {
     min-height: 800px;
 }
 
-#main_LDAP{
-    margin-top: 50px;
-    wdith:300px;
-    float:left;
-    border:1px solid#000000;
-
-}
-#main_HELLO{
-    margin-top: 50px;
-    wdith:30%;
-    float:left;
-    border:1px solid#000000;
-    box-sizing: border-box;
-}
-#main_SSO{
-    margin-top: 50px;
-    wdith:30%;
-    float:left;
-    border:1px solid#000000;
-    box-sizing: border-box;
-
-}
-#main_GROUP{
-    margin-top: 50px;
-    wdith:30%;
-    float:left;
-    border:1px solid#000000;
-    box-sizing: border-box;
-
-}

@@ -2,18 +2,18 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.kakaocorp.iamguide.dao.Guide_TagMapper">
-    <select id="getGuide_Tag" resultType="com.kakaocorp.iamguide.model.Guide_Tag">
+<mapper namespace="com.kakaocorp.iamguide.dao.GuideTagMapper">
+    <select id="getGuide_Tag" resultType="com.kakaocorp.iamguide.model.GuideTag">
         SELECT GT.TAG as tag, GT.DOCUMENT_KEY as doc_key, GD.DIRECTORY_KEY as parent
         FROM GUIDE_TAGGING as GT
         JOIN GUIDE_DOCUMENT as GD
         ON GT.DOCUMENT_KEY = GD.DOCUMENT_KEY
         WHERE GT.TAG LIKE CONCAT("%", #{tag}, "%");
     </select>
-    <select id="getTags" resultType="com.kakaocorp.iamguide.model.Guide_Tag">
+    <select id="getTags" resultType="com.kakaocorp.iamguide.model.GuideTag">
         SELECT TAG as tag FROM GUIDE_TAGGING WHERE DOCUMENT_KEY = #{doc_key};
     </select>
-    <select id="suggestTags" resultType="com.kakaocorp.iamguide.model.Guide_Tag">
+    <select id="suggestTags" resultType="com.kakaocorp.iamguide.model.GuideTag">
         SELECT TAG as tag FROM GUIDE_TAG WHERE TAG LIKE CONCAT("%", #{tag}, "%");
     </select>
     <select id="insertTag">

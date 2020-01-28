@@ -64,9 +64,9 @@ $(function () {
     //admin editor
     ClassicEditor
         .create( document.querySelector( '#editor' ), {
-                extraPlugins:[MyCustomUploadAdapterPlugin],
+            extraPlugins:[MyCustomUploadAdapterPlugin],
 
-                toolbar: ["bold", "heading", "imageStyle:side", "imageUpload", "indent", "outdent",
+                toolbar: ["bold", "heading","imageTextAlternative","imageStyle:full", "imageStyle:side", "imageUpload", "indent", "outdent",
                     "italic", "link", "numberedList", "bulletedList", "insertTable", "tableColumn", "tableRow", "mergeTableCells", "alignment:left",
                     "alignment:right", "alignment:center", "alignment:justify", "alignment", "code", "fontSize", "underline", "undo", "redo"],
 
