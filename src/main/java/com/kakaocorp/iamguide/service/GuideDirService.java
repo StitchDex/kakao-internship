@@ -10,10 +10,15 @@ public class GuideDirService {
     GuideDirMapper guide_dirMapper;
 
     public void createGuide_Dir(String parent, String text,boolean state){
-        if(parent.length()>1)
-        parent = parent.substring(3);
-        String content = " ";
-        guide_dirMapper.createGuide_Dir(parent,text,state);
+        if(parent.length()>1) {
+            parent = parent.substring(3);
+        }
+        else if(parent.equals("#")) {
+            guide_dirMapper.createGuide_rootDir(text, state);
+        }
+        else {
+            guide_dirMapper.createGuide_Dir(parent, text, state);
+        }
     }
     public void deleteGuide_Dir(String key){
         key=key.substring(3);

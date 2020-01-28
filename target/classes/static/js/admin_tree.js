@@ -1,6 +1,6 @@
 var hidden_num;
 var hidden = new Array();
-
+var token = $("meta[name='_csrf']").attr("content");
 $(function () {
     hidden_num=0;
     $('#edit_tree').jstree({
@@ -70,7 +70,7 @@ $(function () {
                                 tree.select_node($node);
                                 var data =get_json_data(tree,$node);
                                 console.log(data);
-                                create_node(data,'DOC');
+                                create_node(data);
 
                             }
                         },
@@ -88,7 +88,7 @@ $(function () {
                                     }
                                 });
                                 tree.select_node($node);
-                                create_node(get_json_data(tree,$node),'DIR');
+                                create_node(get_json_data(tree,$node));
                             }
                         }
                     }
@@ -178,13 +178,6 @@ function make_disable() {
         console.log(hidden[i]);
     }
 }
-
-
-function save_tree_click(){
-    var obj =$("#edit_tree").jstree(true).get_json('#',{flat:true});
-
-}
-
 function get_json_data(tree,$node){
     var temp = tree.get_node($node);
     var json_data = {
@@ -197,11 +190,8 @@ function get_json_data(tree,$node){
     return json_data;
 }
 
-function create_node(sendData,what){
-
-    var token = $("meta[name='_csrf']").attr("content");
+function create_node(sendData){
     sendData = JSON.stringify(sendData);
-    //var header = $("meta[name='_csrf_header']").attr("content");
     $.ajax({
         url: 'admin/admin_tree/create',
         headers: {"X-CSRF-TOKEN": token},
@@ -219,9 +209,17 @@ function create_node(sendData,what){
         }
     });
 }
+function create_root(){
+    var json_data = {
+        'parent': '#',
+        'text': 'New Root',
+        'type': 'DIR',
+        'state': false
+    };
+    create_node(json_data);
+}
 function update_node(sendData,what){
 
-    var token = $("meta[name='_csrf']").attr("content");
     sendData = JSON.stringify(sendData);
     //var header = $("meta[name='_csrf_header']").attr("content");
     $.ajax({
@@ -242,7 +240,6 @@ function update_node(sendData,what){
 }
 function delete_node(sendData,what){
 
-    var token = $("meta[name='_csrf']").attr("content");
 
     sendData = JSON.stringify({'id':sendData, 'type':what});
     //var header = $("meta[name='_csrf_header']").attr("content");

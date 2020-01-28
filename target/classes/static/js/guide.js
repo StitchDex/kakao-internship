@@ -10,9 +10,8 @@ var beforeTags = new Set();
 var afterTags;
 //document ready
 $(function () {
-    isReadOnly = true;
     hidden_num=0;
-
+    isReadOnly = false;
     $('#jstree').jstree({
         'core': {
             'multiple': false,
@@ -60,35 +59,6 @@ $(function () {
         $(this).jstree('open_all')
     });
 
-
-    //admin editor
-    ClassicEditor
-        .create( document.querySelector( '#editor' ), {
-            extraPlugins:[MyCustomUploadAdapterPlugin],
-
-                toolbar: ["bold", "heading","imageTextAlternative","imageStyle:full", "imageStyle:side", "imageUpload", "indent", "outdent",
-                    "italic", "link", "numberedList", "bulletedList", "insertTable", "tableColumn", "tableRow", "mergeTableCells", "alignment:left",
-                    "alignment:right", "alignment:center", "alignment:justify", "alignment", "code", "fontSize", "underline", "undo", "redo"],
-
-                heading: {
-                    options: [
-                        {model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph'},
-                        {model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1'},
-                        {model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2'},
-                        {model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3'}
-                    ]
-                }
-            }
-        )
-        .then( editor => {
-            editor.set('isReadOnly',true);
-            admin_editor=editor;
-
-        })
-        .catch( error => {
-                //console.error( error );
-            }
-        );
 });
 
 //click tree_node
@@ -97,7 +67,7 @@ $('#jstree').on('select_node.jstree', function (e, data) {
     selectedText = data.node.text;
     //click dir_node
     if(selectedData.startsWith("DIR")){
-
+        //no event
     }
     //click page_node
     else {
@@ -107,13 +77,16 @@ $('#jstree').on('select_node.jstree', function (e, data) {
                 url: '/guide/menu?doc_key=' + selectedData,
                 method: 'GET',
                 success: function (res) {//set DOCUMENT_TEXT in editor area
-                    //admin page
-                    if(admin_editor !=null){
-                        admin_editor.set('isReadOnly',true);
-                        admin_editor.setData(res);
-                        get_Guide_update(selectedText);
+                    get_Guide_update(selectedText);
+                    if(admin_editor!=null){ // change doc while edit
+                        admin_editor.destroy();
+                        make_editor(res);
                     }
-                    else{ //user page
+                    else if(doc_editor!=null){ // change doc
+                        doc_editor.destroy();
+                        make_editor(res);
+                    }
+                    else{ // document_ready
                         make_editor(res);
                     }
                 }, error: function (error) {
@@ -129,7 +102,6 @@ $('#jstree').on('select_node.jstree', function (e, data) {
 function make_hide() {
     for(var i=0;i<hidden.length;i++) {
         $("#jstree").jstree(true).hide_node(hidden[i]);
-        //console.log(hidden[i]);
     }
 }
 //make user editor and set html data
@@ -141,7 +113,6 @@ function make_editor(res){
             editor.set('isReadOnly',true);
             doc_editor=editor;
             doc_editor.setData(res);
-            return doc_editor.destroy();
         })
         .catch(error => {
                 console.error(error);
@@ -151,67 +122,100 @@ function make_editor(res){
 
 //admin_edit_button click
 function edit_button_click() {
-    isReadOnly = !isReadOnly;
+    isReadOnly = false;
+    doc_editor.destroy(true);
+    ClassicEditor
+        .create( document.querySelector( '#Guide_Doc' ), {
+                extraPlugins:[MyCustomUploadAdapterPlugin],
+
+                toolbar: ["bold", "heading","imageTextAlternative","imageStyle:full", "imageUpload", "indent", "outdent",
+                    "italic", "link", "numberedList", "bulletedList", "insertTable", "tableColumn", "tableRow", "mergeTableCells", "alignment:left",
+                    "alignment:right", "alignment:center", "alignment:justify", "alignment", "fontSize", "underline", "undo", "redo"],
+                image: {
+                    toolbar: [ 'imageTextAlternative', '|', 'imageStyle:alignLeft', 'imageStyle:full', 'imageStyle:alignRight' ],
+                    styles: [
+                        'full',
+                        'alignLeft',
+                        'alignRight'
+                    ]
+                },
+                heading: {
+                    options: [
+                        {model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph'},
+                        {model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1'},
+                        {model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2'},
+                        {model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3'}
+                    ]
+                }
+            }
+        )
+        .then( editor => {
+            admin_editor=editor;
+        })
+        .catch( error => {
+                console.error( error );
+            }
+        );
     $('select.select2-tagging').prop('disabled', isReadOnly);
-    admin_editor.set('isReadOnly',isReadOnly);
 }
 
 //admin edit_save_button click
 function edit_save_button_click() {
+    if (admin_editor == null) {
+        alert("Error");
+    } else {
+        admin_editor.set('isReadOnly', true);
+        //+)check the doc is edit (if or editor method)
+        const edit_doc = admin_editor.getData();
+        edit_doc.startsWith('img<')
+        var sendData = JSON.stringify({"id": selectedData, "content": edit_doc});
+        var token = $("meta[name='_csrf']").attr("content");
+        $.ajax({
+            url: '/admin/edit_doc',
+            headers: {"X-CSRF-TOKEN": token},
+            data: sendData,
+            method: 'POST',
+            dataType: 'html',
+            contentType: 'application/json',
+            success: function (res) {
+                set_Guide_update(selectedText);
+                // refresh page
+            }, error: function (error) {
+                console.log(error);
+            }
+        });
 
-    admin_editor.set('isReadOnly',true);
-    //+)check the doc is edit (if or editor method)
-    const edit_doc = admin_editor.getData();
-    edit_doc.startsWith('img<')
-    var sendData = JSON.stringify({"id": selectedData ,"content": edit_doc});
-    var token = $("meta[name='_csrf']").attr("content");
-    //var header = $("meta[name='_csrf_header']").attr("content");
-    $.ajax({
-        url: '/admin/edit_doc',
-        headers: {"X-CSRF-TOKEN": token},
-        data: sendData,
-        method: 'POST',
-        dataType:'html',
-        contentType:'application/json',
-        success: function (res) {
-            set_Guide_update(selectedText);
-             // refresh page
-        }, error: function (error) {
-            console.log(error);
+
+        afterTags = new Set();
+        $.each($('select.select2-tagging option:selected'), function (key, val) {
+            afterTags.add(val.text);
+        });
+
+        var insertTags = [];
+        var deleteTags = [];
+
+        insertTags = substract(Array.from(afterTags), Array.from(beforeTags));
+        deleteTags = substract(Array.from(beforeTags), Array.from(afterTags));
+
+        var issuc = false;
+        $.ajax({
+            'url': '/admin/updateTags',
+            'contentType': 'application/json',
+            'async': false,
+            'data': JSON.stringify({'insert': insertTags, 'delete': deleteTags, 'doc_key': selectedData}),
+            'headers': {"X-CSRF-TOKEN": token},
+            'method': 'POST',
+            'success': function () {
+                issuc = true;
+            }
+        });
+        if (issuc) {
+            beforeTags = new Set(afterTags);
         }
-    });
-
-
-    afterTags = new Set();
-    $.each($('select.select2-tagging option:selected'), function(key, val){
-        afterTags.add(val.text);
-    });
-
-    var insertTags = [];
-    var deleteTags = [];
-
-    insertTags = substract(Array.from(afterTags), Array.from(beforeTags));
-    deleteTags = substract(Array.from(beforeTags), Array.from(afterTags));
-
-    var issuc = false;
-    $.ajax({
-        'url':'/admin/updateTags',
-        'contentType':'application/json',
-        'async':false,
-        'data': JSON.stringify({'insert':insertTags, 'delete':deleteTags, 'doc_key':selectedData}),
-        'headers': {"X-CSRF-TOKEN": token},
-        'method': 'POST',
-        'success': function() {
-            issuc=true;
-        }
-    });
-    if(issuc)
-    {
-        beforeTags = new Set(afterTags);
+        alert("save ok");
+        self.close();
+        location.reload();
     }
-    alert("save ok");
-    self.close();
-    location.reload();
 }
 
 //get guide_update when node is selected

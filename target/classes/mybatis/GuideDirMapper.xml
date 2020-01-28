@@ -10,6 +10,14 @@
         values(#{text},#{parent},#{state})
     </insert>
 
+    <insert id="createGuide_rootDir">
+        <selectKey keyProperty="DIR_KEY" resultType="int" order="BEFORE">
+            SELECT IFNULL(MAX(DIR_KEY+1),1) FROM GUIDE_DIR
+        </selectKey>
+        insert into GUIDE_DIR(DIR_KEY,DIR_NAME,DIR_PARENT_KEY,DIR_STATE)
+        values(#{DIR_KEY},#{text},#{DIR_KEY},#{state})
+    </insert>
+
     <update id="updateGuide_Dir">
         update GUIDE_DIR SET DIR_NAME=#{text}, DIR_PARENT_KEY=#{parent}, DIR_STATE=#{state}
         where DIR_KEY=#{key}

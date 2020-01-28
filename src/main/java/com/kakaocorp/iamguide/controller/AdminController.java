@@ -1,6 +1,6 @@
 package com.kakaocorp.iamguide.controller;
 
-import com.kakaocorp.iamguide.model.Guide_Update;
+import com.kakaocorp.iamguide.model.GuideUpdate;
 import com.kakaocorp.iamguide.service.*;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,7 +116,7 @@ public class AdminController {
      */
     @GetMapping("get_update")
     public @ResponseBody
-    List<Guide_Update> getGuide_Update(HttpServletRequest req, @RequestParam("title") String title){
+    List<GuideUpdate> getGuide_Update(HttpServletRequest req, @RequestParam("title") String title){
         logger.info("/guide_update{}",title);
         return guide_updateService.getGuide_Update(title);
     }
