@@ -1,11 +1,7 @@
 package com.kakaocorp.iamguide.service;
 
-import com.kakaocorp.iamguide.IamUtils;
+
 import com.kakaocorp.iamguide.dao.UploadMapper;
-<<<<<<< HEAD
-=======
-import net.daum.tenth2.Tenth2OutputStream;
->>>>>>> a97c529ceadb3c8fc218b1454ee8237ea26102ac
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -62,7 +58,7 @@ public class UploadService {
         info.put("uploadPath",uploadPath);
         info.put("fileName",fileName);
 
-        uploadMapper.setImage(uploadPath);
+        uploadMapper.setImage(uploadPath+fileName);
         return info;
     }
 
