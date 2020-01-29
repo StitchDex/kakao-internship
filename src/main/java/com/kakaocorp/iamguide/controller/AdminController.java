@@ -129,10 +129,10 @@ public class AdminController {
      */
     @RequestMapping("suggest")
     public @ResponseBody
-    List suggest(HttpServletRequest req, @RequestParam String userid) throws Exception {
-        logger.debug("Query : {}", userid);
-        if(userid != null && !userid.isEmpty()) {
-            List ret = common.suggest(userid);
+    List suggest(HttpServletRequest req, @RequestParam String accountId) throws Exception {
+        logger.debug("Query : {}", accountId);
+        if(accountId != null && !accountId.isEmpty()) {
+            List ret = common.suggest(accountId);
             return ret;
         }
         return new ArrayList<>();
@@ -150,12 +150,12 @@ public class AdminController {
      * ldap search
      */
     @RequestMapping(value = "insertAdmin", method = RequestMethod.POST)
-    public @ResponseBody void insertAdmin(@RequestBody List<Object> admins) throws Exception {
+    public @ResponseBody void insertAdmin(@RequestBody List admins) throws Exception {
         common.insertAdmin(admins);
     }
 
     @RequestMapping(value = "deleteAdmin", method = RequestMethod.POST)
-    public @ResponseBody void deleteAdmin(@RequestBody List<Object> admins) throws Exception {
+    public @ResponseBody void deleteAdmin(@RequestBody List admins) throws Exception {
         common.deleteAdmin(admins);
     }
 

@@ -5,18 +5,25 @@
 
 <mapper namespace="com.kakaocorp.iamguide.dao.CommonMapper">
     <select id="isAdmin" resultType="String">
-        SELECT ADMIN_ID FROM ADMIN WHERE ADMIN_ID = #{admin_id}
+        SELECT ADMIN_ACCOUNT_ID FROM ADMIN WHERE ADMIN_ACCOUNT_ID = #{admin_id}
     </select>
-    <select id="suggest" resultType="com.kakaocorp.iamguide.model.User">
-        SELECT ADMIN_ID as user_id FROM ADMIN WHERE ADMIN_ID LIKE CONCAT('%',#{admin_id},'%')
+    <select id="getAdminAll" resultType="com.kakaocorp.iamguide.model.Admin">
+        SELECT ADMIN_EMPNO as adminEmpNo, ADMIN_ACCOUNT_ID as adminAccountId, ADMIN_NAME as adminName
+        FROM ADMIN;
     </select>
-    <select id="getAdminAll" resultType="com.kakaocorp.iamguide.model.User">
-        SELECT ADMIN_ID as user_id FROM ADMIN;
-    </select>
-    <select id="insertAdmin">
-        ${insertQuery}
-    </select>
-    <select id="deleteAdmin">
-        ${deleteQuery}
-    </select>
+    <insert id="insertAdmin" parameterType="java.util.List">
+        INSERT INTO ADMIN
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            ("${item.adminEmpNo}", "${item.adminAccountId}", "${item.adminName}")
+        </foreach>
+    </insert>
+    <delete id="deleteAdmin" parameterType="java.util.List">
+        DELETE FROM ADMIN
+        WHERE ADMIN_EMPNO IN (
+        <foreach collection="list" item="item" separator=",">
+            #{item.adminEmpNo}
+        </foreach>
+        )
+    </delete>
 </mapper>

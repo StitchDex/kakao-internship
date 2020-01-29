@@ -20,7 +20,7 @@ public class CommonAccessDeniedHandler implements AccessDeniedHandler {
     public void handle(HttpServletRequest req, HttpServletResponse res, AccessDeniedException e) throws IOException, ServletException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if(auth != null){
-            log.info("User '" + auth.getName() + "' attempted to access the protected URL: " + req.getRequestURL());
+            log.info("Admin '" + auth.getName() + "' attempted to access the protected URL: " + req.getRequestURL());
             if(req.getRequestURI().equalsIgnoreCase("/login")){
                 res.sendRedirect("/guide");
                 return;
