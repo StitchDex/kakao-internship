@@ -15,8 +15,8 @@
         from GUIDE_DIR as gdr
     </select>
 
-    <select id="selectGuide" resultType="String">
-        select DOCUMENT_TITLE, DOCUMENT_TEXT from GUIDE_DOCUMENT where DOCUMENT_KEY=#{id}
+    <select id="getGuideDoc" resultType="com.kakaocorp.iamguide.model.GuideDoc">
+        select DOCUMENT_TITLE as title, DOCUMENT_TEXT as text from GUIDE_DOCUMENT where DOCUMENT_KEY=#{id}
      </select>
 
     <update id="editGuide_Doc">

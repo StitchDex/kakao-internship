@@ -38,7 +38,7 @@
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                         <input type="hidden" id="admin_name" th:if="${#authentication.getDetails() != null}" th:value="${#authentication.getName()}" />
                         <label class="text-dark mr-2 " style="padding-left:30px;">
-                            <strong th:if="${#authentication.getDetails() != null}" th:text="${#authentication.getName()}"style="font-size: larger"></strong>
+                            <strong th:if="${#authentication.getDetails() != null}" th:text= "|${#authentication.getName()} / ${#authentication.getDetails().getPersonName()}|" style="font-size: larger"></strong>
                         </label>
                         <!--로그아웃-->
                         <input class="btn btn-outline-dark my-2 my-sm-0" type="submit" value="로그아웃"

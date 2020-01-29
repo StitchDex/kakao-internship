@@ -82,6 +82,9 @@ function LoadDocText() {
             url: '/guide/menu?doc_key=' + dockey,
             method: 'GET',
             success: function (res) {//set DOCUMENT_TEXT in editor area
+                var title = res.title;
+                res = res.text;
+                $('#guide-title').text(title);
                 get_Guide_update(selectedText);
                 if(admin_editor!=null){ // change doc while edit
                     admin_editor.destroy();

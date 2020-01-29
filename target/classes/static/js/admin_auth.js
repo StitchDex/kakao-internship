@@ -18,7 +18,7 @@ if (selectAccount.length > 0) {
         'placeholder': '아이디를 검색하고 추가 버튼을 눌러주세요. (최대 10명까지)',
         'minimumInputLength': 2,
         'language': 'ko',
-        'allowClear': true
+        'allowClear': true,
     });
 }
 
