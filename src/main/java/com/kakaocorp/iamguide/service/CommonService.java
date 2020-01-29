@@ -1,7 +1,8 @@
 package com.kakaocorp.iamguide.service;
 
+import com.daum.mis.remote.client.HelloIdentityServiceClient;
 import com.kakaocorp.iamguide.dao.CommonMapper;
-import com.kakaocorp.iamguide.model.User;
+import com.kakaocorp.iamguide.model.Admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,31 +18,19 @@ public class CommonService {
     public String isAdmin(String username) throws Exception{
         return commonMapper.isAdmin(username);
     }
-    public List<User> suggest(String username) throws Exception{
-        return commonMapper.suggest(username);
+    public List suggest(String accountId) throws Exception{
+        HelloIdentityServiceClient client = HelloIdentityServiceClient.getHelloIdentityServiceClient();
+
+        return client.getMembersByName(accountId);
     }
-    public List<User> getAdminAll() throws Exception{
+    public List<Admin> getAdminAll() throws Exception{
         return commonMapper.getAdminAll();
     }
-    public void insertAdmin(List<Object> admins) throws Exception {
-        String sql = "INSERT INTO ADMIN(ADMIN_ID) VALUES ";
-        for(int i = 0; i < admins.size(); i++)
-        {
-            HashMap map = (HashMap) admins.get(i);
-            if(i != admins.size()-1) sql += "('" + map.get("admin") + "'),";
-            else sql += "('" + map.get("admin") + "')";
-        }
-        commonMapper.insertAdmin(sql);
+    public void insertAdmin(List admins) throws Exception {
+        commonMapper.insertAdmin(admins);
     }
 
-    public void deleteAdmin(List<Object> admins) throws Exception {
-        String sql = "DELETE FROM ADMIN WHERE ADMIN_ID IN (";
-        for(int i = 0; i < admins.size(); i++)
-        {
-            HashMap map = (HashMap) admins.get(i);
-            if(i != admins.size()-1) sql += "'" + map.get("admin") + "',";
-            else sql += "'" + map.get("admin") + "')";
-        }
-        commonMapper.deleteAdmin(sql);
+    public void deleteAdmin(List admins) throws Exception {
+        commonMapper.deleteAdmin(admins);
     }
 }

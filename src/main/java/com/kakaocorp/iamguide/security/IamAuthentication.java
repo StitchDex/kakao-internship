@@ -1,7 +1,8 @@
 package com.kakaocorp.iamguide.security;
 
+import com.daum.mis.remote.client.HelloIdentityServiceClient;
 import com.kakaocorp.iamguide.GuideDictionary;
-import com.kakaocorp.iamguide.model.User;
+import com.kakaocorp.iamguide.model.UserInfo;
 import com.kakaocorp.iamguide.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -23,7 +24,7 @@ public class IamAuthentication implements AuthenticationProvider {
     private String ROLE = "ROLE_";
 
     @Autowired
-    HttpServletRequest httpServletRequest;
+    HttpServletRequest req;
 
     @Autowired
     private CommonService commonService;
@@ -35,27 +36,24 @@ public class IamAuthentication implements AuthenticationProvider {
         String password = (String)authentication.getCredentials();
         try{
             // Hello MIS client
-            //HelloIdentityServiceClient client = HelloIdentityServiceClient.getHelloIdentityServiceClient();
-            //PersonInfo userInfo = new PersonInfo(client.getMemberById(username));
+            HelloIdentityServiceClient client = HelloIdentityServiceClient.getHelloIdentityServiceClient();
+            UserInfo user = new UserInfo(client.getMemberById(username));
 //            if(userInfo != null){ // TODO dev code
-            //if(client.authenticationId(username, password, req.getRemoteAddr())
-            //      && !userInfo.getIdentityDisplayName().endsWith("/업무용")){
+            if(client.authenticationId(username, password, req.getRemoteAddr())){
+                List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
 
-            List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
-            User user = new User();
-            user.setUser_id(username);
+                if(commonService.isAdmin(username) != null){
+                    roles.add(new SimpleGrantedAuthority(ROLE + GuideDictionary.ADMIN));
+                }
+                else {
+                    roles.add(new SimpleGrantedAuthority(ROLE + GuideDictionary.USER));
+                }
 
-            String isAdmin = commonService.isAdmin(username);
-            if(isAdmin != null) {
-                user.setIsadmin(true);
-                roles.add(new SimpleGrantedAuthority(ROLE + GuideDictionary.ADMIN));
+                UsernamePasswordAuthenticationToken result = new UsernamePasswordAuthenticationToken(username, password, roles);
+                result.setDetails(user);
+                return result;
             }
-            else
-                roles.add(new SimpleGrantedAuthority(ROLE + GuideDictionary.USER));
-            UsernamePasswordAuthenticationToken result = new UsernamePasswordAuthenticationToken(username, password, roles);
-            result.setDetails(user);
-            System.out.println(username +"\n"+ password+"\n"+roles+"\n"+authentication.isAuthenticated());
-            return result;
+            throw new BadCredentialsException("인증되지 않은 사용자 입니다.");
         }
         catch(BadCredentialsException e){
             System.out.println("BadCredentials");
