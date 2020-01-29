@@ -3,6 +3,10 @@ package com.kakaocorp.iamguide.controller;
 
 import com.kakaocorp.iamguide.service.UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
+<<<<<<< HEAD
+=======
+import org.springframework.beans.factory.annotation.Value;
+>>>>>>> a97c529ceadb3c8fc218b1454ee8237ea26102ac
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -11,6 +15,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+<<<<<<< HEAD
+=======
+import java.awt.*;
+>>>>>>> a97c529ceadb3c8fc218b1454ee8237ea26102ac
 import java.io.*;
 import java.util.HashMap;
 

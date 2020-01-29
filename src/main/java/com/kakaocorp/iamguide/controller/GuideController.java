@@ -34,9 +34,9 @@ public class GuideController {
     }
 
     @GetMapping("menu")
-    public @ResponseBody String setGuide_Doc(HttpServletRequest req, @RequestParam("doc_key") String doc_key){
+    public @ResponseBody GuideDoc getGuideDoc(HttpServletRequest req, @RequestParam("doc_key") String doc_key){
         logger.info("{}", doc_key);
-        return guideDocService.setGuide_Doc(doc_key);
+        return guideDocService.getGuideDoc(doc_key);
     }
 
     /*

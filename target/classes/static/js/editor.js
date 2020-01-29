@@ -44,26 +44,7 @@ class MyUploadAdapter {
                 default: response.url
 
             } );
-            var json_data = {
-                'url' : response.url,
-                'key' : selectedData,
-                'user' : $('#admin_name').val()
-            };
-            var sendData = JSON.stringify(json_data);
-            console.log(sendData);
-            $.ajax({
-                url: '/admin/set_image',
-                headers: {"X-CSRF-TOKEN": token},
-                data: sendData,
-                method: 'POST',
-                dataType: 'html',
-                contentType: 'application/json',
-                success: function (res) {
 
-                }, error: function (error) {
-                    console.log(error);
-                }
-            });
         } );
 
         // 파일로더는 uploadTotal과 upload properties라는 속성 두개를 갖는다.
@@ -81,7 +62,8 @@ class MyUploadAdapter {
     _sendRequest( file ) {
         // 폼 데이터 준비
         const data = new FormData();
-        data.append( 'upload', file );
+        data.append('type',"image");
+        data.append( 'file', file );
         var token = $("meta[name='_csrf']").attr("content");
         this.xhr.setRequestHeader("X-CSRF-TOKEN",token);
         // 여기가 인증이나 CSRF 방어와 같은 방어 로직을 작성하기 좋은 곳이다.

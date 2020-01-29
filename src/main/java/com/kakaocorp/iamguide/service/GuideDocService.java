@@ -32,8 +32,8 @@ public class GuideDocService {
         //root -> DIR0, parent =#
         return temp;
     }
-    public String setGuide_Doc(String doc_key) {
-        return guide_docMapper.selectGuide(doc_key);
+    public GuideDoc getGuideDoc(String doc_key) {
+        return guide_docMapper.getGuideDoc(doc_key);
     }
 
     public void editGuide_Doc(String doc_key, String content){

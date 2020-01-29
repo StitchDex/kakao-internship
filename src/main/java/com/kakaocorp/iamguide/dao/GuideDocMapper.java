@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface GuideDocMapper {
     List<GuideDoc> selectTreeDataForGuide();
-    String selectGuide(@Param("id") String id); // doc_key
+    GuideDoc getGuideDoc(@Param("id") String id); // doc_key
     void editGuide_Doc(@Param("id") String id, @Param("content") String text);
     void createGuide_Doc(@Param("parent") String parent,@Param("content") String content, @Param("text") String text,@Param("state") boolean state);
     void deleteGuide_Doc(@Param("key") String key);

@@ -4,12 +4,12 @@ if (selectAccount.length > 0) {
         'ajax' : {
             'url': '/admin/suggest',
             'data': function(params) {
-                return {'accountId' : params.term}
+                return {'userid' : params.term}
             },
             'processResults': function (data) {
                 var ret = $.map(data, function (obj) {
-                    obj.id = obj.id || obj.accountId;
-                    obj.text = obj.text || obj.identityDisplayName;
+                    obj.id = obj.id || obj.user_id; // replace pk with your identifier
+                    obj.text = obj.text || obj.user_id; // replace pk with your identifier
                     return obj;
                 });
                 return {results : ret}
@@ -26,8 +26,7 @@ function onload() {
     var options = "";
     $.getJSON("/admin/getadminall", function(data){
             $.each(data, function(key, val){
-                options += "<option value='" + val.adminEmpNo + "'>" + val.adminAccountId +
-                   "(" + val.adminName + ")" + "</option>"
+                options += "<option value='" + val.user_key + "'>" + val.user_id +"</option>"
             });
             $('select.select-account-all').html(options);
         }
@@ -40,7 +39,7 @@ function insert_click() {
 
     var selected = $('select.select2-account').select2('data');
     $.each(selected, function (key, val) {
-        var temp = {'adminEmpNo':val.employeeNo, 'adminAccountId':val.accountId, 'adminName':val.personName};
+        var temp = {'admin':val.text};
         admin_list.push(temp);
     })
 
@@ -49,6 +48,7 @@ function insert_click() {
         'headers': {"X-CSRF-TOKEN": token},
         'type':'POST',
         'contentType':'application/json',
+        'dataType':'json',
         'data': JSON.stringify(admin_list),
         'success':function(){
             onload();
@@ -66,7 +66,7 @@ function delete_click() {
 
     var selected = $("select.select-account-all option:selected");
     $.each(selected, function (key, val) {
-        var temp = {"adminEmpNo":val.value, "adminAccountId":val.text};
+        var temp = {"admin":val.text};
         admin_list.push(temp);
     })
 
