@@ -135,7 +135,6 @@ function edit_button_click() {
     ClassicEditor
         .create( document.querySelector( '#Guide_Doc' ), {
                 extraPlugins:[MyCustomUploadAdapterPlugin],
-
                 toolbar: ["bold", "heading","imageTextAlternative","imageStyle:full", "imageUpload", "indent", "outdent",
                     "italic", "link", "numberedList", "bulletedList", "insertTable", "tableColumn", "tableRow", "mergeTableCells", "alignment:left",
                     "alignment:right", "alignment:center", "alignment:justify", "alignment", "fontSize", "underline", "undo", "redo"],
@@ -174,6 +173,7 @@ function edit_save_button_click() {
     } else {
         admin_editor.set('isReadOnly', true);
         //+)check the doc is edit (if or editor method)
+        selectedData = selectedData.substring(3);
         const edit_doc = admin_editor.getData();
         var sendData = JSON.stringify({"id": selectedData, "content": edit_doc});
         var token = $("meta[name='_csrf']").attr("content");

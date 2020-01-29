@@ -95,8 +95,10 @@ public class AdminController {
     void editGuide_Doc(HttpServletRequest req, @RequestBody Map<String,Object> parm) throws Exception{
         String id = (String) parm.get("id");
         String content = (String) parm.get("content");
+        List<String> img_url = (List<String>) parm.get("img_url");
         logger.info("edit : {}",content);
         guide_docService.editGuide_Doc(id,content); // guide_doc edit
+        UploadService.setImaging(id,content,img_url);
     }
     /**
      * AJAX : admin(AUTHENTICATED)

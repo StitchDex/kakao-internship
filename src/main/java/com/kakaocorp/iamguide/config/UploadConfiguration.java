@@ -1,3 +1,4 @@
+/*
 
 package com.kakaocorp.iamguide.config;
 
@@ -9,14 +10,15 @@ import org.springframework.web.servlet.resource.PathResourceResolver;
 
 @Configuration
 public class UploadConfiguration implements WebMvcConfigurer {
-
+    @Value("${tenth.host}")
+    private String tenthHost;
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
-        registry.addResourceHandler("/Users/kakao/Desktop/upload/**")
-                .addResourceLocations("file:/Users/kakao/Desktop/upload/")
+        registry.addResourceHandler("/iam_user_guide/guide/2020_01/**")
+                .addResourceLocations("http://"+tenthHost+"/iam_user_guide/guide/")
                 .setCachePeriod(20);
-
     }
 }
 
+*/
