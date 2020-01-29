@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,7 +39,17 @@ public class GuideController {
         return guideDocService.setGuide_Doc(doc_key);
     }
 
+    @GetMapping(value = "tag")
+    public @ResponseBody
+    List GetTags(@RequestParam("tag") String tag) {
+        return guideTagService.suggestTags(tag);
+    }
 
+    @GetMapping(value = "search")
+    public String GetSearchResults(@RequestParam("tag") String tag, Model model) {
 
+        model.addAttribute("Results", guideTagService.getGuideList(tag));
+        return "guide";
+    }
 }
 

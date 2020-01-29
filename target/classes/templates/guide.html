@@ -10,6 +10,12 @@
             <!--Data-->
             <p>This is some sample content.</p>
         </div>
+        <div>
+            <h1>검색 결과</h1>
+            <ul>
+                <li class="search-click" th:each="result : ${Results}" th:text="${result.title}" th:value="${result.text}"></li>
+            </ul>
+        </div>
 </div>
 </div>
 </html>

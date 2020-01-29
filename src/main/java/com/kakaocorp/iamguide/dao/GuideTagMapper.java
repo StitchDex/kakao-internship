@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper
 @Repository
 public interface GuideTagMapper {
-    List<GuideTag> getGuide_Tag(@Param("tag") String tag); // select tag with search bar
+    List<GuideTag> getGuideList(@Param("tag") String tag); // select tag with search bar
     List<GuideTag> getTags(@Param("doc_key") String doc_key);
     List<GuideTag> suggestTags(@Param("tag") String tag);
     void insertTag(@Param("insertTag") String sql);

@@ -13,8 +13,8 @@ public class GuideTagService {
     @Autowired
     GuideTagMapper guideTagMapper;
 
-    public List<GuideTag> getGuide_Tag(String tag){
-        return guideTagMapper.getGuide_Tag(tag);
+    public List<GuideTag> getGuideList(String tag){
+        return guideTagMapper.getGuideList(tag);
     }
     public List<GuideTag> getTags(String doc_key) {return guideTagMapper.getTags(doc_key);}
     public List<GuideTag> suggestTags(String tag) {return guideTagMapper.suggestTags(tag);}

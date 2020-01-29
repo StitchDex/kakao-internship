@@ -91,6 +91,36 @@ $(function () {
         );
 });
 
+$('.search-click').on("click", function(){
+    LoadText(this.value);
+})
+
+function LoadText(param){
+    selectedData = param;
+    if (!isNaN(selectedData)) {
+        $.ajax({
+            url: '/guide/menu?doc_key=' + selectedData,
+            method: 'GET',
+            success: function (res) {//set DOCUMENT_TEXT in editor area
+                //admin page
+                if(admin_editor !=null){
+                    admin_editor.set('isReadOnly',true);
+                    admin_editor.setData(res);
+                    get_Guide_update(selectedText);
+                }
+                else{ //user page
+                    make_editor(res);
+                }
+            }, error: function (error) {
+                console.log(error);
+            }
+        });
+        init_select_tagging();
+    } else {
+        console.log("not document");
+    }
+}
+
 //click tree_node
 $('#jstree').on('select_node.jstree', function (e, data) {
     selectedData = data.node.id;
@@ -126,6 +156,7 @@ $('#jstree').on('select_node.jstree', function (e, data) {
         }
     }
 });
+
 function make_hide() {
     for(var i=0;i<hidden.length;i++) {
         $("#jstree").jstree(true).hide_node(hidden[i]);

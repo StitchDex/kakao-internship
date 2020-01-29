@@ -46,8 +46,8 @@ public class CommonController {
         return "/guide";
     }
 
-
-
-
-
+    @GetMapping("/search-result")
+    public String searchPage(){
+        return "search-result";
+    }
 }
