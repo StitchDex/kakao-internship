@@ -8,13 +8,5 @@
         values(#{url})
     </insert>
 
-    <select id="insertTag">
-        ${insertTag}
-    </select>
-    <select id="insertTagging">
-        ${insertTagging}
-    </select>
-    <select id="deleteTag">
-        ${deleteTag}
-    </select>
+
 </mapper>

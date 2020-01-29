@@ -68,6 +68,7 @@ $(function () {
                                     }
                                 });
                                 tree.select_node($node);
+
                                 var data =get_json_data(tree,$node);
                                 console.log(data);
                                 create_node(data);

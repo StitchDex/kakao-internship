@@ -179,6 +179,6 @@ public class AdminController {
         String url = (String)parm.get("url");
         String key = (String)parm.get("key");
         String admin = (String)parm.get("user");
-        uploadService.setImage(url,key,admin);
+        //uploadService.setImage(url,key,admin);
     }
 }
