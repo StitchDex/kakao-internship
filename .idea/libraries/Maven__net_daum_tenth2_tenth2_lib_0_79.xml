@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: net.daum.tenth2:tenth2-lib:0.79">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/net/daum/tenth2/tenth2-lib/0.79/tenth2-lib-0.79.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/net/daum/tenth2/tenth2-lib/0.79/tenth2-lib-0.79-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/net/daum/tenth2/tenth2-lib/0.79/tenth2-lib-0.79-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -150,12 +150,12 @@ public class AdminController {
      * ldap search
      */
     @RequestMapping(value = "insertAdmin", method = RequestMethod.POST)
-    public @ResponseBody void insertAdmin(@RequestBody List admins) throws Exception {
+    public @ResponseBody void insertAdmin(@RequestBody List<Object> admins) throws Exception {
         common.insertAdmin(admins);
     }
 
     @RequestMapping(value = "deleteAdmin", method = RequestMethod.POST)
-    public @ResponseBody void deleteAdmin(@RequestBody List admins) throws Exception {
+    public @ResponseBody void deleteAdmin(@RequestBody List<Object> admins) throws Exception {
         common.deleteAdmin(admins);
     }
 
@@ -179,7 +179,6 @@ public class AdminController {
         String url = (String)parm.get("url");
         String key = (String)parm.get("key");
         String admin = (String)parm.get("user");
-        uploadService.setImage(url,key,admin);
+        //uploadService.setImage(url,key,admin);
     }
-
 }
