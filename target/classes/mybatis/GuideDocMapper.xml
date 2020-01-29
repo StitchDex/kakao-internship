@@ -16,7 +16,7 @@
     </select>
 
     <select id="selectGuide" resultType="String">
-        select DOCUMENT_TEXT from GUIDE_DOCUMENT where DOCUMENT_KEY=#{id}
+        select DOCUMENT_TITLE, DOCUMENT_TEXT from GUIDE_DOCUMENT where DOCUMENT_KEY=#{id}
      </select>
 
     <update id="editGuide_Doc">

@@ -1,9 +1,16 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/default">
+
+<div layout:fragment="content">
     <div class="container-fluid" style="margin-top: 100px">
         <h1>검색 결과</h1>
         <ul>
-            <li class="search-click" th:each="result : ${Results}" th:text="${result.title}" th:value="${result.text}"></li>
+            <li th:each="result : ${Results}" >
+                <a th:text="${result.title}" th:href="@{/guide(doc_key=${result.id})}"></a>
+            </li>
         </ul>
     </div>
+</div>
 </html>

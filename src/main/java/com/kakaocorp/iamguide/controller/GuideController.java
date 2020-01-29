@@ -39,17 +39,23 @@ public class GuideController {
         return guideDocService.setGuide_Doc(doc_key);
     }
 
+    /*
+    * 태그 검색 자동완성 데이터 가져오기
+    */
     @GetMapping(value = "tag")
     public @ResponseBody
     List GetTags(@RequestParam("tag") String tag) {
         return guideTagService.suggestTags(tag);
     }
 
+    /*
+    * 검색결과 출력
+    */
     @GetMapping(value = "search")
     public String GetSearchResults(@RequestParam("tag") String tag, Model model) {
-
         model.addAttribute("Results", guideTagService.getGuideList(tag));
-        return "guide";
+        model.addAttribute("test","test");
+        return "search-result";
     }
 }
 

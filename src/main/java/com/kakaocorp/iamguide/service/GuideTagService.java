@@ -1,6 +1,7 @@
 package com.kakaocorp.iamguide.service;
 
 import com.kakaocorp.iamguide.dao.GuideTagMapper;
+import com.kakaocorp.iamguide.model.GuideDoc;
 import com.kakaocorp.iamguide.model.GuideTag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,9 +14,7 @@ public class GuideTagService {
     @Autowired
     GuideTagMapper guideTagMapper;
 
-    public List<GuideTag> getGuideList(String tag){
-        return guideTagMapper.getGuideList(tag);
-    }
+    public List<GuideDoc> getGuideList(String tag){return guideTagMapper.getGuideList(tag);}
     public List<GuideTag> getTags(String doc_key) {return guideTagMapper.getTags(doc_key);}
     public List<GuideTag> suggestTags(String tag) {return guideTagMapper.suggestTags(tag);}
 

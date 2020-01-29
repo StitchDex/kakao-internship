@@ -22,6 +22,10 @@ $(document).ready(function() {
 
 //tag select event
 $('.select2-tag').on('select2:select', function(e){
+    var url = "/guide/search?tag=" + encodeURIComponent(e.params.data.tag);
+    location.href=url;
+    $('.select2-tag').val(null).trigger("change");
+    /*
     $.ajax
     ({
         'url':"/guide/search",
@@ -32,6 +36,5 @@ $('.select2-tag').on('select2:select', function(e){
         'error' : function () {
             console.log("tag request fail");
         }
-    })
-    $('.select2-tag').val(null).trigger("change");
+    })*/
 });

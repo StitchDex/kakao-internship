@@ -6,14 +6,11 @@
 
 <div layout:fragment="content">
     <div class="container-fluid" style="margin-top: 100px">
+        <input id="selected" hidden="hidden" th:value="${selected}">
         <div id="Guide_Doc">
+
         </div>
-        <div>
-            <h1>검색 결과</h1>
-            <ul>
-                <li class="search-click" th:each="result : ${Results}" th:text="${result.title}" th:value="${result.text}"></li>
-            </ul>
-        </div>
-</div>
+
+    </div>
 </div>
 </html>
