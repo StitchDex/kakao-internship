@@ -4,9 +4,9 @@
     <head th:replace="fragments/config :: configFragment"></head>
     <body>
         <div class="d-flex" id="wrapper" >
-    <header th:replace="fragments/header :: headerFragment"></header>
-            <headr th:replace="fragments/sidebar :: sidebarFragment"></headr>
-        <div layout:fragment="content" ></div>
+            <header th:replace="fragments/header :: headerFragment"></header>
+            <header th:replace="fragments/sidebar :: sidebarFragment"></header>
+        <div layout:fragment="content"></div>
         </div>
     <footer th:replace="fragments/footer :: footerFragment"></footer>
     </body>

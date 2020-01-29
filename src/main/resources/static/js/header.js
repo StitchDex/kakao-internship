@@ -3,52 +3,38 @@ $(document).ready(function() {
         'ajax' : {
             'url': '/guide/tag',
             'data': function (param) {
-                param.term = param.term || "";
                 return {'tag' : param.term}
             },
             'processResults': function (data) {
                 var ret = $.map(data, function(obj){
                     obj.id = obj.id || obj.tag;
                     obj.text = obj.text || obj.tag;
-                    console.log(obj);
                     return obj;
                 })
                 return {'results' : ret};
 
             }
         },
-        'placeholder':"Search Tag"
-
+        'placeholder':"Search Tag",
+        'minimumInputLength': 2
     });
 });
 
 //tag select event
 $('.select2-tag').on('select2:select', function(e){
+    var url = "/guide/search?tag=" + encodeURIComponent(e.params.data.tag);
+    location.href=url;
+    $('.select2-tag').val(null).trigger("change");
+    /*
     $.ajax
     ({
-        'url':"/guide/menu",
-        'data': {'doc_key' : e.params.data.doc_key},
+        'url':"/guide/search",
+        'data': {'tag' : e.params.data.tag},
         'success': function(res){
-            if(admin_editor !=null){
-                admin_editor.setData(res);
-            }
-            else{
-                make_editor(res);
-            }
             console.log("tag request succ");
         },
         'error' : function () {
             console.log("tag request fail");
         }
-    })
-    $('.select2-tag').val(null).trigger('change');
+    })*/
 });
-
-function Group(data) {
-    var optGroup = [{}];
-    var opts = [];
-
-    for (var i = 0; i < data.length; i++) {
-
-    }
-}

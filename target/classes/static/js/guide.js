@@ -12,6 +12,8 @@ var afterTags;
 $(function () {
     hidden_num=0;
     isReadOnly = false;
+    var searched = $('#selected').val();
+
     $('#jstree').jstree({
         'core': {
             'multiple': false,
@@ -35,9 +37,9 @@ $(function () {
                         }
                     }
                     console.log(data);
-                    },
+                }
              }
-             },
+        },
         'types' : {
             "DIR": {
                 "icon" : "far fa-folder"
@@ -47,18 +49,16 @@ $(function () {
                 "max_children" : 0,
             },
         },
-        "cookies" : {
-            'save_selected' : false,
-            'save_opened' : false,
-            'auto_save': false
-        },
-        'plugins' : ["wholerow","types","state","cookies"]
+        'plugins' : ["wholerow","types", "state"]
     })
         .on('ready.jstree', function(){
             make_hide();
+            $('#jstree').jstree('select_node', "DOC" + searched);
         $(this).jstree('open_all')
     });
 
+    $('#jstree').jstree('clear_state');
+    console.log("BP")
 });
 
 //click tree_node
@@ -71,34 +71,39 @@ $('#jstree').on('select_node.jstree', function (e, data) {
     }
     //click page_node
     else {
-        selectedData = selectedData.substring(3,selectedData.length);
-        if (!isNaN(selectedData)) {
-            $.ajax({
-                url: '/guide/menu?doc_key=' + selectedData,
-                method: 'GET',
-                success: function (res) {//set DOCUMENT_TEXT in editor area
-                    get_Guide_update(selectedText);
-                    if(admin_editor!=null){ // change doc while edit
-                        admin_editor.destroy();
-                        make_editor(res);
-                    }
-                    else if(doc_editor!=null){ // change doc
-                        doc_editor.destroy();
-                        make_editor(res);
-                    }
-                    else{ // document_ready
-                        make_editor(res);
-                    }
-                }, error: function (error) {
-                    console.log(error);
-                }
-            });
-            init_select_tagging();
-        } else {
-            console.log("not document");
-        }
+        LoadDocText();
     }
 });
+
+function LoadDocText() {
+    var dockey = selectedData.substring(3, selectedData.length);
+    if (!isNaN(dockey)) {
+        $.ajax({
+            url: '/guide/menu?doc_key=' + dockey,
+            method: 'GET',
+            success: function (res) {//set DOCUMENT_TEXT in editor area
+                get_Guide_update(selectedText);
+                if(admin_editor!=null){ // change doc while edit
+                    admin_editor.destroy();
+                    make_editor(res);
+                }
+                else if(doc_editor!=null){ // change doc
+                    doc_editor.destroy();
+                    make_editor(res);
+                }
+                else{ // document_ready
+                    make_editor(res);
+                }
+            }, error: function (error) {
+                console.log(error);
+            }
+        });
+        init_select_tagging();
+    } else {
+        console.log("not document");
+    }
+}
+
 function make_hide() {
     for(var i=0;i<hidden.length;i++) {
         $("#jstree").jstree(true).hide_node(hidden[i]);
@@ -158,7 +163,7 @@ function edit_button_click() {
         );
     $('select.select2-tagging').prop('disabled', isReadOnly);
 }
-f
+
 //admin edit_save_button click
 function edit_save_button_click() {
     if (admin_editor == null) {

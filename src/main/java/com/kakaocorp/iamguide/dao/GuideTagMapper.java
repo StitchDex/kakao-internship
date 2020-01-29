@@ -1,5 +1,6 @@
 package com.kakaocorp.iamguide.dao;
 
+import com.kakaocorp.iamguide.model.GuideDoc;
 import com.kakaocorp.iamguide.model.GuideTag;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -10,7 +11,7 @@ import java.util.List;
 @Mapper
 @Repository
 public interface GuideTagMapper {
-    List<GuideTag> getGuide_Tag(@Param("tag") String tag); // select tag with search bar
+    List<GuideDoc> getGuideList(@Param("tag") String tag); // select tag with search bar
     List<GuideTag> getTags(@Param("doc_key") String doc_key);
     List<GuideTag> suggestTags(@Param("tag") String tag);
     void insertTag(@Param("insertTag") String sql);
