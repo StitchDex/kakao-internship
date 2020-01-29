@@ -14,22 +14,24 @@
     <link href="../static/css/common.css" th:href="@{/css/common.css}" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" />
     <link href="../../static/css/jstree/style.css" th:href="@{/css/jstree/style.css}" rel="stylesheet" />
+
 </head>
 <style>
    ul{
        font-size: 15pt;
    }
 </style>
+<headr th:with="admin = ${#authentication.getDetails()}"></headr>
 <body id="treeBody">
+<input type="hidden" id="admin_name" th:if="${#authentication.getDetails() != null}" th:value="${#authentication.getName()}" />
 <div id="edit_tree">
 
 </div>
-<input type="button" id="save_tree_button" onclick="save_tree_click();" value = "저장"></input>
+<input type="button" id="save_tree_button" onclick="create_root();" value = "root create"></input>
 
 
 
-<script type="text/javascript" th:src="@{/js/jquery.min.js}"
-        src="../../static/js/jquery.min.js"></script>
+<script type="text/javascript" th:src="@{/js/jquery.min.js}" src="../../static/js/jquery.min.js"></script>
 <script type="text/javascript" th:src="@{/js/jstree.js}" src="../../static/js/jstree.js"></script>
 <script type="text/javascript" th:src="@{/js/admin_tree.js}" src="../../static/js/admin_tree.js"></script>
 <script type="text/javascript" th:src="@{/js/bootstrap.min.js}" src="../../static/js/bootstrap.min.js"></script>

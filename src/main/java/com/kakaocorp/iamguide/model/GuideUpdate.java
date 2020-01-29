@@ -5,7 +5,7 @@ import lombok.Data;
 import java.sql.Timestamp;
 
 @Data
-public class Guide_Update {
+public class GuideUpdate {
     private int UPDATE_KEY;
     private String ADMIN_ID;
     private String DOCUMENT_TITLE;
