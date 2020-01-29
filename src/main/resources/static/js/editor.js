@@ -44,26 +44,7 @@ class MyUploadAdapter {
                 default: response.url
 
             } );
-            /*var json_data = {
-                'url' : response.url,
-                'key' : selectedData,
-                'user' : $('#admin_name').val()
-            };
-            var sendData = JSON.stringify(json_data);
-            console.log(sendData);
-            $.ajax({
-                url: '/admin/set_image',
-                headers: {"X-CSRF-TOKEN": token},
-                data: sendData,
-                method: 'POST',
-                dataType: 'html',
-                contentType: 'application/json',
-                success: function (res) {
 
-                }, error: function (error) {
-                    console.log(error);
-                }
-            });*/
         } );
 
         // 파일로더는 uploadTotal과 upload properties라는 속성 두개를 갖는다.
@@ -85,7 +66,6 @@ class MyUploadAdapter {
         data.append( 'file', file );
         var token = $("meta[name='_csrf']").attr("content");
         this.xhr.setRequestHeader("X-CSRF-TOKEN",token);
-        //this.xhr.setRequestHeader("content-type",'multipart/form-data');
         // 여기가 인증이나 CSRF 방어와 같은 방어 로직을 작성하기 좋은 곳이다.
         // 예를들어, XHR.setREquestHeader()를 사용해 요청 헤더에 CSRF 토큰을 넣을 수 있다.
 

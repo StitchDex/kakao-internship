@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.io.*;
+import java.util.HashMap;
 
 
 @Controller
@@ -34,15 +35,13 @@ public class UploadController {
 
 
         // 한글깨짐을 방지하기위해 문자셋 설정, 파라미터로 전달되는 response 객체의 한글 설정
-        String fileName = upload.getOriginalFilename();
-        byte[] bytes = upload.getBytes();
-        String uploadPath = "/Users/kakao/Desktop/upload/";
-        OutputStream out = new FileOutputStream(new File(uploadPath + fileName));
-        out.write(bytes);
+        HashMap<String,String> info = uploadService.setImage(upload);
+        String fileName = info.get("fileName");
 
         response.setCharacterEncoding("utf-8");
         response.setContentType("text/html; charset=utf-8");
-        String fileUrl = request.getContextPath() +"/Users/kakao/Desktop/upload/"+ fileName;
+
+        String fileUrl = request.getContextPath() +info.get("uploadPath")+fileName;
         PrintWriter printWriter = response.getWriter();
         JSONObject json = new JSONObject();
         json.put("uploaded", 1);

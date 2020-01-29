@@ -12,10 +12,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.URLEncoder;
 import java.security.SignatureException;
+import java.util.HashMap;
+
 
 @Service
 public class UploadService {
@@ -37,19 +38,29 @@ public class UploadService {
     @Autowired
     UploadMapper uploadMapper;
 
-    public String setImage(MultipartFile upload) throws IOException {
+    public HashMap<String,String> setImage(MultipartFile upload) throws IOException {
         /*serviceId=$1                  # 서비스ID
                 wirte_key=$2            # Write key(서비스ID 등록시 발급받은 write key)
         tenth2_full_pathname=$3         # 업로드할 Tenth2 타겟경로 (파일이 업로드될 전체 경로를 명시합니다.
                                         e.g. "/test/diego/test_post_upload_image_resize_no_original_20160121045425")
         full_pathname_to_upload=$4      # 업로드할 로컬파일 경로*/
-        Tenth2OutputStream os = null;
+        /*Tenth2OutputStream os = null;
         String path = IamUtils.getTenthPath(serviceId, upload.getOriginalFilename());
         //tenth
         os = new Tenth2OutputStream(path, upload.getBytes().length);
-        os.write(upload.getBytes());
-        //uploadMapper.setImage(path);
-        return path;
+        os.write(upload.getBytes());*/
+        HashMap<String,String> info = null;
+        String fileName = upload.getOriginalFilename();
+        byte[] bytes = upload.getBytes();
+        String uploadPath = "/Users/kakao/Desktop/upload/";
+        OutputStream out = new FileOutputStream(new File(uploadPath + fileName));
+        out.write(bytes);
+        info = new HashMap<String,String>();
+        info.put("uploadPath",uploadPath);
+        info.put("fileName",fileName);
+
+        uploadMapper.setImage(uploadPath);
+        return info;
     }
 
     public String getFileUrl(String ip, String path) throws UnsupportedEncodingException, SignatureException {
