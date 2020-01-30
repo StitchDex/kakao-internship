@@ -8,6 +8,8 @@ var hidden_num;
 var hidden = new Array();
 var beforeTags = new Set();
 var afterTags;
+var beforeImageUrl = new Set();
+var afterImageUrl = new Set();
 //document ready
 $(function () {
     hidden_num=0;
@@ -163,7 +165,10 @@ function edit_button_click() {
                 console.error( error );
             }
         );
+
     $('select.select2-tagging').prop('disabled', isReadOnly);
+    var temp = doc_editor.getData()
+    beforeImageUrl = new Set(UrlParse(temp));
 }
 
 //admin edit_save_button click
@@ -179,7 +184,6 @@ function edit_save_button_click() {
         const edit_doc = admin_editor.getData();
         var sendData = JSON.stringify({"id": dockey, "content": edit_doc});
         var token = $("meta[name='_csrf']").attr("content");
-        var urls = [];
         $.ajax({
             url: '/admin/edit_doc',
             headers: {"X-CSRF-TOKEN": token},
@@ -198,16 +202,25 @@ function edit_save_button_click() {
 
         //IMAGE URL
         //Get before URL
-        var beforeURL = new Set();
-        var afterURL = new Set();
         //Get after URL
+        afterImageUrl = new Set(UrlParse(admin_editor.getData()));
         //Extract insertUrl & deleteUrl
-        //Insert URL to DB
-        //Delete URL from DB
+        var inserUrl = substract(Array.from(afterImageUrl), Array.from(beforeImageUrl));
+        var deleteUrl = substract(Array.from(beforeImageUrl), Array.from(afterImageUrl));
+        //Insert URL to DB & Delete URL from DB
+        var updateUrls = {"insertUrl":inserUrl, "deleteUrl":deleteUrl,"docId":dockey};
+        $.ajax({
+            'url' : '/admin/imageurl',
+            'data' : updateUrls,
+            'contentType' : 'application/json',
+            'headers': {"X-CSRF-TOKEN": token},
+            'method': 'POST',
+            'success':'',
+            'error':''
+        });
+
 
         urls = UrlParse(sendData);
-        beforeURL;
-        afterURL;
 
         //Tag Select2
         afterTags = new Set();
@@ -312,10 +325,11 @@ function get_Guide_tag(title) {
 }*/
 function init_select_tagging(){
     var ret = [];
+    var dockey = selectedData.substring(3);
     $.ajax({
         'async':false,
         'url':'admin/getTags',
-        'data':{'doc_key':selectedData},
+        'data':{'doc_key':dockey},
         'success':function(data){
             $.each(data, function(key, val){
                 ret.push({"id" : key, "text":val.tag, "selected":true});
@@ -364,6 +378,7 @@ function init_select_tagging(){
 }
 
 function substract(a,b) { return $(a).not(b).get(); }
+
 
 function UrlParse(text) {
     var m,
