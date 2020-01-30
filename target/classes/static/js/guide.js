@@ -172,10 +172,11 @@ function edit_save_button_click() {
     if (admin_editor == null) {
         alert("Error");
     } else {
+        var dockey = selectedData.substring(3, selectedData.length);
         admin_editor.set('isReadOnly', true);
         //+)check the doc is edit (if or editor method)
         const edit_doc = admin_editor.getData();
-        var sendData = JSON.stringify({"id": selectedData, "content": edit_doc});
+        var sendData = JSON.stringify({"id": dockey, "content": edit_doc});
         var token = $("meta[name='_csrf']").attr("content");
         $.ajax({
             url: '/admin/edit_doc',
@@ -347,3 +348,16 @@ function init_select_tagging(){
 }
 
 function substract(a,b) { return $(a).not(b).get(); }
+
+function test() {
+    var text = doc_editor.getData();
+    var m,
+        urls = [],
+        str = text,
+        rex = /[sS][rR][cC]\s*=\s*(?:'|")([^("|')]*)(?:'|")/g;
+
+    while ( m = rex.exec( str ) ) {
+        urls.push( m[1] );
+    }
+    console.log(urls);
+}

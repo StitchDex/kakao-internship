@@ -172,11 +172,14 @@ function edit_save_button_click() {
     if (admin_editor == null) {
         alert("Error");
     } else {
+        //Editor Save
+        var dockey = selectedData.substring(3, selectedData.length);
         admin_editor.set('isReadOnly', true);
         //+)check the doc is edit (if or editor method)
         const edit_doc = admin_editor.getData();
-        var sendData = JSON.stringify({"id": selectedData, "content": edit_doc});
+        var sendData = JSON.stringify({"id": dockey, "content": edit_doc});
         var token = $("meta[name='_csrf']").attr("content");
+        var urls = [];
         $.ajax({
             url: '/admin/edit_doc',
             headers: {"X-CSRF-TOKEN": token},
@@ -186,13 +189,27 @@ function edit_save_button_click() {
             contentType: 'application/json',
             success: function (res) {
                 set_Guide_update(selectedText,'update');
+                issuc = true;
                 // refresh page
             }, error: function (error) {
                 console.log(error);
             }
         });
 
+        //IMAGE URL
+        //Get before URL
+        var beforeURL = new Set();
+        var afterURL = new Set();
+        //Get after URL
+        //Extract insertUrl & deleteUrl
+        //Insert URL to DB
+        //Delete URL from DB
 
+        urls = UrlParse(sendData);
+        beforeURL;
+        afterURL;
+
+        //Tag Select2
         afterTags = new Set();
         $.each($('select.select2-tagging option:selected'), function (key, val) {
             afterTags.add(val.text);
@@ -347,3 +364,15 @@ function init_select_tagging(){
 }
 
 function substract(a,b) { return $(a).not(b).get(); }
+
+function UrlParse(text) {
+    var m,
+        urls = [],
+        str = text,
+        rex = /[sS][rR][cC]\s*=\s*(?:'|")([^("|')]*)(?:'|")/g;
+
+    while ( m = rex.exec( str ) ) {
+        urls.push( m[1] );
+    }
+    return urls;
+}
