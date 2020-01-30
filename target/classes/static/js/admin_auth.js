@@ -23,24 +23,69 @@ if (selectAccount.length > 0) {
 }
 
 function onload() {
-    var options = "";
+    $('select.select-account-all').empty();
     $.getJSON("/admin/getadminall", function(data){
-            $.each(data, function(key, val){
-                options += "<option value='" + val.adminEmpNo + "'>" + val.adminAccountId +
-                   "(" + val.adminName + ")" + "</option>"
+        $.each(data, function(key, val){
+                var options = $("<option></option>")
+                    .attr('EmpNo',val.adminEmpNo)
+                    .attr('AccountId',val.adminAccountId)
+                    .attr('Name',val.adminName)
+                    .text(val.adminAccountId + "(" + val.adminName + ")");
+                $('select.select-account-all').append(options);
             });
-            $('select.select-account-all').html(options);
         }
     );
 }
 
-function insert_click() {
+function deleteAdd(param){
+    $(param).parent("li").remove();
+}
+
+$('.insert-admin').click(function(e) {
+    e.preventDefault();
+
+    if($("#ccList").children("li").length > 10) {
+        alert("참조는 최대 10명까지만 추가가 가능합니다.");
+        return;
+    }
+
+    var selectAccount = $('select.select2-account').select2('data');
+    if(selectAccount.length > 0) {
+        var data = { 'memberName': selectAccount[0].identityDisplayName,
+            'memberAccountId': selectAccount[0].accountId,
+            'memberEmpNo': selectAccount[0].employeeNo,
+            'personName': selectAccount[0].personName};
+        var deleteBtn = $('<button class="close deleteCC" onclick="deleteAdd(this)"><span aria-hidden="true">×</span></button>');
+
+        // 중복 검사
+        var liArr = $("select.select-account-all").children("option");
+        for(i=0; i<liArr.length; i++) {
+            if(data.memberAccountId == $(liArr[i]).attr('accountid')) {
+                $('.select2-account').val(null).trigger('change');
+                alert("이미 관리자 권한을 갖고있는 아이디 입니다.");
+                return;
+            }
+        }
+
+        var li = $('<li class="list-group-item"></li>')
+            .attr('empNo', data.memberEmpNo)
+            .attr('accountId', data.memberAccountId)
+            .attr('empName',data.personName)
+            .text(data.memberName)
+            .append(deleteBtn);
+        $("#addList").prepend(li);
+        $('.select2-account').val(null).trigger('change');
+    }
+})
+
+function insertClick() {
+
     var token = $("meta[name='_csrf']").attr("content");
     var admin_list = [];
 
-    var selected = $('select.select2-account').select2('data');
+    var selected = $('#addList').children('li');
     $.each(selected, function (key, val) {
-        var temp = {'adminEmpNo':val.employeeNo, 'adminAccountId':val.accountId, 'adminName':val.personName};
+        var temp = {'adminEmpNo':val.getAttribute('empno'), 'adminAccountId':val.getAttribute('accountid'), 'adminName':val.getAttribute('empname')};
         admin_list.push(temp);
     })
 
@@ -53,20 +98,21 @@ function insert_click() {
         'success':function(){
             onload();
             alert('성공적으로 추가되었습니다.');
+            $('#addList').children('li').remove();
         },
         'error':function(){
-            alert('에러 발생')
+            alert('에러 발생');
         }
     });
 }
 
-function delete_click() {
+function deleteClick() {
     var token = $("meta[name='_csrf']").attr("content");
     var admin_list = [];
 
-    var selected = $("select.select-account-all option:selected");
+    var selected = $("select.select-account-all").find("option:selected");
     $.each(selected, function (key, val) {
-        var temp = {"adminEmpNo":val.value, "adminAccountId":val.text};
+        var temp = {"adminEmpNo":val.getAttribute("empno")};
         admin_list.push(temp);
     })
 
@@ -74,6 +120,7 @@ function delete_click() {
     $.ajax({
         'url':'./deleteAdmin',
         'headers': {"X-CSRF-TOKEN": token},
+        'async':false,
         'type':'POST',
         'contentType':'application/json',
         'data': admin_list,
@@ -85,4 +132,10 @@ function delete_click() {
             alert('에러 발생')
         }
     });
+
+    onChange();
+}
+
+function onChange(){
+    $('#select-count').text($('.select-account-all').children("option:selected").length)
 }
