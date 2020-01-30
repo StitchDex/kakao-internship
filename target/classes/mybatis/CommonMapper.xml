@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.kakaocorp.iamguide.dao.CommonMapper">
+    <select id="isAdmin" resultType="String">
+        SELECT ADMIN_ACCOUNT_ID FROM ADMIN WHERE ADMIN_ACCOUNT_ID = #{admin_id}
+    </select>
+    <select id="getAdminAll" resultType="com.kakaocorp.iamguide.model.Admin">
+        SELECT ADMIN_EMPNO as adminEmpNo, ADMIN_ACCOUNT_ID as adminAccountId, ADMIN_NAME as adminName
+        FROM ADMIN;
+    </select>
+    <insert id="insertAdmin" parameterType="java.util.List">
+        INSERT INTO ADMIN
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            ("${item.adminEmpNo}", "${item.adminAccountId}", "${item.adminName}")
+        </foreach>
+    </insert>
+    <delete id="deleteAdmin" parameterType="java.util.List">
+        DELETE FROM ADMIN
+        WHERE ADMIN_EMPNO IN (
+        <foreach collection="list" item="item" separator=",">
+            #{item.adminEmpNo}
+        </foreach>
+        )
+    </delete>
+</mapper>

@@ -19,6 +19,7 @@ import java.io.*;
 import java.net.URLEncoder;
 import java.nio.file.FileAlreadyExistsException;
 import java.security.SignatureException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -45,7 +46,6 @@ public class UploadService {
 
     public static void setImaging(String id, String content, List<String> img_url) {
         String doc_key = id;
-
     }
 
 
@@ -103,5 +103,25 @@ public class UploadService {
         }
 
         return URLEncoder.encode(result, "UTF-8");
+<<<<<<< HEAD
     }
+=======
+    }*/
+
+   public void updateImageUrl(Object urls){
+       HashMap hashMap = (HashMap) urls;
+       String docId = (String) hashMap.get("docId");
+       ArrayList<String> insert = (ArrayList<String>) hashMap.get("insertUrl");
+       ArrayList<String> delete = (ArrayList<String>) hashMap.get("deleteUrl");
+
+       if(!insert.isEmpty()){
+           uploadMapper.insertImageUrl(insert);
+           uploadMapper.insertImaging(insert, docId);
+       }
+       /*if(!delete.isEmpty()){
+           uploadMapper.deleteImageUrl(delete);
+       }
+       uploadMapper.deleteTrash();*/
+   }
+>>>>>>> b06d5b40eb02bbda436480866b25e8b5069d6b7c
 }

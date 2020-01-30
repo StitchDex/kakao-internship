@@ -2,9 +2,14 @@ package com.kakaocorp.iamguide.controller;
 
 
 import com.kakaocorp.iamguide.service.UploadService;
+<<<<<<< HEAD
 import net.daum.tenth2.util.Tenth2Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+=======
+import net.daum.tenth2.Tenth2InputStream;
+import net.daum.tenth2.util.Tenth2Util;
+>>>>>>> b06d5b40eb02bbda436480866b25e8b5069d6b7c
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.*;
+import java.net.URLDecoder;
 
 @Controller
 public class UploadController {
@@ -49,10 +55,20 @@ public class UploadController {
     public @ResponseBody byte[]
     ImageDownload(HttpServletResponse response,HttpServletRequest request,@PathVariable("filename") String filename) throws IOException, JSONException {
         Tenth2Util util = new Tenth2Util();
+<<<<<<< HEAD
         String uploadPath = request.getRequestURI();
         byte[] data = util.get(uploadPath);
         logger.info("{}","imagedownload");
+=======
+
+        String uploadPath = URLDecoder.decode(request.getRequestURI(),"UTF-8");
+        byte[] data = util.get(uploadPath);
+>>>>>>> b06d5b40eb02bbda436480866b25e8b5069d6b7c
         return data;
     }
 
+    @RequestMapping(value = "admin/imageurl", method = RequestMethod.POST)
+    public @ResponseBody void insertImageUrl(@RequestBody Object urls) {
+        uploadService.updateImageUrl(urls);
+    }
 }

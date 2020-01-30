@@ -36,9 +36,7 @@ public class GuideDocService {
         return guide_docMapper.getGuideDoc(doc_key);
     }
 
-    public void editGuide_Doc(String doc_key, String content){
-        guide_docMapper.editGuide_Doc(doc_key,content);
-    }
+    public void editGuide_Doc(String doc_key, String content){ guide_docMapper.editGuide_Doc(doc_key,content);}
 
     public void createGuide_Doc(String parent, String text,boolean state){
         if(parent.length()<1)
