@@ -45,7 +45,6 @@ public class UploadService {
 
     public static void setImaging(String id, String content, List<String> img_url) {
         String doc_key = id;
-
     }
 
 

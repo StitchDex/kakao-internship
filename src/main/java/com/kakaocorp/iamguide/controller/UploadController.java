@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.*;
+import java.net.URLDecoder;
 
 @Controller
 public class UploadController {
@@ -44,7 +45,7 @@ public class UploadController {
     public @ResponseBody byte[]
     ImageDownload(HttpServletResponse response,HttpServletRequest request,@PathVariable("filename") String filename) throws IOException, JSONException {
         Tenth2InputStream is = null;
-        String uploadPath = request.getRequestURI();
+        String uploadPath = URLDecoder.decode(request.getRequestURI(),"UTF-8");
         byte[] data = null;
         is = new Tenth2InputStream(uploadPath);
         try {
