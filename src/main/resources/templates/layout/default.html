@@ -3,8 +3,13 @@
     <head th:replace="fragments/config :: configFragment"></head>
         <div class="d-flex" id="wrapper">
             <header th:replace="fragments/header :: headerFragment"></header>
+<<<<<<< HEAD
             <section th:replace="fragments/sidebar :: sidebarFragment"></section>
         <div layout:fragment="content"></div>
+=======
+            <header th:replace="fragments/sidebar :: sidebarFragment"></header>
+            <div layout:fragment="content"></div>
+>>>>>>> 7177e5e39570fa987c4413ce5cbd393f1dcdd57e
         </div>
     <footer th:replace="fragments/footer :: footerFragment"></footer>
 </html>
