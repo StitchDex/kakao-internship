@@ -122,7 +122,11 @@
     <orderEntry type="library" name="Maven: commons-io:commons-io:2.5" level="project" />
     <orderEntry type="library" name="Maven: com.daumcorp.mis:hello-mis-api:1.3.1-spring3.0" level="project" />
     <orderEntry type="library" name="Maven: javax.mail:mail:1.4.1" level="project" />
+<<<<<<< HEAD
     <orderEntry type="library" name="Maven: net.daum.tenth2:tenth2-lib:0.79" level="project" />
+=======
+    <orderEntry type="library" name="Maven: net.daum.tenth2:tenth2-lib:0.83" level="project" />
+>>>>>>> 6aad042a1f484a23da4cca465aa814d44f6989b5
     <orderEntry type="library" name="Maven: dnsjava:dnsjava:2.1.6" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.3.4" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.4.12" level="project" />

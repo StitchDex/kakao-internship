@@ -37,14 +37,12 @@ class MyUploadAdapter {
             if ( !response || response.error ) {
                 return reject( response && response.error ? response.error.message : genericErrorText );
             }
-
             // 만약 업로드가 성공했다면, 업로드 프로미스를 적어도 default URL을 담은 객체와 함께 resolve하라.
             // 이 URL은 서버에 업로드된 이미지를 가리키며, 컨텐츠에 이미지를 표시하기 위해 사용된다.
+
             resolve( {
                 default: response.url
-
             } );
-
         } );
 
         // 파일로더는 uploadTotal과 upload properties라는 속성 두개를 갖는다.
@@ -62,10 +60,11 @@ class MyUploadAdapter {
     _sendRequest( file ) {
         // 폼 데이터 준비
         const data = new FormData();
-        data.append('type',"image");
-        data.append( 'file', file );
         var token = $("meta[name='_csrf']").attr("content");
         this.xhr.setRequestHeader("X-CSRF-TOKEN",token);
+        data.append('type',"image");
+        data.append( 'upload', file );
+
         // 여기가 인증이나 CSRF 방어와 같은 방어 로직을 작성하기 좋은 곳이다.
         // 예를들어, XHR.setREquestHeader()를 사용해 요청 헤더에 CSRF 토큰을 넣을 수 있다.
 
@@ -75,6 +74,7 @@ class MyUploadAdapter {
 
 function MyCustomUploadAdapterPlugin( editor ) {
     editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader ) => {
+
         return new MyUploadAdapter( loader );
     };
 }
