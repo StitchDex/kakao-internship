@@ -73,15 +73,15 @@ public class UploadService {
 
     }
 
-   /* public String getFileUrl(String ip, String path) throws UnsupportedEncodingException, SignatureException {
+    public String getFileUrl(String ip, String path) throws UnsupportedEncodingException, SignatureException {
         long expires = (System.currentTimeMillis() / 1000) + 300;
-        String plainText = "GET\n" + expires + "\n" + ip + "\n\n\n" + path ;
+        String plainText = "GET\n" + expires + "\n\n\n\n" + path ;
         String signature = getSignature(readKey, plainText);
-        String url = host + path +
+        String url = host +":3124/"+ path +
                 "?TWGServiceId=" + serviceId +
-                "&Signature=" + signature +
-                "&AllowedIp=" + ip +
-                "&Expires=" +expires;
+                "&Expires=" +expires +
+                "&Signature=" + signature;
+
         return url;
 
     }
@@ -103,5 +103,5 @@ public class UploadService {
         }
 
         return URLEncoder.encode(result, "UTF-8");
-    }*/
+    }
 }

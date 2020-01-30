@@ -2,7 +2,9 @@ package com.kakaocorp.iamguide.controller;
 
 
 import com.kakaocorp.iamguide.service.UploadService;
-import net.daum.tenth2.Tenth2InputStream;
+import net.daum.tenth2.util.Tenth2Util;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +21,10 @@ import java.io.*;
 
 @Controller
 public class UploadController {
+    private Logger logger = LoggerFactory.getLogger(CommonController.class);
 
+    @Value("${tenth.host}")
+    private String tenthHost;
 
     @Autowired
     UploadService uploadService;
@@ -37,36 +42,16 @@ public class UploadController {
         json.put("url",fileUrl);
         printWriter.println(json);
         printWriter.flush();
+        logger.info("{}","imageupload");
     }
-
-    //Get image (need edit mapping value + transaction)
+    //pathvariable, cache
     @RequestMapping(value="/iam_user_guide/guide/2020_01/{filename}",method = RequestMethod.GET)
     public @ResponseBody byte[]
     ImageDownload(HttpServletResponse response,HttpServletRequest request,@PathVariable("filename") String filename) throws IOException, JSONException {
-        Tenth2InputStream is = null;
+        Tenth2Util util = new Tenth2Util();
         String uploadPath = request.getRequestURI();
-        byte[] data = null;
-        is = new Tenth2InputStream(uploadPath);
-        try {
-            is = new Tenth2InputStream(uploadPath);
-            // 현재 위치에서 남은 데이터 길이를 가져옵니다.
-            long remains = is.remains();
-
-
-
-            data = new byte[(int)remains];
-
-            // readFully는 data.length만큼 읽습니다.
-            // 반면 read는 최대 data.length만큼 읽으려고 시도하지만 모두 읽지 못할 수 있습니다. 주의하세요!
-            is.readFully(data);
-
-        } catch(FileNotFoundException e) {
-            throw e;
-        } catch(IOException e) {
-            throw e;
-        } finally {
-            if(is != null) try { is.close(); } catch (IOException e) {}
-        }
+        byte[] data = util.get(uploadPath);
+        logger.info("{}","imagedownload");
         return data;
     }
 
