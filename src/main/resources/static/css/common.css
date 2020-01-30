@@ -103,3 +103,15 @@ a, a:hover {
     outline-color: white;
 }
 
+.select2-tag{
+    font-size: 20px;
+    width:325px;
+    padding: 10px;
+    border: 0px;
+    outline: none;
+    float: left
+}
+.row {
+    text-align: center;
+    flex-wrap:nowrap;
+}

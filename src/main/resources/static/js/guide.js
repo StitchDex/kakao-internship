@@ -10,12 +10,14 @@ var beforeTags = new Set();
 var afterTags;
 var beforeImageUrl = new Set();
 var afterImageUrl = new Set();
+var isAdmin
+
 //document ready
 $(function () {
     hidden_num=0;
     isReadOnly = false;
     var searched = $('#selected').val();
-
+    isAdmin = document.location.href;
     $('#jstree').jstree({
         'core': {
             'multiple': false,
@@ -58,7 +60,6 @@ $(function () {
             $('#jstree').jstree('select_node', "DOC" + searched);
         $(this).jstree('open_all')
     });
-
     $('#jstree').jstree('clear_state');
     console.log("BP")
 });
@@ -368,4 +369,13 @@ function UrlParse(text) {
         urls.push( m[1] );
     }
     return urls;
+}
+
+function admin_content_show() {
+    var x = document.getElementById("admin_content");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
 }

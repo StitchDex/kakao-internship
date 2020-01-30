@@ -1,21 +1,34 @@
 <!DOCTYPE html>
-<html lang="ko">
-<html xmlns:th="http://www.thymeleaf.org">
-<<header th:fragment="sidebarFragment">
-    <div class="border-right" id="sidebar-wrapper">
-        <div class=" list-group list-group-flush">
-            <a href="/guide" class="sidebar-heading list-group-item-action ">가이드 목록 </a>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-            <div id="jstree" style="overflow: auto">
-
-            </div><!--jstree-->
-
-            <a href="/admin/admin_auth"> 관리자 권한으로</a>
-            <a href="/admin/admin_tree"> 가이드 트리 편집</a>
-        </div>
+<section th:fragment="sidebarFragment">
+    <div class="wrapper" style="margin-top: 80px;margin-left: 15px; max-width: 300px">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3 ><a href="/guide" class="sidebar-heading list-group-item-action ">가이드목록</a></h3>
+                <strong>IAM</strong>
+            </div>
+            <div class="sidebar-header" style="border-bottom: solid gray; height: auto;">
+                    <div class = 'container-fluid' id="jstree"style="overflow: scroll; min-width: 100px"></div>
+            </div>
+            <div class="admin_button" sec:authorize="hasRole('ROLE_ADMIN')"
+                 style="margin-left: 70px;margin-top: 20px;">
+            <ul class="list-unstyled components">
+                <button type="button" id = "button1" class="btn btn-info" onclick="location.href='/admin'"
+                        style="color: #212529;background-color: #ffc10780;border-color: #ffc10700;width: 130px">문서 편집으로</button>
+            </ul>
+            <ul class="list-unstyled components">
+            <button type="button" id = "button2" class="btn btn-info" onclick="location.href='/admin/admin_auth'"
+                    style="color: #212529;background-color: #ffc10780;border-color: #ffc10700;width: 130px"> 관리자 권한으로</button>
+            </ul>
+            <ul class="list-unstyled components">
+            <button type="button" id = "button3" class="btn btn-info" onclick="location.href='/admin/admin_tree'"
+                    style="color: #212529;background-color: #ffc10780;border-color: #ffc10700;width: 130px"> 가이드 트리 편집</button>
+            </ul>
+            </div>
+        </nav>
     </div>
-
-
-</header>
-
+    </section>
 </html>

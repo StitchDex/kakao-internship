@@ -3,28 +3,24 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout/default">
 
-<!-- index.html 고유 CSS 추가
-<th:block layout:fragment="css">
-
-</th:block>
--->
-<!-- index.html 고유 스크립트 추가
-<th:block layout:fragment="script">
-
-</th:block>
--->
-
 <div layout:fragment="content">
-    <div class="container-fluid" style="margin-top: 100px">
-        <div class="row" id="Guide_Doc" style="margin-bottom: 30px"></div>
-        <div class="row">
-            <select class="custom-select col-sm-4 select2-tagging" name="tags" multiple="multiple"></select>
-            <input type="button" class="col-sm-2" id="edit_button" onclick="edit_button_click();" value = "편집"></input>  <!--editor readonly : false-->
-            <input type="button" class="col-sm-2" id="edit_save_button" onclick="edit_save_button_click();" value = "저장"></input>  <!--// ajax save guide_doc_text-->
+
+    <div id="admin_content" style="margin-left: 20px">
+    <div class="row container" style="margin-top: 100px">
+        <div class="container" id="Guide_Doc" style="margin-left: 30px">
+            <h1>GUIDE_DOC</h1>
         </div>
-        <div class="doc_update">
-            <textarea id="update" rows="20" cols="50" readonly="readonly"></textarea>
+        <div class="container doc_update">
+            <h1>업데이트 내역</h1>
+            <textarea id="update" rows="20" cols="60" readonly="readonly" style="resize: none"></textarea>
         </div>
     </div>
+
+        <div class="container" style="margin-top: 10px">
+            <select class="custom-select col-sm-4 select2-tagging"style="height: 40px" name="tags" multiple="multiple"></select>
+            <button style="margin-left:50px; color: #212529;background-color: #ffc10780;border-color: #ffc10700;width: 130px;height: 40px" type="button" class="btn btn-info"  id="edit_button" onclick="edit_button_click();">편집</button>  <!--editor readonly : false-->
+            <button style="margin-left:30px;color: #212529;background-color: #ffc10780;border-color: #ffc10700;width: 130px;height: 40px" type="button" class="btn btn-info" id="edit_save_button" onclick="edit_save_button_click();" >저장</button>  <!--// ajax save guide_doc_text-->
+        </div>
+</div>
 </div>
 </html>
