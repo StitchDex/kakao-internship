@@ -379,3 +379,7 @@ function admin_content_show() {
         x.style.display = "none";
     }
 }
+
+$('#button3').on('click', function() {
+    open("/admin/admin_tree","hi","resizable=yes,toolbar=yes,status=0,location=no,menubar=no,scrollbars=yes");
+})

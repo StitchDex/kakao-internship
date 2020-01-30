@@ -22,6 +22,10 @@ if (selectAccount.length > 0) {
     });
 }
 
+$(window).on('load', function () {
+    onload();
+})
+
 function onload() {
     $('select.select-account-all').empty();
     $.getJSON("/admin/getadminall", function(data){
