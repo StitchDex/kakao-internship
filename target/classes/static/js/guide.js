@@ -301,28 +301,6 @@ function set_Guide_update(title,type) {
     });
 }
 
-//get guide_tag when node is selected
-/*
-function get_Guide_tag(title) {
-    console.log(title);
-    $.ajax({
-        url: '/admin/get_tag?doc_key=' + title,
-        method: 'GET',
-        success: function (res) {
-            //update_KEY: 1, admin_ID: "jun.3671", document_TITLE: "ex1", update_TIME: "2020-01-24T19:28:25.000+0000", update_TYPE_CUD: "update
-            var ttemp = new Array(); var ttext = " ";
-            ttemp = Object.values(res);
-            for(var i=1;i<ttemp.length;i++) {
-                ttext += ttemp[i];
-                ttext += " - ";
-            }
-            $('#update').val(ttext);
-            console.log(res);
-        }, error: function (error) {
-            console.log(error);
-        }
-    });
-}*/
 function init_select_tagging(){
     var ret = [];
     var dockey = selectedData.substring(3);

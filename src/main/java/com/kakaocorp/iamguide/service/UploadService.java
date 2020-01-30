@@ -103,10 +103,10 @@ public class UploadService {
         }
 
         return URLEncoder.encode(result, "UTF-8");
-<<<<<<< HEAD
+
     }
-=======
-    }*/
+
+
 
    public void updateImageUrl(Object urls){
        HashMap hashMap = (HashMap) urls;
@@ -123,5 +123,5 @@ public class UploadService {
        }
        uploadMapper.deleteTrash();*/
    }
->>>>>>> b06d5b40eb02bbda436480866b25e8b5069d6b7c
+
 }
