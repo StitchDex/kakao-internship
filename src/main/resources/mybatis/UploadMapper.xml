@@ -18,7 +18,7 @@
         INSERT INTO GUIDE_IMAGING(IMAGE_KEY, DOCUMENT_KEY)
         VALUES
         <foreach collection="list" item="item" separator=",">
-            (#{item.id}, #{item.dockey})
+            (SELECT IMAGE_KEY FROM GUIDE_IMAGE WHERE IMAGE_PATH=#{item.path}, #{item.dockey})
         </foreach>
     </insert>
     <delete id="deleteImaging" parameterType="java.util.List">

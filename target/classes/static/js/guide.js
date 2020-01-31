@@ -208,7 +208,7 @@ function edit_save_button_click() {
         //Get after URL
         afterImageUrl = new Set(UrlParse(admin_editor.getData()));
         //Extract insertUrl & deleteUrl
-        var inserUrl = substract(Array.from(afterImageUrl), Array.from(beforeImageUrl));
+              var inserUrl = substract(Array.from(afterImageUrl), Array.from(beforeImageUrl));
         var deleteUrl = substract(Array.from(beforeImageUrl), Array.from(afterImageUrl));
         //Insert URL to DB & Delete URL from DB
         var updateUrls = {"insertUrl":inserUrl, "deleteUrl":deleteUrl,"docId":dockey};
