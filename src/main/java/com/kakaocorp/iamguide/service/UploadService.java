@@ -51,9 +51,7 @@ public class UploadService {
         String doc_key = id;
     }
 
-    public void deleteImage(){
 
-    }
     public String setImage(MultipartFile upload, String userIp) throws IOException {
 
         Tenth2OutputStream os = null;
@@ -78,43 +76,7 @@ public class UploadService {
 
     }
 
-<<<<<<< HEAD
-    public void updateImageUrl(Object urls){
-=======
-    public String getFileUrl(String ip, String path) throws UnsupportedEncodingException, SignatureException {
-        long expires = (System.currentTimeMillis() / 1000) + 300;
-        String plainText = "GET\n" + expires + "\n\n\n\n" + path ;
-        String signature = getSignature(readKey, plainText);
-        String url = host +":3124/"+ path +
-                "?TWGServiceId=" + serviceId +
-                "&Expires=" +expires +
-                "&Signature=" + signature;
-
-        return url;
-
-    }
-    private String getSignature(String key, String value) throws SignatureException, UnsupportedEncodingException {
-        String HMAC_SHA1_ALGORITHM = "HmacSHA1";
-        String result;
-
-        try {
-            SecretKeySpec signingKey =
-                    new SecretKeySpec(key.getBytes(), HMAC_SHA1_ALGORITHM);
-
-            Mac mac = Mac.getInstance(HMAC_SHA1_ALGORITHM);
-            mac.init(signingKey);
-
-            byte[] rawHmac = mac.doFinal(value.getBytes());
-            result = Base64.encodeBase64String(rawHmac).trim();
-        } catch (Exception e) {
-            throw new SignatureException("Failed to generate HMAC : " + e.getMessage());
-        }
-
-        return URLEncoder.encode(result, "UTF-8");
-
-    }
     public void updateImageUrl(Object urls) throws IOException {
->>>>>>> d656c171752fc765a72a1bf15788e91e581ead37
         HashMap hashMap = (HashMap) urls;
         String docId = (String) hashMap.get("docId");
         ArrayList<Image> insert = new ArrayList<>();
@@ -128,7 +90,7 @@ public class UploadService {
         }
 
         if(!insert.isEmpty()){
-            uploadMapper.insertImageUrl(insert); //이미지 테이블에 새로운 이미지 추가
+            //uploadMapper.insertImageUrl(insert); //이미지 테이블에 새로운 이미지 추가
             uploadMapper.insertImaging(insert); //새로추가된 이미지와 문서 연결 : 이미징 테이블에 추가
         }
 
