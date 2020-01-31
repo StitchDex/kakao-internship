@@ -4,6 +4,7 @@ package com.kakaocorp.iamguide.service;
 import com.kakaocorp.iamguide.IamUtils;
 import com.kakaocorp.iamguide.dao.UploadMapper;
 import com.kakaocorp.iamguide.model.Image;
+import net.daum.tenth2.Tenth2File;
 import net.daum.tenth2.Tenth2InputStream;
 import net.daum.tenth2.Tenth2OutputStream;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -23,6 +24,7 @@ import java.security.SignatureException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Queue;
 
 
 @Service
@@ -76,7 +78,43 @@ public class UploadService {
 
     }
 
+<<<<<<< HEAD
     public void updateImageUrl(Object urls){
+=======
+    public String getFileUrl(String ip, String path) throws UnsupportedEncodingException, SignatureException {
+        long expires = (System.currentTimeMillis() / 1000) + 300;
+        String plainText = "GET\n" + expires + "\n\n\n\n" + path ;
+        String signature = getSignature(readKey, plainText);
+        String url = host +":3124/"+ path +
+                "?TWGServiceId=" + serviceId +
+                "&Expires=" +expires +
+                "&Signature=" + signature;
+
+        return url;
+
+    }
+    private String getSignature(String key, String value) throws SignatureException, UnsupportedEncodingException {
+        String HMAC_SHA1_ALGORITHM = "HmacSHA1";
+        String result;
+
+        try {
+            SecretKeySpec signingKey =
+                    new SecretKeySpec(key.getBytes(), HMAC_SHA1_ALGORITHM);
+
+            Mac mac = Mac.getInstance(HMAC_SHA1_ALGORITHM);
+            mac.init(signingKey);
+
+            byte[] rawHmac = mac.doFinal(value.getBytes());
+            result = Base64.encodeBase64String(rawHmac).trim();
+        } catch (Exception e) {
+            throw new SignatureException("Failed to generate HMAC : " + e.getMessage());
+        }
+
+        return URLEncoder.encode(result, "UTF-8");
+
+    }
+    public void updateImageUrl(Object urls) throws IOException {
+>>>>>>> d656c171752fc765a72a1bf15788e91e581ead37
         HashMap hashMap = (HashMap) urls;
         String docId = (String) hashMap.get("docId");
         ArrayList<Image> insert = new ArrayList<>();
@@ -90,12 +128,32 @@ public class UploadService {
         }
 
         if(!insert.isEmpty()){
-            uploadMapper.insertImageUrl(insert);
-            uploadMapper.insertImaging(insert);
+            uploadMapper.insertImageUrl(insert); //이미지 테이블에 새로운 이미지 추가
+            uploadMapper.insertImaging(insert); //새로추가된 이미지와 문서 연결 : 이미징 테이블에 추가
         }
-        /*if(!delete.isEmpty()){
-            uploadMapper.deleteImageUrl(delete);
+
+        if(!delete.isEmpty()){
+            uploadMapper.deleteImaging(delete, docId); //이미징 테이블에서 연결관계 해제
         }
-        uploadMapper.deleteTrash();*/
+
+        List<Image> trashList = uploadMapper.findTrash();
+        int pn = 0;
+        while(pn != trashList.size())
+        {
+            if (!delete(trashList.get(pn).getPath())) {//DELETE FAIL
+                trashList.remove(pn);
+            }
+            else { //DELETE SUCCESS
+                pn++;
+            }
+        }
+        uploadMapper.deleteTrash(trashList); //이미징 테이블과 연결관계가 없는 이미지 데이터 모두 삭제
+    }
+
+    private boolean delete(String path) throws IOException {
+        Tenth2File file = new Tenth2File(path);
+        if(file.exists() && file.isFile())
+            file.delete();
+        return !file.exists();
     }
 }

@@ -11,4 +11,7 @@ public interface UploadMapper {
     public void setImage(@Param("url") String url);
     public void insertImageUrl(List insert);
     public void insertImaging(List insert);
+    public void deleteImaging(List delete, @Param("docId") String docId);
+    public void deleteTrash(List trash);
+    public List findTrash();
 }
