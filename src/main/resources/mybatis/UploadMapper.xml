@@ -7,19 +7,16 @@
         insert ignore into GUIDE_IMAGE(IMAGE_PATH)
         values(#{url})
     </insert>
-    <insert id="insertImageUrl" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO GUIDE_IMAGE(IMAGE_PATH)
-        VALUES
-        <foreach collection="list" item="item" separator=",">
-            (#{item.path})
-        </foreach>
-    </insert>
     <insert id="insertImaging" parameterType="java.util.List">
         INSERT INTO GUIDE_IMAGING(IMAGE_KEY, DOCUMENT_KEY)
-        VALUES
-        <foreach collection="list" item="item" separator=",">
-            (SELECT IMAGE_KEY FROM GUIDE_IMAGE WHERE IMAGE_PATH=#{item.path}, #{item.dockey})
-        </foreach>
+        SELECT IMAGE_KEY, ${docId} as DOCUMENT_KEY
+        FROM GUIDE_IMAGE
+        WHERE IMAGE_PATH IN (
+            <foreach collection="insert" item="item" separator=",">
+                #{item.path}
+            </foreach>
+        )
+
     </insert>
     <delete id="deleteImaging" parameterType="java.util.List">
         DELETE FROM GUIDE_IMAGING
