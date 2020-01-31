@@ -21,15 +21,12 @@
        font-size: 15pt;
    }
 </style>
-<headr th:with="admin = ${#authentication.getDetails()}"></headr>
+<header th:with="admin = ${#authentication.getDetails()}"></header>
 <body id="treeBody">
 <input type="hidden" id="admin_name" th:if="${#authentication.getDetails() != null}" th:value="${#authentication.getName()}" />
-<div id="edit_tree">
+<div id="edit_tree"></div>
 
-</div>
 <input type="button" id="save_tree_button" onclick="create_root();" value = "root create"></input>
-
-
 
 <script type="text/javascript" th:src="@{/js/jquery.min.js}" src="../../static/js/jquery.min.js"></script>
 <script type="text/javascript" th:src="@{/js/jstree.js}" src="../../static/js/jstree.js"></script>

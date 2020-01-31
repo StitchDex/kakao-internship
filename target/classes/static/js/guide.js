@@ -383,3 +383,8 @@ function admin_content_show() {
 $('#button3').on('click', function() {
     open("/admin/admin_tree","hi","resizable=yes,toolbar=yes,status=0,location=no,menubar=no,scrollbars=yes");
 })
+
+$('#button4').on('click',function () {
+    var modal = $('#myModal').find('.modal-body').load("/admin/admin_tree");
+    console.log("")
+})

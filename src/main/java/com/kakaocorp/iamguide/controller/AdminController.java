@@ -46,6 +46,8 @@ public class AdminController {
         return "admin_tree";
     }
 
+    @GetMapping("adminTreeModal")
+    public String adminTreeModal() {return "admin_tree";}
 
     @PostMapping(value = "admin_tree/create", produces = MediaType.APPLICATION_JSON_VALUE )
     public String createGuide_node(HttpServletRequest req, @RequestBody Map<String,Object> parm) throws Exception{
