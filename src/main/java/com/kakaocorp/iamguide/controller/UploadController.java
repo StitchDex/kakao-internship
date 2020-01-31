@@ -62,9 +62,4 @@ public class UploadController {
         byte[] data = util.get(uploadPath);
         return data;
     }
-
-    @RequestMapping(value = "admin/imageurl", method = RequestMethod.POST)
-    public @ResponseBody void insertImageUrl(@RequestBody Object urls) {
-        uploadService.updateImageUrl(urls);
-    }
 }

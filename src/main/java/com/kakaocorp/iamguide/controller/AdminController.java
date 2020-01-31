@@ -185,4 +185,10 @@ public class AdminController {
         String admin = (String)parm.get("user");
         //uploadService.setImage(url,key,admin);
     }
+
+    @RequestMapping(value = "imageurl", method = RequestMethod.POST)
+    public @ResponseBody void insertImageUrl(@RequestBody Object urls) {
+        logger.info("{}",urls);
+        uploadService.updateImageUrl(urls);
+    }
 }

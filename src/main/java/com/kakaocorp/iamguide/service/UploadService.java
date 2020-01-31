@@ -3,6 +3,7 @@ package com.kakaocorp.iamguide.service;
 
 import com.kakaocorp.iamguide.IamUtils;
 import com.kakaocorp.iamguide.dao.UploadMapper;
+import com.kakaocorp.iamguide.model.Image;
 import net.daum.tenth2.Tenth2InputStream;
 import net.daum.tenth2.Tenth2OutputStream;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -105,23 +106,22 @@ public class UploadService {
         return URLEncoder.encode(result, "UTF-8");
 
     }
+    public void updateImageUrl(Object urls){
+        HashMap hashMap = (HashMap) urls;
+        String docId = (String) hashMap.get("docId");
+        ArrayList<Image> insert = new ArrayList<>();
+        ArrayList<Image> delete = new ArrayList<>();
 
+        for(String s : (ArrayList<String>) hashMap.get("insertUrl")){insert.add(new Image(s, docId));}
+        for(String s : (ArrayList<String>) hashMap.get("deleteUrl")){delete.add(new Image(s, docId));}
 
-
-   public void updateImageUrl(Object urls){
-       HashMap hashMap = (HashMap) urls;
-       String docId = (String) hashMap.get("docId");
-       ArrayList<String> insert = (ArrayList<String>) hashMap.get("insertUrl");
-       ArrayList<String> delete = (ArrayList<String>) hashMap.get("deleteUrl");
-
-       if(!insert.isEmpty()){
-           uploadMapper.insertImageUrl(insert);
-           uploadMapper.insertImaging(insert, docId);
-       }
-       /*if(!delete.isEmpty()){
-           uploadMapper.deleteImageUrl(delete);
-       }
-       uploadMapper.deleteTrash();*/
-   }
-
+        if(!insert.isEmpty()){
+            uploadMapper.insertImageUrl(insert);
+            uploadMapper.insertImaging(insert);
+        }
+        /*if(!delete.isEmpty()){
+            uploadMapper.deleteImageUrl(delete);
+        }
+        uploadMapper.deleteTrash();*/
+    }
 }

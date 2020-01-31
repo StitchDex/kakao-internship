@@ -212,16 +212,17 @@ function edit_save_button_click() {
         var updateUrls = {"insertUrl":inserUrl, "deleteUrl":deleteUrl,"docId":dockey};
         $.ajax({
             'url' : '/admin/imageurl',
-            'data' : updateUrls,
+            'data' : JSON.stringify(updateUrls),
             'contentType' : 'application/json',
             'headers': {"X-CSRF-TOKEN": token},
             'method': 'POST',
-            'success':'',
-            'error':''
+            'success':function(){
+                console.log("uploadImageUrl Success")
+            },
+            'error':function () {
+                console.log("uploadImageUrl Fail")
+            }
         });
-
-
-        urls = UrlParse(sendData);
 
         //Tag Select2
         afterTags = new Set();

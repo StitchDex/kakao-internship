@@ -11,5 +11,5 @@ import java.util.List;
 public interface UploadMapper {
     public void setImage(@Param("url") String url);
     public void insertImageUrl(List insert);
-    public void insertImaging(List insert, @Param("docId") String docId);
+    public void insertImaging(List insert);
 }
