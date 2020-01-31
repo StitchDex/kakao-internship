@@ -4,15 +4,55 @@
       layout:decorate="layout/default">
 
 
-<div layout:fragment="content">
-    <div id = 'content' style="margin-left: 20px">
-    <div class="container-fluid" style="margin-top: 100px">
+<div layout:fragment="content" class="container" style="margin-top: 100px; margin-left: 40px">
+    <div class ="container flex-column mb-3" id="guide_first">
+        <div class="d-flex flex-row justify-content-center" style="padding-left: 150px">
+            <h1>GUIDE 목차</h1>
+        </div>
+        <div class ="row container" id="guide_second" style="height: 500px; width: 450px; margin-top: 50px">
+                <div class="container" style="margin-left: 50px">
+                    <h1 style="padding-left: 140px">LDAP</h1>
+                    <ul class="list-group" style="width: 500px;height: 400px;">
+                        <li class="list-group-item" style="overflow: auto;">LDAP DESCRIPTION</li>
+                        <li class="list-group-item" style="overflow: auto; color: mediumvioletred">TAG LIST</li>
+                        <li class="list-group-item">
+                            <a href="#" onclick="menu_tag('ldap')">#LDAP</a>
+                            <a href="#" onclick="menu_tag('faq')">#FAQ</a>
+                            <a href="#" onclick="menu_tag('생성')">#생성</a>
+                            <a href="#" onclick="menu_tag('만료')">#만료</a>
+                        </li>
+                    </ul>
+                </div>
+            <div class="container" style="margin-left: 200px">
+                <h1 style="padding-left: 140px">HELLO MIS</h1>
+                <ul class="list-group" style="width: 500px;height: 400px;">
+                    <li class="list-group-item">HELLO MIS DESCRIPTION</li>
+                    <li class="list-group-item"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row container" style="height: 500px; width: 450px; margin-top: 50px">
+            <div class="container" style="margin-left: 50px">
+                <h1 style="padding-left: 140px">SSO</h1>
+                <ul class="list-group" style="width: 500px;height: 400px;">
+                    <li class="list-group-item">SSO DESCRIPTION</li>
+                    <li class="list-group-item"></li>
+                </ul>
+            </div>
+            <div class="container" style="margin-left: 200px">
+                <h1 style="padding-left: 140px">GROUP MAIL</h1>
+                <ul class="list-group" style="width: 500px;height: 400px;">
+                    <li class="list-group-item">GROUP MAIL DESCRIPTION</li>
+                    <li class="list-group-item"></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid" id="guide_content" style="display: none">
         <input id="selected" hidden="hidden" th:value="${selected}">
         <h1 id="guide-title"></h1>
         <div id="Guide_Doc">
-            <h1>목차</h1>
         </div>
     </div>
-</div>
 </div>
 </html>

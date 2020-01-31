@@ -10,14 +10,11 @@ var beforeTags = new Set();
 var afterTags;
 var beforeImageUrl = new Set();
 var afterImageUrl = new Set();
-var isAdmin
-
 //document ready
 $(function () {
     hidden_num=0;
     isReadOnly = false;
     var searched = $('#selected').val();
-    isAdmin = document.location.href;
     $('#jstree').jstree({
         'core': {
             'multiple': false,
@@ -74,12 +71,17 @@ $('#jstree').on('select_node.jstree', function (e, data) {
     }
     //click page_node
     else {
+        $('#guide_first').css("display","none");
+        $('#guide_content').show();
         LoadDocText();
     }
 });
 
-function LoadDocText() {
-    var dockey = selectedData.substring(3, selectedData.length);
+function LoadDocText(search_key) {
+    let dockey = selectedData.substring(3, selectedData.length);
+    if(search_key != null) {
+        dockey = search_key;
+    }
     if (!isNaN(dockey)) {
         $.ajax({
             url: '/guide/menu?doc_key=' + dockey,
@@ -168,7 +170,7 @@ function edit_button_click() {
         );
 
     $('select.select2-tagging').prop('disabled', isReadOnly);
-    var temp = doc_editor.getData()
+    var temp = doc_editor.getData();
     beforeImageUrl = new Set(UrlParse(temp));
 }
 
@@ -370,16 +372,11 @@ function UrlParse(text) {
     }
     return urls;
 }
-
-function admin_content_show() {
-    var x = document.getElementById("admin_content");
-    if (x.style.display === "none") {
-        x.style.display = "block";
-    } else {
-        x.style.display = "none";
-    }
+function menu_tag(tag_name){
+    location.href = "/guide/search?tag=%23" + tag_name;
 }
 
-$('#button3').on('click', function() {
-    open("/admin/admin_tree","hi","resizable=yes,toolbar=yes,status=0,location=no,menubar=no,scrollbars=yes");
-})
+//admin_tree
+$('#admin_tree_button').on('click', function() {
+    window.open("/admin/admin_tree","hi","width=500,height=800,resizable=yes,toolbar=yes,status=0,location=no,menubar=no,scrollbars=yes");
+});

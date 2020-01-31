@@ -7,7 +7,6 @@ $(function () {
         'core': {
             'multiple': false,
             'check_callback': true,
-
             'data':  {
                 'url' : '/guide/tree',
                 'type': "GET",
@@ -205,7 +204,6 @@ function create_node(sendData){
         success: function (res) {
             set_Guide_update(title,'create');
             alert("create ok");
-            self.close();
             location.reload();
         }, error: function (error) {
             console.log(error);
@@ -213,15 +211,6 @@ function create_node(sendData){
     });
 }
 
-function create_root(){
-    var json_data = {
-        'parent': '#',
-        'text': 'New Root',
-        'type': 'DIR',
-        'state': false
-    };
-    create_node(json_data);
-}
 function update_node(sendData,what){
     var title = sendData.text;
     sendData = JSON.stringify(sendData);
@@ -236,7 +225,6 @@ function update_node(sendData,what){
         success: function (res) {
             set_Guide_update(title,'change');
             alert("update ok");
-            self.close();
             location.reload();
         }, error: function (error) {
             console.log(error);
@@ -257,10 +245,19 @@ function delete_node(sendData,title,what){
         success: function (res) {
             set_Guide_update(title,'delete');
             alert("delete ok");
-            self.close();
             location.reload();
         }, error: function (error) {
             console.log(error);
         }
     });
+}
+
+function create_root(){
+    var json_data = {
+        'parent': '#',
+        'text': 'New Root',
+        'type': 'DIR',
+        'state': false
+    };
+    create_node(json_data);
 }

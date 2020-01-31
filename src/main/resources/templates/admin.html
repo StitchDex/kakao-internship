@@ -3,24 +3,29 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout/default">
 
-<div layout:fragment="content">
+<div layout:fragment="content" style="margin-top: 100px; margin-left: 40px">
 
-    <div id="admin_content" style="margin-left: 20px">
-    <div class="row container" style="margin-top: 100px">
-        <div class="container" id="Guide_Doc" style="margin-left: 30px">
-            <h1>GUIDE_DOC</h1>
-        </div>
+    <div class="container" id="guide_first">
+    <h1>ADMIN_PAGE</h1>
+        <h2>HOW TO?</h2>
+        <li>CLICK TREE</li><li>CLICK EDIT BUTTON</li><li>CLICK SAVE BUTTON</li>
+    </div>
+
+    <div id="guide_content" style="margin-left: 20px; display: none">
+        <h1 id="guide-title"></h1>
+            <div class="row container">
+                <div class="container" id="Guide_Doc" style="margin-left: 30px">
+            </div>
         <div class="container doc_update">
             <h1>업데이트 내역</h1>
             <textarea id="update" rows="20" cols="60" readonly="readonly" style="resize: none"></textarea>
         </div>
-    </div>
-
+            </div>
         <div class="container" style="margin-top: 10px">
             <select class="custom-select col-sm-4 select2-tagging"style="height: 40px" name="tags" multiple="multiple"></select>
             <button style="margin-left:50px; color: #212529;background-color: #ffc10780;border-color: #ffc10700;width: 130px;height: 40px" type="button" class="btn btn-info"  id="edit_button" onclick="edit_button_click();">편집</button>  <!--editor readonly : false-->
             <button style="margin-left:30px;color: #212529;background-color: #ffc10780;border-color: #ffc10700;width: 130px;height: 40px" type="button" class="btn btn-info" id="edit_save_button" onclick="edit_save_button_click();" >저장</button>  <!--// ajax save guide_doc_text-->
         </div>
-</div>
+    </div>
 </div>
 </html>
