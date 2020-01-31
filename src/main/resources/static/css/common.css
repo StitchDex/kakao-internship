@@ -96,11 +96,9 @@ a, a:hover {
 
 .ck.ck-editor {
     min-width: 1100px;
-    outline-color: white;
 }
 .ck-editor__editable {
-    min-height: 800px;
-    outline-color: white;
+    min-height: auto;
 }
 
 .select2-tag{
@@ -115,6 +113,4 @@ a, a:hover {
     text-align: center;
     flex-wrap:nowrap;
 }
-.ck-editor__editable{
-    min-height: 30px;!important;
-}
+

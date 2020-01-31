@@ -79,6 +79,7 @@ $('#jstree').on('select_node.jstree', function (e, data) {
 
 function LoadDocText(search_key) {
     let dockey = selectedData.substring(3, selectedData.length);
+
     if(search_key != null) {
         dockey = search_key;
     }
@@ -163,6 +164,7 @@ function edit_button_click() {
         )
         .then( editor => {
             admin_editor=editor;
+            $(this).css({"border-style":"solid;!important"});
         })
         .catch( error => {
                 console.error( error );
