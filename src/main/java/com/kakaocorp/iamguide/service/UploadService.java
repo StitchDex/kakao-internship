@@ -92,8 +92,7 @@ public class UploadService {
         }
 
         if(!insert.isEmpty()){
-            uploadMapper.insertImageUrl(insert); //이미지 테이블에 새로운 이미지 추가
-            uploadMapper.insertImaging(insert); //새로추가된 이미지와 문서 연결 : 이미징 테이블에 추가
+            uploadMapper.insertImaging(insert, docId); //새로추가된 이미지와 문서 연결 : 이미징 테이블에 추가
         }
 
         if(!delete.isEmpty()){
@@ -111,7 +110,10 @@ public class UploadService {
                 pn++;
             }
         }
-        uploadMapper.deleteTrash(trashList); //이미징 테이블과 연결관계가 없는 이미지 데이터 모두 삭제
+
+        if(!trashList.isEmpty()){
+            uploadMapper.deleteTrash(trashList); //이미징 테이블과 연결관계가 없는 이미지 데이터 모두 삭제
+        }
     }
 
     private boolean delete(String path) throws IOException {
