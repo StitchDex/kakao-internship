@@ -15,26 +15,14 @@ $(document).ready(function() {
 
             }
         },
-        'placeholder':"Search Tag",
-        'minimumInputLength': 2
+        'placeholder':"#Tag Search",
+        'minimumInputLength': 1
     });
 });
-
 //tag select event
-$('.select2-tag').on('select2:select', function(e){
-    var url = "/guide/search?tag=" + encodeURIComponent(e.params.data.tag);
-    location.href=url;
-    $('.select2-tag').val(null).trigger("change");
-    /*
-    $.ajax
-    ({
-        'url':"/guide/search",
-        'data': {'tag' : e.params.data.tag},
-        'success': function(res){
-            console.log("tag request succ");
-        },
-        'error' : function () {
-            console.log("tag request fail");
-        }
-    })*/
-});
+    $('.select2-tag').on('select2:select', function (e) {
+        var url = "/guide/search?tag=" + encodeURIComponent(e.params.data.tag);
+        location.href = url;
+        $('.select2-tag').val(null).trigger("change");
+
+    });
