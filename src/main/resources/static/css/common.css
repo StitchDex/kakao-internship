@@ -115,3 +115,6 @@ a, a:hover {
     text-align: center;
     flex-wrap:nowrap;
 }
+.ck-editor__editable{
+    min-height: 30px;!important;
+}
