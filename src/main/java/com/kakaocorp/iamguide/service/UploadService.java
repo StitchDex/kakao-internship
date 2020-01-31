@@ -4,6 +4,7 @@ package com.kakaocorp.iamguide.service;
 import com.kakaocorp.iamguide.IamUtils;
 import com.kakaocorp.iamguide.dao.UploadMapper;
 import com.kakaocorp.iamguide.model.Image;
+import net.daum.tenth2.Tenth2File;
 import net.daum.tenth2.Tenth2InputStream;
 import net.daum.tenth2.Tenth2OutputStream;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -23,6 +24,7 @@ import java.security.SignatureException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Queue;
 
 
 @Service
@@ -106,7 +108,7 @@ public class UploadService {
         return URLEncoder.encode(result, "UTF-8");
 
     }
-    public void updateImageUrl(Object urls){
+    public void updateImageUrl(Object urls) throws IOException {
         HashMap hashMap = (HashMap) urls;
         String docId = (String) hashMap.get("docId");
         ArrayList<Image> insert = new ArrayList<>();
@@ -116,12 +118,32 @@ public class UploadService {
         for(String s : (ArrayList<String>) hashMap.get("deleteUrl")){delete.add(new Image(s, docId));}
 
         if(!insert.isEmpty()){
-            uploadMapper.insertImageUrl(insert);
-            uploadMapper.insertImaging(insert);
+            uploadMapper.insertImageUrl(insert); //이미지 테이블에 새로운 이미지 추가
+            uploadMapper.insertImaging(insert); //새로추가된 이미지와 문서 연결 : 이미징 테이블에 추가
         }
-        /*if(!delete.isEmpty()){
-            uploadMapper.deleteImageUrl(delete);
+
+        if(!delete.isEmpty()){
+            uploadMapper.deleteImaging(delete, docId); //이미징 테이블에서 연결관계 해제
         }
-        uploadMapper.deleteTrash();*/
+
+        List<Image> trashList = uploadMapper.findTrash();
+        int pn = 0;
+        while(pn != trashList.size())
+        {
+            if (!delete(trashList.get(pn).getPath())) {//DELETE FAIL
+                trashList.remove(pn);
+            }
+            else { //DELETE SUCCESS
+                pn++;
+            }
+        }
+        uploadMapper.deleteTrash(trashList); //이미징 테이블과 연결관계가 없는 이미지 데이터 모두 삭제
+    }
+
+    private boolean delete(String path) throws IOException {
+        Tenth2File file = new Tenth2File(path);
+        if(file.exists() && file.isFile())
+            file.delete();
+        return !file.exists();
     }
 }

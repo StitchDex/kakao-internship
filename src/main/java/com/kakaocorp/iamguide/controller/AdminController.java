@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -185,7 +186,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "imageurl", method = RequestMethod.POST)
-    public @ResponseBody void insertImageUrl(@RequestBody Object urls) {
+    public @ResponseBody void insertImageUrl(@RequestBody Object urls) throws IOException {
         logger.info("{}",urls);
         uploadService.updateImageUrl(urls);
     }
