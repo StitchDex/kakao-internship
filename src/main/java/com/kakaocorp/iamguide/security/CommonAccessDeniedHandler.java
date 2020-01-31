@@ -25,9 +25,10 @@ public class CommonAccessDeniedHandler implements AccessDeniedHandler {
                 res.sendRedirect("/guide");
                 return;
             }
-        } else
-            log.info("request, {} {}", req.getMethod() , req.getRequestURL());
-        res.sendError(HttpServletResponse.SC_FORBIDDEN);
+        } else {
+            log.info("request, {} {}", req.getMethod(), req.getRequestURL());
+            res.sendError(HttpServletResponse.SC_FORBIDDEN);
+        }
     }
 }
 

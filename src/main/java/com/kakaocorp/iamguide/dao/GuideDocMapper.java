@@ -9,7 +9,6 @@ import java.util.List;
 
 
 @Mapper
-@Repository
 public interface GuideDocMapper {
     List<GuideDoc> selectTreeDataForGuide();
     GuideDoc getGuideDoc(@Param("id") String id); // doc_key

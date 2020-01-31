@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Mapper
-@Repository
 public interface GuideTagMapper {
     List<GuideDoc> getGuideList(@Param("tag") String tag); // select tag with search bar
     List<GuideTag> getTags(@Param("doc_key") String doc_key);

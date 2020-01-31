@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Mapper
-@Repository
 public interface UploadMapper {
     public void setImage(@Param("url") String url);
     public void insertImageUrl(List insert);

@@ -4,6 +4,8 @@ import com.kakaocorp.iamguide.model.GuideUpdate;
 import com.kakaocorp.iamguide.service.*;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +48,7 @@ public class AdminController {
         return "admin_tree";
     }
 
-
+    @CacheEvict(cacheNames ="TreeLoad",allEntries = true)
     @PostMapping(value = "admin_tree/create", produces = MediaType.APPLICATION_JSON_VALUE )
     public String createGuide_node(HttpServletRequest req, @RequestBody Map<String,Object> parm) throws Exception{
         String parent = (String) parm.get("parent");
@@ -61,6 +63,7 @@ public class AdminController {
         return "redirect:admin/admin_tree";
     }
 
+    @CacheEvict(cacheNames ="TreeLoad",allEntries = true)
     @PostMapping(value = "admin_tree/update", produces = MediaType.APPLICATION_JSON_VALUE )
     public String updateGuide_node(HttpServletRequest req, @RequestBody Map<String,Object> parm) throws Exception{
         String key = (String)parm.get("id");
@@ -75,6 +78,8 @@ public class AdminController {
         }
         return "redirect:admin/admin_tree";
     }
+
+    @CacheEvict(cacheNames ="TreeLoad",allEntries = true)
     @PostMapping(value = "admin_tree/delete", produces = MediaType.APPLICATION_JSON_VALUE )
     public String deleteGuide_node(HttpServletRequest req, @RequestBody Map<String,Object> parm) throws Exception{
         String key = (String) parm.get("id");
@@ -142,6 +147,7 @@ public class AdminController {
      * JSON : GET ADMIN LIST
      * ldap search
      */
+    @Cacheable(cacheNames = "Admin_auth")
     @RequestMapping("getadminall")
     public @ResponseBody
     List getAdminAll() throws Exception {

@@ -5,7 +5,6 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 @Mapper
-@Repository
 public interface GuideDirMapper {
     void createGuide_Dir(@Param("parent") String parent, @Param("text") String text,@Param("state") boolean state);
     void createGuide_rootDir(@Param("text") String text,@Param("state") boolean state);

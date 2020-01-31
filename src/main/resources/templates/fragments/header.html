@@ -26,7 +26,6 @@
                         <label class="text-dark mr-2 " style="padding-left:25px;">
                             <strong th:if="${#authentication.getDetails() != null}" th:text= "|${#authentication.getName()} / ${#authentication.getDetails().getPersonName()}|" style="font-size: larger"></strong>
                         </label>
-                        <!--로그아웃-->
                         <input class="btn btn-outline-dark my-2 my-sm-0" type="submit" value="로그아웃"
                                 style = "margin-left:10px;"/>
                     </form>
@@ -34,7 +33,7 @@
             </ul>
         </div>
     </nav>
-</header>
+    </header>
 </header>
 </body>
 </html>

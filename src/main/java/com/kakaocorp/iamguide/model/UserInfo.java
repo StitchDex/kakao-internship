@@ -3,8 +3,9 @@ package com.kakaocorp.iamguide.model;
 import com.daum.mis.remote.client.model.IdentityPersonInfo;
 import lombok.Data;
 
-@Data
-public class UserInfo extends IdentityPersonInfo {
+import java.io.Serializable;
+
+public class UserInfo extends IdentityPersonInfo implements Serializable {
     public UserInfo(IdentityPersonInfo parent){
         super.setEmployeeNo(parent.getEmployeeNo());
         super.setAccountId(parent.getAccountId());

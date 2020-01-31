@@ -9,7 +9,6 @@ import java.util.List;
 
 
 @Mapper
-@Repository
 public interface GuideUpdateMapper {
     void setGuide_Update(@Param("ADMIN_ID")String id, @Param("DOCUMENT_TITLE")String title,
                           @Param("UPDATE_TYPE_CUD")String crud);

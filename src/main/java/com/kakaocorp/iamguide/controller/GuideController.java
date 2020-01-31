@@ -6,6 +6,7 @@ import com.kakaocorp.iamguide.service.GuideTagService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,16 +27,15 @@ public class GuideController {
     @Autowired
     GuideTagService guideTagService;
 
+    @Cacheable(cacheNames = "TreeLoad")
     @GetMapping(value = "tree", produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    List<GuideDoc> getGuideTree(){
-        logger.info("/guide/tree {}");
+    public @ResponseBody List<GuideDoc> getGuideTree(){
         return guideDocService.getGuideTreeList();
     }
 
     @GetMapping("menu")
     public @ResponseBody GuideDoc getGuideDoc(HttpServletRequest req, @RequestParam("doc_key") String doc_key){
-        logger.info("{}", doc_key);
+        logger.info("clicked_menu_num:{}", doc_key);
         return guideDocService.getGuideDoc(doc_key);
     }
 

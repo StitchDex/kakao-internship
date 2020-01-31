@@ -23,8 +23,14 @@ if (selectAccount.length > 0) {
 }
 
 $(window).on('load', function () {
-    onload();
-})
+    var cur_path = window.location.pathname;
+    if(cur_path == "/admin/admin_auth") {
+        onload();
+    }
+    else{
+
+    }
+});
 
 function onload() {
     $('select.select-account-all').empty();
