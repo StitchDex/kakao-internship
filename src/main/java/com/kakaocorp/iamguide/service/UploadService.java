@@ -51,9 +51,7 @@ public class UploadService {
         String doc_key = id;
     }
 
-    public void deleteImage(){
 
-    }
     public String setImage(MultipartFile upload, String userIp) throws IOException {
 
         Tenth2OutputStream os = null;
@@ -92,7 +90,12 @@ public class UploadService {
         }
 
         if(!insert.isEmpty()){
+<<<<<<< HEAD
             uploadMapper.insertImaging(insert, docId); //새로추가된 이미지와 문서 연결 : 이미징 테이블에 추가
+=======
+            //uploadMapper.insertImageUrl(insert); //이미지 테이블에 새로운 이미지 추가
+            uploadMapper.insertImaging(insert); //새로추가된 이미지와 문서 연결 : 이미징 테이블에 추가
+>>>>>>> 6a827ff0dceb0d063c9cff8e5e0a11aac4121a0a
         }
 
         if(!delete.isEmpty()){
