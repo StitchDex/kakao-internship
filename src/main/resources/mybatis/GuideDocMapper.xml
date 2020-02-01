@@ -5,7 +5,15 @@
 
 <mapper namespace="com.kakaocorp.iamguide.dao.GuideDocMapper">
 
-    <select id="selectTreeDataForGuide" resultType="com.kakaocorp.iamguide.model.GuideDoc">
+    <select id="retrieveGuideDoc" resultType="com.kakaocorp.iamguide.model.GuideDoc">
+        select DOCUMENT_TITLE as title, DOCUMENT_TEXT as text from GUIDE_DOCUMENT where DOCUMENT_KEY=#{id}
+     </select>
+
+    <update id="updateGuideDoc">
+        update GUIDE_DOCUMENT SET DOCUMENT_TEXT=#{content} where DOCUMENT_KEY=#{id}
+    </update>
+
+    <select id="retrieveGuideTreeList" resultType="com.kakaocorp.iamguide.model.GuideDoc">
         select concat("DOC",gd.DOCUMENT_KEY) as id, gd.DOCUMENT_TITLE as text, concat("DIR",gdr.DIR_KEY) as parent, gd.DOCUMENT_STATE as state
         from GUIDE_DOCUMENT as gd
         inner join GUIDE_DIR as gdr
@@ -15,27 +23,18 @@
         from GUIDE_DIR as gdr
     </select>
 
-    <select id="getGuideDoc" resultType="com.kakaocorp.iamguide.model.GuideDoc">
-        select DOCUMENT_TITLE as title, DOCUMENT_TEXT as text from GUIDE_DOCUMENT where DOCUMENT_KEY=#{id}
-     </select>
-
-    <update id="editGuide_Doc">
-        update GUIDE_DOCUMENT SET DOCUMENT_TEXT=#{content} where DOCUMENT_KEY=#{id}
-    </update>
-
-    <insert id="createGuide_Doc">
+    <insert id="createGuideTree">
         insert into GUIDE_DOCUMENT(DOCUMENT_TITLE,DOCUMENT_TEXT,DIRECTORY_KEY,DOCUMENT_STATE)
         values(#{text},#{content},#{parent},#{state})
     </insert>
 
-    <update id="updateGuide_Doc">
+    <update id="updateGuideTree">
         update GUIDE_DOCUMENT SET DOCUMENT_TITLE=#{text}, DIRECTORY_KEY=#{parent}, DOCUMENT_STATE=#{state}
         where DOCUMENT_KEY=#{key}
     </update>
 
-    <delete id="deleteGuide_Doc">
+    <delete id="deleteGuideTree">
         delete from GUIDE_DOCUMENT where DOCUMENT_KEY=#{key}
     </delete>
-
 
 </mapper>

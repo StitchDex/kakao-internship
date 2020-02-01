@@ -16,8 +16,7 @@ public class CommonController {
     private Logger logger = LoggerFactory.getLogger(CommonController.class);
 
     @Autowired
-    CommonService commonService;
-
+    private CommonService commonService;
 
     @GetMapping("/")
     public String indexPage(Authentication auth) {
@@ -32,19 +31,17 @@ public class CommonController {
      */
     @GetMapping("/login")
     public ModelAndView loginPage() {
-        logger.info("[GET]{}", "/login");
         return  new ModelAndView("login");
     }
 
     @GetMapping("/admin")
-    public String adminPage(){
-        logger.info("[Get]{}", "/admin");
+    public String adminPage(Authentication auth){
+        logger.info("{}",auth.getDetails());
         return "/admin";
     }
 
     @GetMapping("/guide")
     public String guidePage(@RequestParam(required = false) String doc_key, Model model){
-        logger.info("[Get]{}", "/guide");
         if(doc_key != null) {
             model.addAttribute("selected",doc_key);
         }

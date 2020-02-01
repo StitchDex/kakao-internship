@@ -7,24 +7,26 @@ import org.springframework.stereotype.Service;
 @Service
 public class GuideDirService {
     @Autowired
-    GuideDirMapper guide_dirMapper;
+    private GuideDirMapper guideDirMapper;
 
-    public void createGuide_Dir(String parent, String text,boolean state){
+    public void createGuideDir(String parent, String text, boolean state){
         if(parent.length()>1) {
             parent = parent.substring(3);
         }
         else if(parent.equals("#")) {
-            guide_dirMapper.createGuide_rootDir(text, state);
+            guideDirMapper.createGuideRootDir(text, state);
         }
         else {
-            guide_dirMapper.createGuide_Dir(parent, text, state);
+            guideDirMapper.createGuideDir(parent, text, state);
         }
     }
-    public void deleteGuide_Dir(String key){
+
+    public void deleteGuideDir(String key){
         key=key.substring(3);
-        guide_dirMapper.deleteGuide_Dir(key);
+        guideDirMapper.deleteGuideDir(key);
     }
-    public void updateGuide_Dir(String key,String parent, String text,boolean state){
+
+    public void updateGuideDir(String key, String parent, String text, boolean state){
         key=key.substring(3);
         if(parent.length()>1) {
             parent = parent.substring(3);
@@ -32,6 +34,6 @@ public class GuideDirService {
         else{
             parent = key;
         }
-        guide_dirMapper.updateGuide_Dir(key,parent,text,state);
+        guideDirMapper.updateGuideDir(key,parent,text,state);
     }
 }

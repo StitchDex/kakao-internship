@@ -6,7 +6,6 @@ import com.kakaocorp.iamguide.service.GuideTagService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,20 +22,20 @@ public class GuideController {
     private Logger logger = LoggerFactory.getLogger(CommonController.class);
 
     @Autowired
-    GuideDocService guideDocService;
+    private GuideDocService guideDocService;
     @Autowired
-    GuideTagService guideTagService;
+    private GuideTagService guideTagService;
 
-    @Cacheable(cacheNames = "TreeLoad")
+
     @GetMapping(value = "tree", produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody List<GuideDoc> getGuideTree(){
-        return guideDocService.getGuideTreeList();
+    public @ResponseBody List<GuideDoc> retrieveGuideTreeList(){
+        return guideDocService.retrieveGuideTreeList();
     }
 
     @GetMapping("menu")
-    public @ResponseBody GuideDoc getGuideDoc(HttpServletRequest req, @RequestParam("doc_key") String doc_key){
+    public @ResponseBody GuideDoc retrieveGuideDoc(HttpServletRequest req, @RequestParam("doc_key") String doc_key){
         logger.info("clicked_menu_num:{}", doc_key);
-        return guideDocService.getGuideDoc(doc_key);
+        return guideDocService.retrieveGuideDoc(doc_key);
     }
 
     /*
@@ -44,16 +43,16 @@ public class GuideController {
     */
     @GetMapping(value = "tag")
     public @ResponseBody
-    List GetTags(@RequestParam("tag") String tag) {
-        return guideTagService.suggestTags(tag);
+    List getTags(@RequestParam("tag") String tag) {
+        return guideTagService.suggestGuideTagList(tag);
     }
 
     /*
     * 검색결과 출력
     */
     @GetMapping(value = "search")
-    public String GetSearchResults(@RequestParam("tag") String tag, Model model) {
-        model.addAttribute("Results", guideTagService.getGuideList(tag));
+    public String getSearchResults(@RequestParam("tag") String tag, Model model) {
+        model.addAttribute("Results", guideTagService.retrieveGuideList(tag));
         model.addAttribute("test","test");
         return "search-result";
     }

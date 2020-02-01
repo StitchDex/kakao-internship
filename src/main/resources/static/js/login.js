@@ -5,6 +5,7 @@ $(document).ready(function() {
         $("input.remember-me").attr("checked", true);
     }
 });
+
 $( "form" ).submit(function( event ) {
     var userName = $('input[name=username]').val();
     if ( $(".remember-me").is(":checked")){
@@ -20,7 +21,6 @@ function setCookie(cname,cvalue,exdays) {
     var expires = "expires=" + d.toGMTString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
-
 
 function getCookie(cname) {
     var name = cname + "=";

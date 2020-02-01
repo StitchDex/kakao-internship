@@ -25,7 +25,7 @@ memoryStoreEvictionPolicy="LRU">
 </defaultCache>
 
         <!-- 사용하고자 하는 캐시 별 설정 -->
-<cache name="TreeLoad"
+    <cache name="treeCache"
        eternal="false"
        timeToIdleSeconds="0"
        timeToLiveSeconds="1200"
@@ -33,15 +33,16 @@ memoryStoreEvictionPolicy="LRU">
        diskPersistent="false"
        diskExpiryThreadIntervalSeconds="120"
        memoryStoreEvictionPolicy="LRU">
-</cache>
+    </cache>
 
-<cache name="Admin_auth"
-       eternal="false"
-       timeToIdleSeconds="0"
-       timeToLiveSeconds="1200"
-       overflowToDisk="false"
-       diskPersistent="false"
-       diskExpiryThreadIntervalSeconds="120"
-       memoryStoreEvictionPolicy="LRU">
-</cache>
-        </ehcache>
+    <cache name="misCache"
+           eternal="false"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="1200"
+           overflowToDisk="false"
+           diskPersistent="false"
+           diskExpiryThreadIntervalSeconds="120"
+           memoryStoreEvictionPolicy="LRU">
+    </cache>
+
+</ehcache>

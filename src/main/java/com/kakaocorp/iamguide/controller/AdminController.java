@@ -4,8 +4,6 @@ import com.kakaocorp.iamguide.model.GuideUpdate;
 import com.kakaocorp.iamguide.service.*;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -23,21 +21,18 @@ public class AdminController {
     private Logger logger = LoggerFactory.getLogger(CommonController.class);
 
     @Autowired
-    CommonService common;
+    private CommonService commonService;
     @Autowired
-    GuideDocService guide_docService;
+    private GuideDocService guideDocService;
     @Autowired
-    GuideUpdateService guide_updateService;
+    private GuideUpdateService guideUpdateService;
     @Autowired
-    GuideTagService guide_tagService;
+    private GuideTagService guideTagService;
     @Autowired
-    GuideDirService guide_dirService;
+    private GuideDirService guideDirService;
     @Autowired
-    UploadService uploadService;
-    /**
-     * PAGE: admin (AUTHENTICATED)
-     * @return
-     */
+    private UploadService uploadService;
+
 
     @GetMapping("admin_auth")
     public String admin_authPage(){
@@ -49,46 +44,49 @@ public class AdminController {
         return "admin_tree";
     }
 
-    @CacheEvict(cacheNames ="TreeLoad",allEntries = true)
     @PostMapping(value = "admin_tree/create", produces = MediaType.APPLICATION_JSON_VALUE )
-    public String createGuide_node(HttpServletRequest req, @RequestBody Map<String,Object> parm) throws Exception{
+    public String createGuideTree(HttpServletRequest req, @RequestBody Map<String,Object> parm) throws Exception{
         String parent = (String) parm.get("parent");
         String text = (String) parm.get("text");
         String type = (String) parm.get("type");
         boolean state = (boolean) parm.get("state");
-        if(type.equals("DOC"))
-        guide_docService.createGuide_Doc(parent,text,state);
+
+        if(type.equals("DOC")){
+            guideDocService.createGuideTree(parent, text, state);
+        }
         else{
-            guide_dirService.createGuide_Dir(parent,text,state);
+            guideDirService.createGuideDir(parent,text,state);
         }
         return "redirect:admin/admin_tree";
     }
 
-    @CacheEvict(cacheNames ="TreeLoad",allEntries = true)
     @PostMapping(value = "admin_tree/update", produces = MediaType.APPLICATION_JSON_VALUE )
-    public String updateGuide_node(HttpServletRequest req, @RequestBody Map<String,Object> parm) throws Exception{
+    public String updateGuideTree(HttpServletRequest req, @RequestBody Map<String,Object> parm) throws Exception{
         String key = (String)parm.get("id");
         String parent = (String) parm.get("parent");
         String text = (String) parm.get("text");
         boolean state = (boolean) parm.get("state");
         String type = (String) parm.get("type");
-        if(type.equals("DOC"))
-            guide_docService.updateGuide_Doc(key,parent,text,state);
+
+        if(type.equals("DOC")) {
+            guideDocService.updateGuideTree(key, parent, text, state);
+        }
         else{
-            guide_dirService.updateGuide_Dir(key,parent,text,state);
+            guideDirService.updateGuideDir(key,parent,text,state);
         }
         return "redirect:admin/admin_tree";
     }
 
-    @CacheEvict(cacheNames ="TreeLoad",allEntries = true)
     @PostMapping(value = "admin_tree/delete", produces = MediaType.APPLICATION_JSON_VALUE )
-    public String deleteGuide_node(HttpServletRequest req, @RequestBody Map<String,Object> parm) throws Exception{
+    public String deleteGuideTree(HttpServletRequest req, @RequestBody Map<String,Object> parm) throws Exception{
         String key = (String) parm.get("id");
         String type = (String) parm.get("type");
-        if(type.equals("DOC"))
-            guide_docService.deleteGuide_Doc(key);
+
+        if(type.equals("DOC")) {
+            guideDocService.deleteGuideTree(key);
+        }
         else{
-            guide_dirService.deleteGuide_Dir(key);
+            guideDirService.deleteGuideDir(key);
         }
         return "redirect:admin/admin_tree";
     }
@@ -98,13 +96,16 @@ public class AdminController {
      */
     @PostMapping(value = "edit_doc", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    void editGuide_Doc(HttpServletRequest req, @RequestBody Map<String,Object> parm) throws Exception{
+    void updateGuideDoc(HttpServletRequest req, @RequestBody Map<String,Object> parm) throws Exception{
+
         String id = (String) parm.get("id");
         String content = (String) parm.get("content");
         List<String> img_url = (List<String>) parm.get("img_url");
-        logger.info("edit : {}",content);
-        guide_docService.editGuide_Doc(id,content); // guide_doc edit
-        UploadService.setImaging(id,content,img_url);
+
+        guideDocService.updateGuideDoc(id,content); // guide_doc edit
+        uploadService.createImaging(id,content,img_url);
+
+        logger.info("edit : {}",id);
     }
     /**
      * AJAX : admin(AUTHENTICATED)
@@ -112,12 +113,15 @@ public class AdminController {
      */
     @PostMapping(value="set_update", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    void setGuide_Update(HttpServletRequest req, @RequestBody Map<String,Object> parm) throws Exception{
+    void createGuideUpdate(HttpServletRequest req, @RequestBody Map<String,Object> parm) throws Exception{
+
         String admin = (String) parm.get("admin");
         String title = (String) parm.get("title");
         String CRUD = (String) parm.get("CRUD");
+
+        guideUpdateService.createGuideUpdate(admin,title,CRUD); // guide_doc edit
+
         logger.info("edit : {}",title);
-        guide_updateService.setGuide_Update(admin,title,CRUD); // guide_doc edit
     }
 
     /**
@@ -126,9 +130,9 @@ public class AdminController {
      */
     @GetMapping("get_update")
     public @ResponseBody
-    List<GuideUpdate> getGuide_Update(HttpServletRequest req, @RequestParam("title") String title){
+    List<GuideUpdate> retrieveGuideUpdate(HttpServletRequest req, @RequestParam("title") String title){
         logger.info("/guide_update{}",title);
-        return guide_updateService.getGuide_Update(title);
+        return guideUpdateService.retrieveGuideUpdate(title);
     }
 
     /**
@@ -140,60 +144,52 @@ public class AdminController {
     List suggest(HttpServletRequest req, @RequestParam String accountId) throws Exception {
         logger.debug("Query : {}", accountId);
         if(accountId != null && !accountId.isEmpty()) {
-            List ret = common.suggest(accountId);
+            List ret = commonService.suggest(accountId);
             return ret;
         }
         return new ArrayList<>();
-    } /**
+    }
+    /**
      * JSON : GET ADMIN LIST
      * ldap search
      */
-    @Cacheable(cacheNames = "Admin_auth")
     @RequestMapping("getadminall")
     public @ResponseBody
-    List getAdminAll() throws Exception {
-        return common.getAdminAll();
+    List getAdminList() throws Exception {
+        return commonService.getAdminList();
     }
     /**
      * AJAX : admin(AUTHENTICATED)
      * ldap search
      */
     @RequestMapping(value = "insertAdmin", method = RequestMethod.POST)
-    public @ResponseBody void insertAdmin(@RequestBody List<Object> admins) throws Exception {
-        common.insertAdmin(admins);
+    public @ResponseBody void createAdmin(@RequestBody List<Object> admins) throws Exception {
+        commonService.createAdmin(admins);
     }
 
     @RequestMapping(value = "deleteAdmin", method = RequestMethod.POST)
     public @ResponseBody void deleteAdmin(@RequestBody List<Object> admins) throws Exception {
-        common.deleteAdmin(admins);
+        commonService.deleteAdmin(admins);
     }
 
     @RequestMapping(value = "getTags")
-    public @ResponseBody List getTags(@RequestParam("doc_key") String doc_key) {
-        return guide_tagService.getTags(doc_key);
+    public @ResponseBody List retrieveTags(@RequestParam("doc_key") String doc_key) {
+        return guideTagService.retrieveGuideTagList(doc_key);
     }
 
     @RequestMapping(value = "suggestTags")
     public @ResponseBody List suggestTags(@RequestParam("tag") String tag){
-        return guide_tagService.suggestTags(tag);
+        return guideTagService.suggestGuideTagList(tag);
     }
 
     @RequestMapping(value = "updateTags", method = RequestMethod.POST)
     public @ResponseBody void updateTags(@RequestBody Object tags){
-        guide_tagService.updateTags(tags);
-    }
-
-    @RequestMapping(value = "set_image", method = RequestMethod.POST)
-    public @ResponseBody void setImage(@RequestBody Map<String,Object> parm) throws Exception {
-        String url = (String)parm.get("url");
-        String key = (String)parm.get("key");
-        String admin = (String)parm.get("user");
-        //uploadService.setImage(url,key,admin);
+        guideTagService.updateGuideTag(tags);
     }
 
     @RequestMapping(value = "imageurl", method = RequestMethod.POST)
-    public @ResponseBody void insertImageUrl(@RequestBody Object urls) throws IOException {
-        logger.info("{}",urls);
+    public @ResponseBody void updateImageUrl(@RequestBody Object urls) throws IOException {
         uploadService.updateImageUrl(urls);
+        logger.info("{}",urls);
     }
 }

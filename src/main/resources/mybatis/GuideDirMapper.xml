@@ -5,12 +5,12 @@
 
 <mapper namespace="com.kakaocorp.iamguide.dao.GuideDirMapper">
 
-    <insert id="createGuide_Dir">
+    <insert id="createGuideDir">
         insert into GUIDE_DIR(DIR_NAME,DIR_PARENT_KEY,DIR_STATE)
         values(#{text},#{parent},#{state})
     </insert>
 
-    <insert id="createGuide_rootDir">
+    <insert id="createGuideRootDir">
         <selectKey keyProperty="DIR_KEY" resultType="int" order="BEFORE">
             SELECT IFNULL(MAX(DIR_KEY+1),1) FROM GUIDE_DIR
         </selectKey>
@@ -18,12 +18,12 @@
         values(#{DIR_KEY},#{text},#{DIR_KEY},#{state})
     </insert>
 
-    <update id="updateGuide_Dir">
+    <update id="updateGuideDir">
         update GUIDE_DIR SET DIR_NAME=#{text}, DIR_PARENT_KEY=#{parent}, DIR_STATE=#{state}
         where DIR_KEY=#{key}
     </update>
 
-    <delete id="deleteGuide_Dir">
+    <delete id="deleteGuideDir">
         delete from GUIDE_DIR where DIR_KEY=#{key}
     </delete>
 </mapper>

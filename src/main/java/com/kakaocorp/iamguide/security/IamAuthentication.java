@@ -24,7 +24,7 @@ public class IamAuthentication implements AuthenticationProvider {
     private String ROLE = "ROLE_";
 
     @Autowired
-    HttpServletRequest req;
+    private HttpServletRequest req;
 
     @Autowired
     private CommonService commonService;
@@ -38,7 +38,6 @@ public class IamAuthentication implements AuthenticationProvider {
             // Hello MIS client
             HelloIdentityServiceClient client = HelloIdentityServiceClient.getHelloIdentityServiceClient();
             UserInfo user = new UserInfo(client.getMemberById(username));
-//            if(userInfo != null){ // TODO dev code
             if(client.authenticationId(username, password, req.getRemoteAddr())){
                 List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
 

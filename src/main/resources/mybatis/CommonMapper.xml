@@ -7,17 +7,20 @@
     <select id="isAdmin" resultType="String">
         SELECT ADMIN_ACCOUNT_ID FROM ADMIN WHERE ADMIN_ACCOUNT_ID = #{admin_id}
     </select>
-    <select id="getAdminAll" resultType="com.kakaocorp.iamguide.model.Admin">
+
+    <select id="getAdminList" resultType="com.kakaocorp.iamguide.model.Admin">
         SELECT ADMIN_EMPNO as adminEmpNo, ADMIN_ACCOUNT_ID as adminAccountId, ADMIN_NAME as adminName
         FROM ADMIN;
     </select>
-    <insert id="insertAdmin" parameterType="java.util.List">
+
+    <insert id="createAdmin" parameterType="java.util.List">
         INSERT INTO ADMIN
         VALUES
         <foreach collection="list" item="item" separator=",">
             ("${item.adminEmpNo}", "${item.adminAccountId}", "${item.adminName}")
         </foreach>
     </insert>
+
     <delete id="deleteAdmin" parameterType="java.util.List">
         DELETE FROM ADMIN
         WHERE ADMIN_EMPNO IN (
@@ -26,4 +29,5 @@
         </foreach>
         )
     </delete>
+
 </mapper>

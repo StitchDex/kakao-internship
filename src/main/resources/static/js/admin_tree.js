@@ -154,7 +154,7 @@ $(function () {
             }
 
         },
-        'plugins' : ["wholerow","types","dnd","contextmenu","cookies"]
+        'plugins' : ["types","dnd","contextmenu","cookies"]
     }).on('ready.jstree', function(){
         make_disable();
         $(this).jstree('open_all')
@@ -214,7 +214,6 @@ function create_node(sendData){
 function update_node(sendData,what){
     var title = sendData.text;
     sendData = JSON.stringify(sendData);
-    //var header = $("meta[name='_csrf_header']").attr("content");
     $.ajax({
         url: 'admin/admin_tree/update',
         headers: {"X-CSRF-TOKEN": token},
@@ -234,7 +233,6 @@ function update_node(sendData,what){
 function delete_node(sendData,title,what){
 
     sendData = JSON.stringify({'id':sendData, 'type':what});
-    //var header = $("meta[name='_csrf_header']").attr("content");
     $.ajax({
         url: 'admin/admin_tree/delete',
         headers: {"X-CSRF-TOKEN": token},

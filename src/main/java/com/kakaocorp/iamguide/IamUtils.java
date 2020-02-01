@@ -1,14 +1,15 @@
 package com.kakaocorp.iamguide;
 
+import org.springframework.security.core.Authentication;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class IamUtils {
-    public static String getTenthPath(String serviceId, String originalName){
+    public static String getTenthPath(String serviceId, String originalName, Authentication auth){
         Date now = new Date();
-        String dir = new SimpleDateFormat("yyyy_MM").format(now);
         return String.format("/%s/%s/%s/%s_%d",
-                serviceId,"guide",dir, originalName.replaceAll("\\.", "_"), now.getTime());
+                serviceId,"guide",auth.getName(),originalName.replaceAll("\\.", "_"),now.getTime());
     }
 
     public static boolean isEmpty(String test) {
