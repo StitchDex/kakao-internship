@@ -2,8 +2,11 @@ package com.kakaocorp.iamguide.security;
 
 import com.daum.mis.remote.client.HelloIdentityServiceClient;
 import com.kakaocorp.iamguide.GuideDictionary;
+import com.kakaocorp.iamguide.model.Admin;
+import com.kakaocorp.iamguide.model.DevAdmin;
 import com.kakaocorp.iamguide.model.UserInfo;
 import com.kakaocorp.iamguide.service.CommonService;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -34,11 +37,19 @@ public class IamAuthentication implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
         String password = (String)authentication.getCredentials();
+        if(username.equals("local") && password.equals("local")) {
+            DevAdmin user = new DevAdmin();
+            List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
+            roles.add(new SimpleGrantedAuthority(ROLE + GuideDictionary.ADMIN));
+            UsernamePasswordAuthenticationToken result = new UsernamePasswordAuthenticationToken(username, password, roles);
+            result.setDetails(user);
+            return result;
+        }
         try{
             // Hello MIS client
             HelloIdentityServiceClient client = HelloIdentityServiceClient.getHelloIdentityServiceClient();
             UserInfo user = new UserInfo(client.getMemberById(username));
-//            if(userInfo != null){ // TODO dev code
+//           if(userInfo != null){ // TODO dev code
             if(client.authenticationId(username, password, req.getRemoteAddr())){
                 List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
 

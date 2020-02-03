@@ -16,7 +16,6 @@
                 #{item.path}
             </foreach>
         )
-
     </insert>
     <delete id="deleteImaging" parameterType="java.util.List">
         DELETE FROM GUIDE_IMAGING

@@ -17,7 +17,6 @@ public class GuideDocService {
     @Autowired
     GuideDocMapper guide_docMapper;
 
-
     public List<GuideDoc> getGuideTreeList() {
         List<GuideDoc> temp = guide_docMapper.selectTreeDataForGuide();
         for(int i=0;i<temp.size();i++){

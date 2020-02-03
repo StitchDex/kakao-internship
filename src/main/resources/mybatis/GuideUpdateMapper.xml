@@ -12,5 +12,4 @@
 <select id="getGuide_Update" resultType="com.kakaocorp.iamguide.model.GuideUpdate">
         select * from GUIDE_UPDATE where DOCUMENT_TITLE=#{title}
 </select>
-
 </mapper>
