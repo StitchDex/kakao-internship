@@ -10,7 +10,7 @@ import org.springframework.core.io.ClassPathResource;
 
 @Configuration
 @EnableCaching(proxyTargetClass = true, mode = AdviceMode.PROXY)
-public class EhCacheConfig {
+public class CacheConfiguration {
     @Bean
     public EhCacheManagerFactoryBean ehCacheManagerFactoryBean() {
         EhCacheManagerFactoryBean ehCacheManagerFactoryBean = new EhCacheManagerFactoryBean();

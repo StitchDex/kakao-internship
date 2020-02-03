@@ -50,7 +50,7 @@ $(function () {
                 "max_children" : 0,
             },
         },
-        'plugins' : ["wholerow","types", "state"]
+        'plugins' : ["types", "state","wholerow"]
     })
         .on('ready.jstree', function(){
             make_hide();
@@ -58,7 +58,7 @@ $(function () {
         $(this).jstree('open_all')
     });
     $('#jstree').jstree('clear_state');
-    console.log("BP")
+
 });
 
 //click tree_node
@@ -79,6 +79,7 @@ $('#jstree').on('select_node.jstree', function (e, data) {
 
 function LoadDocText(search_key) {
     let dockey = selectedData.substring(3, selectedData.length);
+
     if(search_key != null) {
         dockey = search_key;
     }
@@ -126,6 +127,7 @@ function make_editor(res){
             editor.set('isReadOnly',true);
             doc_editor=editor;
             doc_editor.setData(res);
+
         })
         .catch(error => {
                 console.error(error);
@@ -163,6 +165,7 @@ function edit_button_click() {
         )
         .then( editor => {
             admin_editor=editor;
+            $(this).css({"border-style":"solid;!important"});
         })
         .catch( error => {
                 console.error( error );
@@ -266,7 +269,6 @@ function get_Guide_update(title) {
         url: '/admin/get_update?title=' + title,
         method: 'GET',
         success: function (res) {
-            //update_KEY: 1, admin_ID: "jun.3671", document_TITLE: "ex1", update_TIME: "2020-01-24T19:28:25.000+0000", update_TYPE_CUD: "update
             var ttemp = new Array();
             var ttext = " ";
             for(var k=0;k<res.length;k++) {
@@ -373,11 +375,10 @@ function UrlParse(text) {
     }
     return urls;
 }
+
 function menu_tag(tag_name){
     location.href = "/guide/search?tag=%23" + tag_name;
 }
 
 //admin_tree
-$('#admin_tree_button').on('click', function() {
-    window.open("/admin/admin_tree","","width=500,height=800,resizable=yes,toolbar=yes,status=0,location=no,menubar=no,scrollbars=yes");
-});
+

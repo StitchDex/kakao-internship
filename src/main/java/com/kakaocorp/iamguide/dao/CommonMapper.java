@@ -9,8 +9,11 @@ import java.util.List;
 
 @Mapper
 public interface CommonMapper {
-    public String isAdmin(@Param("admin_id") String username) throws Exception;
-    public List<Admin> getAdminAll() throws Exception;
-    public void insertAdmin(List admins) throws Exception;
-    public void deleteAdmin(List admins) throws Exception;
+    String isAdmin(@Param("admin_id") String username) throws Exception;
+
+    List<Admin> getAdminList() throws Exception;
+
+    void createAdmin(List admins) throws Exception;
+
+    void deleteAdmin(List admins) throws Exception;
 }

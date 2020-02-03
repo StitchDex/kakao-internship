@@ -10,7 +10,7 @@ $(document).ready(function() {
                     obj.id = obj.id || obj.tag;
                     obj.text = obj.text || obj.tag;
                     return obj;
-                })
+                });
                 return {'results' : ret};
 
             }
@@ -26,3 +26,6 @@ $(document).ready(function() {
         $('.select2-tag').val(null).trigger("change");
 
     });
+$('#admin_tree_button').on('click', function() {
+    window.open("/admin/admin_tree","","width=500,height=600,resizable=yes,toolbar=yes,status=0,location=no,menubar=no,scrollbars=yes");
+});

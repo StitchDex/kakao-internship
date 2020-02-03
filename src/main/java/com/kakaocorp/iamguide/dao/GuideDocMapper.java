@@ -10,10 +10,15 @@ import java.util.List;
 
 @Mapper
 public interface GuideDocMapper {
-    List<GuideDoc> selectTreeDataForGuide();
-    GuideDoc getGuideDoc(@Param("id") String id); // doc_key
-    void editGuide_Doc(@Param("id") String id, @Param("content") String text);
-    void createGuide_Doc(@Param("parent") String parent,@Param("content") String content, @Param("text") String text,@Param("state") boolean state);
-    void deleteGuide_Doc(@Param("key") String key);
-    void updateGuide_Doc(@Param("key") String key,@Param("parent") String parent, @Param("text") String text,@Param("state") boolean state);
+    List<GuideDoc> retrieveGuideTreeList();
+
+    GuideDoc retrieveGuideDoc(@Param("id") String id); // doc_key
+
+    void updateGuideDoc(@Param("id") String id, @Param("content") String text);
+
+    void createGuideTree(@Param("parent") String parent, @Param("content") String content, @Param("text") String text, @Param("state") boolean state);
+
+    void deleteGuideTree(@Param("key") String key);
+
+    void updateGuideTree(@Param("key") String key, @Param("parent") String parent, @Param("text") String text, @Param("state") boolean state);
 }

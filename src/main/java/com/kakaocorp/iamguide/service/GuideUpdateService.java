@@ -10,16 +10,15 @@ import java.util.List;
 
 @Service
 public class GuideUpdateService {
-    @Autowired
-    GuideUpdateMapper guide_updateMapper;
 
-    public List<GuideUpdate> getGuide_Update(String DOCUMENT_TITLE){
-        return guide_updateMapper.getGuide_Update(DOCUMENT_TITLE);
+    @Autowired
+    private GuideUpdateMapper guideUpdateMapper;
+
+    public List<GuideUpdate> retrieveGuideUpdate(String DOCUMENT_TITLE){
+        return guideUpdateMapper.retrieveGuideUpdate(DOCUMENT_TITLE);
     }
-    public void setGuide_Update(String ADMIN_ID,String DOCUMENT_TITLE,String UPDATE_TYPE_CUD){
-        /*Timestamp UPDATE_TIME = new Timestamp(new Date().getTime());
-        System.out.println(UPDATE_TIME);*/
-        guide_updateMapper.setGuide_Update(ADMIN_ID,DOCUMENT_TITLE,UPDATE_TYPE_CUD);
+    public void createGuideUpdate(String ADMIN_ID, String DOCUMENT_TITLE, String UPDATE_TYPE_CUD){
+        guideUpdateMapper.createGuideUpdate(ADMIN_ID,DOCUMENT_TITLE,UPDATE_TYPE_CUD);
     }
 }
 

@@ -96,25 +96,64 @@ a, a:hover {
 
 .ck.ck-editor {
     min-width: 1100px;
-    outline-color: white;
-}
-.ck-editor__editable {
-    min-height: 800px;
-    outline-color: white;
 }
 
-.select2-tag{
+.ck-editor__editable_inline {
+    min-height: 800px;
+}
+
+.ck.ck-editor__main > .ck-read-only {
+    border-style: none;
+}
+
+.select2-tag {
     font-size: 20px;
-    width:325px;
+    width: 325px;
     padding: 10px;
     border: 0px;
     outline: none;
     float: left
 }
+
 .row {
     text-align: center;
-    flex-wrap:nowrap;
+    flex-wrap: nowrap;
 }
-.ck-editor__editable{
-    min-height: 30px;!important;
+
+.scroll-box {
+    width: 100%;
+    height: auto;
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+.scroll-box::-webkit-scrollbar {
+    width: .4em;
+    height: .4em;
+}
+
+.scroll-box::-webkit-scrollbar,
+.scroll-box::-webkit-scrollbar-thumb {
+    overflow: visible;
+    border-radius: 4px;
+}
+
+.scroll-box::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, .2);
+}
+
+.cover-bar {
+    position: absolute;
+    background: #fff;;
+    height: 100%;
+    top: 0;
+    right: 0;
+    width: .4em;
+    -webkit-transition: all .5s;
+    opacity: 1;
+}
+
+.scroll-bar-wrap:hover .cover-bar {
+    opacity: 0;
+    -webkit-transition: all .5s;
 }

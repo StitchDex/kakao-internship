@@ -12,13 +12,13 @@ import java.util.List;
 @Service
 public class GuideTagService {
     @Autowired
-    GuideTagMapper guideTagMapper;
+    private GuideTagMapper guideTagMapper;
 
-    public List<GuideDoc> getGuideList(String tag){return guideTagMapper.getGuideList(tag);}
-    public List<GuideTag> getTags(String doc_key) {return guideTagMapper.getTags(doc_key);}
-    public List<GuideTag> suggestTags(String tag) {return guideTagMapper.suggestTags(tag);}
+    public List<GuideDoc> retrieveGuideList(String tag){return guideTagMapper.retrieveGuideList(tag);}//for search result
+    public List<GuideTag> retrieveGuideTagList(String doc_key) {return guideTagMapper.retrieveGuideTagList(doc_key);}
+    public List<GuideTag> suggestGuideTagList(String tag) {return guideTagMapper.suggestGuideTagList(tag);}
 
-    public void updateTags(Object tags) {
+    public void updateGuideTag(Object tags) {
         HashMap temp = (HashMap) tags;
         String doc_key = (String) temp.get("doc_key");
         ArrayList<String> insert = (ArrayList<String>) temp.get("insert");
@@ -49,8 +49,8 @@ public class GuideTagService {
 
         if(!insert.isEmpty())
         {
-            guideTagMapper.insertTag(insertTagSql);
-            guideTagMapper.insertTagging(insertTaggingSql);
+            guideTagMapper.createTag(insertTagSql);
+            guideTagMapper.createTagging(insertTaggingSql);
         }
         if(!delete.isEmpty())
             guideTagMapper.deleteTag(deleteTagSql);
