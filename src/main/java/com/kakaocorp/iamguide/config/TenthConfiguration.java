@@ -27,7 +27,7 @@ public class TenthConfiguration {
     private String serviceId;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         // 사용할 서비스의 read key, write key를 먼저 등록합니다.
         try {
             Tenth2Authentication.addAccessKey(serviceId, readKey, writeKey);
@@ -35,12 +35,12 @@ public class TenthConfiguration {
             e.printStackTrace();
         }
 
-        try{
+        try {
             // 서버 지정.
             Tenth2Connector.setHost(new Tenth2Connector.HostInfo(tenthHost));
             Tenth2Config.setConnTimeout(3000);
             Tenth2Config.setMaxConnRetry(3);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

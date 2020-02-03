@@ -16,18 +16,18 @@ public class CommonService {
     @Autowired
     private CommonMapper commonMapper;
 
-    public String isAdmin(String username) throws Exception{
+    public String isAdmin(String username) throws Exception {
         return commonMapper.isAdmin(username);
     }
 
-    @Cacheable(cacheNames = "misCache", key="#accountId")
-    public List suggest(String accountId) throws Exception{
+    @Cacheable(cacheNames = "misCache", key = "#accountId")
+    public List suggest(String accountId) throws Exception {
         HelloIdentityServiceClient client = HelloIdentityServiceClient.getHelloIdentityServiceClient();
 
         return client.getMembersByName(accountId);
     }
 
-    public List<Admin> getAdminList() throws Exception{
+    public List<Admin> getAdminList() throws Exception {
         return commonMapper.getAdminList();
     }
 

@@ -2,6 +2,7 @@ package com.kakaocorp.iamguide.security;
 
 import com.daum.mis.remote.client.HelloIdentityServiceClient;
 import com.kakaocorp.iamguide.GuideDictionary;
+import com.kakaocorp.iamguide.model.DevAdmin;
 import com.kakaocorp.iamguide.model.UserInfo;
 import com.kakaocorp.iamguide.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,19 +33,30 @@ public class IamAuthentication implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        /*String username = authentication.getName();
+        String password = (String) authentication.getCredentials();
+        if (username.equals("local") && password.equals("local")) {
+            DevAdmin user = new DevAdmin();
+            List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
+            roles.add(new SimpleGrantedAuthority(ROLE + GuideDictionary.ADMIN));
+            UsernamePasswordAuthenticationToken result = new UsernamePasswordAuthenticationToken(username, password, roles);
+            result.setDetails(user);
+            return result;
+        }
+        throw new BadCredentialsException("인증되지 않은 사용자 입니다.");
+    }*/
         String username = authentication.getName();
-        String password = (String)authentication.getCredentials();
-        try{
+        String password = (String) authentication.getCredentials();
+        try {
             // Hello MIS client
             HelloIdentityServiceClient client = HelloIdentityServiceClient.getHelloIdentityServiceClient();
             UserInfo user = new UserInfo(client.getMemberById(username));
-            if(client.authenticationId(username, password, req.getRemoteAddr())){
+            if (client.authenticationId(username, password, req.getRemoteAddr())) {
                 List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
 
-                if(commonService.isAdmin(username) != null){
+                if (commonService.isAdmin(username) != null) {
                     roles.add(new SimpleGrantedAuthority(ROLE + GuideDictionary.ADMIN));
-                }
-                else {
+                } else {
                     roles.add(new SimpleGrantedAuthority(ROLE + GuideDictionary.USER));
                 }
 
@@ -53,12 +65,10 @@ public class IamAuthentication implements AuthenticationProvider {
                 return result;
             }
             throw new BadCredentialsException("인증되지 않은 사용자 입니다.");
-        }
-        catch(BadCredentialsException e){
+        } catch (BadCredentialsException e) {
             System.out.println("BadCredentials");
             throw e;
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw new BadCredentialsException(e.getMessage());
         }

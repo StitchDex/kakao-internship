@@ -28,19 +28,21 @@ public class GuideController {
 
 
     @GetMapping(value = "tree", produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody List<GuideDoc> retrieveGuideTreeList(){
+    public @ResponseBody
+    List<GuideDoc> retrieveGuideTreeList() {
         return guideDocService.retrieveGuideTreeList();
     }
 
     @GetMapping("menu")
-    public @ResponseBody GuideDoc retrieveGuideDoc(HttpServletRequest req, @RequestParam("doc_key") String doc_key){
+    public @ResponseBody
+    GuideDoc retrieveGuideDoc(HttpServletRequest req, @RequestParam("doc_key") String doc_key) {
         logger.info("clicked_menu_num:{}", doc_key);
         return guideDocService.retrieveGuideDoc(doc_key);
     }
 
     /*
-    * 태그 검색 자동완성 데이터 가져오기
-    */
+     * 태그 검색 자동완성 데이터 가져오기
+     */
     @GetMapping(value = "tag")
     public @ResponseBody
     List getTags(@RequestParam("tag") String tag) {
@@ -48,12 +50,12 @@ public class GuideController {
     }
 
     /*
-    * 검색결과 출력
-    */
+     * 검색결과 출력
+     */
     @GetMapping(value = "search")
     public String getSearchResults(@RequestParam("tag") String tag, Model model) {
         model.addAttribute("Results", guideTagService.retrieveGuideList(tag));
-        model.addAttribute("test","test");
+        model.addAttribute("test", "test");
         return "search-result";
     }
 }

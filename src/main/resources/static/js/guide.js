@@ -50,7 +50,7 @@ $(function () {
                 "max_children" : 0,
             },
         },
-        'plugins' : ["types", "state"]
+        'plugins' : ["types", "state","wholerow"]
     })
         .on('ready.jstree', function(){
             make_hide();
@@ -58,7 +58,7 @@ $(function () {
         $(this).jstree('open_all')
     });
     $('#jstree').jstree('clear_state');
-    console.log("BP")
+
 });
 
 //click tree_node
@@ -127,6 +127,7 @@ function make_editor(res){
             editor.set('isReadOnly',true);
             doc_editor=editor;
             doc_editor.setData(res);
+
         })
         .catch(error => {
                 console.error(error);

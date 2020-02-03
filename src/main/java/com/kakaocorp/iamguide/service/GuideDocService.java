@@ -19,7 +19,7 @@ public class GuideDocService {
     @Autowired
     private GuideDocMapper guideDocMapper;
 
-    @Cacheable(cacheNames = "TREE_LOAD")
+    @Cacheable(cacheNames = "treeCache")
     public List<GuideDoc> retrieveGuideTreeList() {
         List<GuideDoc> guideTreeList = guideDocMapper.retrieveGuideTreeList();
 
@@ -36,7 +36,7 @@ public class GuideDocService {
         return guideTreeList;
     }
 
-    @CacheEvict(cacheNames ="TREE_LOAD",allEntries = true)
+    @CacheEvict(cacheNames ="treeCache",allEntries = true)
     public void createGuideTree(String parent, String text, boolean state){
         if(parent.length()<1)
             parent = "0";
@@ -45,19 +45,20 @@ public class GuideDocService {
         guideDocMapper.createGuideTree(parent,content,text,state);
     }
 
-    @CacheEvict(cacheNames ="TREE_LOAD",allEntries = true)
+    @CacheEvict(cacheNames ="treeCache",allEntries = true)
     public void deleteGuideTree(String key){
         key=key.substring(3);
         guideDocMapper.deleteGuideTree(key);
     }
 
-    @CacheEvict(cacheNames ="TreeLoad",allEntries = true)
+    @CacheEvict(cacheNames ="treeCache",allEntries = true)
     public void updateGuideTree(String key, String parent, String text, boolean state){
         key=key.substring(3);
         if(parent.length()<1)
             parent = "0";
         parent = parent.substring(3);
-        guideDocMapper.updateGuideDoc(key,parent,text,state);
+        logger.info("{},{},{},{}",key,parent,text,state);
+        guideDocMapper.updateGuideTree(key,parent,text,state);
     }
 
     public GuideDoc retrieveGuideDoc(String doc_key) {

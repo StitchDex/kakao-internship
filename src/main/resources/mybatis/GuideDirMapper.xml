@@ -26,4 +26,5 @@
     <delete id="deleteGuideDir">
         delete from GUIDE_DIR where DIR_KEY=#{key}
     </delete>
+
 </mapper>

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,25 +30,26 @@ public class UploadController {
     private UploadService uploadService;
 
     @RequestMapping(value = "admin/imageupload", method = RequestMethod.POST)
-    public void ImageUpload(HttpServletResponse response, @RequestParam("upload") MultipartFile upload) throws IOException, JSONException {
-            JSONObject json = uploadService.createImage(upload);
+    public void ImageUpload(Authentication auth, HttpServletResponse response, @RequestParam("upload") MultipartFile upload) throws IOException, JSONException {
+        JSONObject json = uploadService.createImage(upload, auth);
 
-            response.setCharacterEncoding("utf-8");
-            response.setContentType("text/html; charset=utf-8");
-            PrintWriter printWriter = response.getWriter();
-            printWriter.println(json);
-            printWriter.flush();
-            logger.info("{},{}","imageUpload",upload.getOriginalFilename());
+        response.setCharacterEncoding("utf-8");
+        response.setContentType("text/html; charset=utf-8");
+        PrintWriter printWriter = response.getWriter();
+        printWriter.println(json);
+        printWriter.flush();
+        logger.info("{},{}", "imageUpload", upload.getOriginalFilename());
 
     }
 
-    @RequestMapping(value=IMAGE_DEFAULT_PATH,method = RequestMethod.GET)
-    public @ResponseBody byte[] ImageDownload(HttpServletRequest request) throws IOException {
+    @RequestMapping(value = IMAGE_DEFAULT_PATH, method = RequestMethod.GET)
+    public @ResponseBody
+    byte[] ImageDownload(HttpServletRequest request) throws IOException {
         byte[] imageData = null;
 
         imageData = uploadService.retrieveImage(request.getRequestURI());
 
-        logger.info("{},{}","imageUpload",request.getRequestURI());
+        logger.info("{},{}", "imageUpload", request.getRequestURI());
         return imageData;
     }
 }

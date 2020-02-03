@@ -27,5 +27,5 @@ $(document).ready(function() {
 
     });
 $('#admin_tree_button').on('click', function() {
-    window.open("/admin/admin_tree","","width=500,height=800,resizable=yes,toolbar=yes,status=0,location=no,menubar=no,scrollbars=yes");
+    window.open("/admin/admin_tree","","width=500,height=600,resizable=yes,toolbar=yes,status=0,location=no,menubar=no,scrollbars=yes");
 });

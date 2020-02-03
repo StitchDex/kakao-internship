@@ -10,8 +10,8 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
                 <h3 ><a href="/guide" class="sidebar-heading list-group-item-action ">가이드목록</a></h3>
                 <strong>IAM</strong>
             </div>
-            <div class="sidebar-header" style="border-bottom: solid gray; height: auto;">
-                    <div class = 'container-fluid' id="jstree"style="overflow: scroll; min-width: 100px"></div>
+            <div class="sidebar-header" style="border-bottom: solid gray;">
+                    <div class = 'scroll-box' id="jstree"></div>
             </div>
             <div class="admin_button" sec:authorize="hasRole('ROLE_ADMIN')"
                  style="margin-left: 70px;margin-top: 20px;">
