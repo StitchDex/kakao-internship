@@ -203,7 +203,8 @@ function create_node(sendData){
         contentType:'application/json',
         success: function (res) {
             set_Guide_update(title,'create');
-            alert("create ok");
+            alert("tree create ok");
+            opener.document.location.reload();
             location.reload();
         }, error: function (error) {
             console.log(error);
@@ -223,7 +224,8 @@ function update_node(sendData,what){
         contentType:'application/json',
         success: function (res) {
             set_Guide_update(title,'change');
-            alert("update ok");
+            alert("tree update ok");
+            opener.document.location.reload();
             location.reload();
         }, error: function (error) {
             console.log(error);
@@ -242,7 +244,8 @@ function delete_node(sendData,title,what){
         contentType:'application/json',
         success: function (res) {
             set_Guide_update(title,'delete');
-            alert("delete ok");
+            alert("tree delete ok");
+            opener.document.location.reload();
             location.reload();
         }, error: function (error) {
             console.log(error);

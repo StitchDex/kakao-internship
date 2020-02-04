@@ -106,11 +106,7 @@ public class UploadService {
             delete.add(new Image(s, docId));
         }
 
-<<<<<<< HEAD
-        if(!insert.isEmpty()){
-=======
         if (!insert.isEmpty()) {
->>>>>>> eb0ce79199654fd6e2e5f49fd7c01d4ab5b8855b
             uploadMapper.insertImaging(insert, docId); //새로추가된 이미지와 문서 연결 : 이미징 테이블에 추가
         }
 

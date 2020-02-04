@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-package com.kakaocorp.iamguide.model;
 
-=======
 /*
 package com.kakaocorp.iamguide.model;
 //for local
@@ -13,8 +10,5 @@ public class DevAdmin {
     public String getPersonName() {
         return personName;
     }
-<<<<<<< HEAD
 }
-=======
 }*/
->>>>>>> eb0ce79199654fd6e2e5f49fd7c01d4ab5b8855b

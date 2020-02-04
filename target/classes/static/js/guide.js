@@ -1,7 +1,6 @@
 //for ckeditor
 let doc_editor; // for users
 let admin_editor; // for admin
-let isReadOnly;
 let selectedData; //current guide_document id
 let selectedText; //current guide_document title
 var hidden_num;
@@ -13,7 +12,6 @@ var afterImageUrl = new Set();
 //document ready
 $(function () {
     hidden_num=0;
-    isReadOnly = false;
     var searched = $('#selected').val();
     $('#jstree').jstree({
         'core': {
@@ -91,9 +89,8 @@ function LoadDocText(search_key) {
                 var title = res.title;
                 res = res.text;
                 $('#guide-title').text(title);
-                get_Guide_update(selectedText);
                 if(admin_editor!=null){ // change doc while edit
-                    admin_editor.destroy();
+                    admin_editor.destroy(true);
                     make_editor(res);
                 }
                 else if(doc_editor!=null){ // change doc
@@ -107,9 +104,10 @@ function LoadDocText(search_key) {
                 console.log(error);
             }
         });
+        get_Guide_update(selectedText);
         init_select_tagging();
     } else {
-        console.log("not document");
+        console.log("document key error");
     }
 }
 
@@ -137,7 +135,8 @@ function make_editor(res){
 
 //admin_edit_button click
 function edit_button_click() {
-    isReadOnly = false;
+    var temp = doc_editor.getData();
+    beforeImageUrl = new Set(UrlParse(temp));
     doc_editor.destroy(true);
     ClassicEditor
         .create( document.querySelector( '#Guide_Doc' ), {
@@ -167,13 +166,12 @@ function edit_button_click() {
             admin_editor=editor;
         })
         .catch( error => {
-                console.error( error );
+            alert("편집 버튼 에디터 오류");
             }
         );
 
-    $('select.select2-tagging').prop('disabled', isReadOnly);
-    var temp = doc_editor.getData();
-    beforeImageUrl = new Set(UrlParse(temp));
+    $('select.select2-tagging').prop('disabled', true);
+
 }
 
 //admin edit_save_button click
@@ -199,7 +197,6 @@ function edit_save_button_click() {
             success: function (res) {
                 set_Guide_update(selectedText,'update');
                 issuc = true;
-                // refresh page
             }, error: function (error) {
                 console.log(error);
             }
