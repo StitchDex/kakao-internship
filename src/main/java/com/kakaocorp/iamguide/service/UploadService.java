@@ -13,6 +13,8 @@ import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,10 +44,11 @@ public class UploadService {
     @Autowired
     private UploadMapper uploadMapper;
 
+    @Autowired
+    PlatformTransactionManager txManager;
 
     //need Transactions
     public JSONObject createImage(MultipartFile upload, Authentication auth) throws IOException, JSONException {
-
         JSONObject json = new JSONObject();
         Tenth2OutputStream os = null;
 
@@ -92,41 +95,22 @@ public class UploadService {
         return !file.exists();
     }
 
-    public void createImaging(String id, String content, List<String> img_url) {
-        String doc_key = id;
-    }
-
-    public void updateImageUrl(Object urls) throws IOException {
-        HashMap hashMap = (HashMap) urls;
-        String docId = (String) hashMap.get("docId");
-        ArrayList<Image> insert = new ArrayList<>();
-        ArrayList<Image> delete = new ArrayList<>();
-
-        for (String s : (ArrayList<String>) hashMap.get("insertUrl")) {
-            insert.add(new Image(s, docId));
-        }
-        for (String s : (ArrayList<String>) hashMap.get("deleteUrl")) {
-            delete.add(new Image(s, docId));
+    public void updateImaging(String id, List insertUrl, List deleteUrl) throws IOException {
+        if(!insertUrl.isEmpty()){
+            uploadMapper.createImaging(insertUrl, id); //새로추가된 이미지와 문서 연결 : 이미징 테이블에 추가
         }
 
-<<<<<<< HEAD
-        if(!insert.isEmpty()){
-=======
-        if (!insert.isEmpty()) {
->>>>>>> eb0ce79199654fd6e2e5f49fd7c01d4ab5b8855b
-            uploadMapper.insertImaging(insert, docId); //새로추가된 이미지와 문서 연결 : 이미징 테이블에 추가
-        }
-
-        if (!delete.isEmpty()) {
-            uploadMapper.deleteImaging(delete, docId); //이미징 테이블에서 연결관계 해제
+        if (!deleteUrl.isEmpty()) {
+            uploadMapper.deleteImaging(deleteUrl, id); //이미징 테이블에서 연결관계 해제
         }
 
         List<Image> trashList = uploadMapper.findTrash();
         int pn = 0;
         while (pn != trashList.size()) {
-            if (!deleteImage(trashList.get(pn).getPath())) {//DELETE FAIL
+            if (!deleteImage(trashList.get(pn).getPath())) { //DELETE FAIL
                 trashList.remove(pn);
-            } else { //DELETE SUCCESS
+            }
+            else { //DELETE SUCCESS
                 pn++;
             }
         }

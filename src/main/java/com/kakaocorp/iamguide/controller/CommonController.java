@@ -38,7 +38,6 @@ public class CommonController {
 
     @GetMapping("/admin")
     public String adminPage(Authentication auth) {
-        logger.info("{}", auth.getDetails());
         return "/admin";
     }
 
