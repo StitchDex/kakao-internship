@@ -4,8 +4,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="com.kakaocorp.iamguide.dao.GuideDirMapper">
+<<<<<<< HEAD
+    <insert id="createGuide_Dir">
+=======
 
     <insert id="createGuideDir">
+>>>>>>> eb0ce79199654fd6e2e5f49fd7c01d4ab5b8855b
         insert into GUIDE_DIR(DIR_NAME,DIR_PARENT_KEY,DIR_STATE)
         values(#{text},#{parent},#{state})
     </insert>

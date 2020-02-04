@@ -5,6 +5,11 @@
 
 <mapper namespace="com.kakaocorp.iamguide.dao.GuideUpdateMapper">
 
+<<<<<<< HEAD
+<select id="getGuide_Update" resultType="com.kakaocorp.iamguide.model.GuideUpdate">
+        select * from GUIDE_UPDATE where DOCUMENT_TITLE=#{title}
+</select>
+=======
         <insert id="createGuideUpdate">
             insert into GUIDE_UPDATE(ADMIN_ID,DOCUMENT_TITLE,UPDATE_TIME,UPDATE_TYPE_CUD)
             values(#{ADMIN_ID},#{DOCUMENT_TITLE},CURRENT_TIMESTAMP,#{UPDATE_TYPE_CUD})
@@ -14,4 +19,5 @@
             select * from GUIDE_UPDATE where DOCUMENT_TITLE=#{title}
         </select>
 
+>>>>>>> eb0ce79199654fd6e2e5f49fd7c01d4ab5b8855b
 </mapper>

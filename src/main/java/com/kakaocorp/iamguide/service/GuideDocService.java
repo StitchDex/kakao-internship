@@ -19,13 +19,24 @@ public class GuideDocService {
     @Autowired
     private GuideDocMapper guideDocMapper;
 
+<<<<<<< HEAD
+    public List<GuideDoc> getGuideTreeList() {
+        List<GuideDoc> temp = guide_docMapper.selectTreeDataForGuide();
+        for(int i=0;i<temp.size();i++){
+            GuideDoc doc = temp.get(i);
+=======
     @Cacheable(cacheNames = "treeCache")
     public List<GuideDoc> retrieveGuideTreeList() {
         List<GuideDoc> guideTreeList = guideDocMapper.retrieveGuideTreeList();
 
         for (int i = 0; i < guideTreeList.size(); i++) {
             GuideDoc doc = guideTreeList.get(i);
+<<<<<<< HEAD
             if (doc.getId().startsWith("DIR")) {
+=======
+>>>>>>> eb0ce79199654fd6e2e5f49fd7c01d4ab5b8855b
+            if(doc.getId().startsWith("DIR")){
+>>>>>>> 42ca155bd0fbb6a37d34d8cab4ef26492ba17742
                 doc.setType("DIR");
             } else {
                 doc.setType("DOC");
