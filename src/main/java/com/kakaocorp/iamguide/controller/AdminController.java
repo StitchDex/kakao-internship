@@ -102,7 +102,7 @@ public class AdminController {
         List<String> img_url = (List<String>) parm.get("img_url");
 
         guideDocService.updateGuideDoc(id, content); // guide_doc edit
-        uploadService.createImaging(id, content, img_url);
+
 
         logger.info("edit : {}", id);
     }

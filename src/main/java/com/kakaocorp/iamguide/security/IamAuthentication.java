@@ -2,7 +2,7 @@ package com.kakaocorp.iamguide.security;
 
 import com.daum.mis.remote.client.HelloIdentityServiceClient;
 import com.kakaocorp.iamguide.GuideDictionary;
-import com.kakaocorp.iamguide.model.DevAdmin;
+
 import com.kakaocorp.iamguide.model.UserInfo;
 import com.kakaocorp.iamguide.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;

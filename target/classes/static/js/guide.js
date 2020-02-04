@@ -165,7 +165,6 @@ function edit_button_click() {
         )
         .then( editor => {
             admin_editor=editor;
-            $(this).css({"border-style":"solid;!important"});
         })
         .catch( error => {
                 console.error( error );

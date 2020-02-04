@@ -92,9 +92,6 @@ public class UploadService {
         return !file.exists();
     }
 
-    public void createImaging(String id, String content, List<String> img_url) {
-        String doc_key = id;
-    }
 
     public void updateImageUrl(Object urls) throws IOException {
         HashMap hashMap = (HashMap) urls;
