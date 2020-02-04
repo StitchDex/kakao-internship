@@ -1,26 +1,25 @@
 var selectAccount = $('select.select2-account');
-if (selectAccount.length > 0) {
-    selectAccount.select2({
-        'ajax' : {
-            'url': '/admin/suggest',
-            'data': function(params) {
-                return {'accountId' : params.term}
-            },
-            'processResults': function (data) {
-                var ret = $.map(data, function (obj) {
-                    obj.id = obj.id || obj.accountId;
-                    obj.text = obj.text || obj.identityDisplayName;
-                    return obj;
-                });
-                return {results : ret}
-            }
-        }, //ajax end
-        'placeholder': '아이디를 검색하고 추가 버튼을 눌러주세요. (최대 10명까지)',
-        'minimumInputLength': 2,
-        'language': 'ko',
-        'allowClear': true,
-    });
-}
+
+selectAccount.select2({
+    'ajax' : {
+        'url': '/admin/suggest',
+        'data': function(params) {
+            return {'accountId' : params.term}
+        },
+        'processResults': function (data) {
+            var ret = $.map(data, function (obj) {
+                obj.id = obj.id || obj.accountId;
+                obj.text = obj.text || obj.identityDisplayName;
+                return obj;
+            });
+            return {results : ret}
+        }
+    }, //ajax end
+    'placeholder': '아이디를 검색하고 추가 버튼을 눌러주세요. (최대 10명까지)',
+    'minimumInputLength': 2,
+    'language': 'ko',
+    'allowClear': true,
+});
 
 $(window).on('load', function () {
     var cur_path = window.location.pathname;
@@ -99,6 +98,8 @@ function insertClick() {
         admin_list.push(temp);
     })
 
+    if(admin_list.length == 0) return;
+
     $.ajax({
         'url':'./insertAdmin',
         'headers': {"X-CSRF-TOKEN": token},
@@ -117,14 +118,24 @@ function insertClick() {
 }
 
 function deleteClick() {
-    var token = $("meta[name='_csrf']").attr("content");
     var admin_list = [];
-
     var selected = $("select.select-account-all").find("option:selected");
     $.each(selected, function (key, val) {
-        var temp = {"adminEmpNo":val.getAttribute("empno")};
+        var temp = {"adminEmpNo":val.getAttribute("empno"), "text" : val.text};
         admin_list.push(temp);
     })
+
+    if(admin_list.length==0) return;
+
+    var confirmText = "관리자 권한을 삭제 하시겠습니까?\n";
+
+    for(var i = 0; i < admin_list.length; i++){
+        confirmText += admin_list[i]['text'] + "\n";
+    }
+    var realDelete = confirm(confirmText)
+    if(realDelete == false) return;
+
+    var token = $("meta[name='_csrf']").attr("content");
 
     admin_list = JSON.stringify(admin_list);
     $.ajax({

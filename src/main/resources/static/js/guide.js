@@ -178,15 +178,16 @@ function edit_button_click() {
 function edit_save_button_click() {
     if (admin_editor == null) {
         alert("Error");
-    } else {
+    }
+    else {
         //Editor Save
         var dockey = selectedData.substring(3, selectedData.length);
         admin_editor.set('isReadOnly', true);
         //+)check the doc is edit (if or editor method)
         selectedData = selectedData.substring(3);
         const edit_doc = admin_editor.getData();
-        var sendData = JSON.stringify({"id": dockey, "content": edit_doc});
         var token = $("meta[name='_csrf']").attr("content");
+<<<<<<< HEAD
         $.ajax({
             url: '/admin/edit_doc',
             headers: {"X-CSRF-TOKEN": token},
@@ -201,27 +202,34 @@ function edit_save_button_click() {
                 console.log(error);
             }
         });
+=======
+>>>>>>> d6ad47e43182ea919a5c7134c5ba1a14e1f1bde4
 
         //IMAGE URL
         //Get before URL
         //Get after URL
         afterImageUrl = new Set(UrlParse(admin_editor.getData()));
         //Extract insertUrl & deleteUrl
-              var inserUrl = substract(Array.from(afterImageUrl), Array.from(beforeImageUrl));
+        var inserUrl = substract(Array.from(afterImageUrl), Array.from(beforeImageUrl));
         var deleteUrl = substract(Array.from(beforeImageUrl), Array.from(afterImageUrl));
         //Insert URL to DB & Delete URL from DB
-        var updateUrls = {"insertUrl":inserUrl, "deleteUrl":deleteUrl,"docId":dockey};
+        var updateUrls = {"insertUrl":inserUrl, "deleteUrl":deleteUrl};
+
+        var sendData = JSON.stringify({"id": dockey, "content": edit_doc, "insertUrl": inserUrl, "deleteUrl":deleteUrl});
+
         $.ajax({
-            'url' : '/admin/imageurl',
-            'data' : JSON.stringify(updateUrls),
-            'contentType' : 'application/json',
-            'headers': {"X-CSRF-TOKEN": token},
-            'method': 'POST',
-            'success':function(){
-                console.log("uploadImageUrl Success")
-            },
-            'error':function () {
-                console.log("uploadImageUrl Fail")
+        url: '/admin/edit_doc',
+        headers: {"X-CSRF-TOKEN": token},
+        data: sendData,
+        method: 'POST',
+        dataType: 'html',
+        contentType: 'application/json',
+        // refresh page
+        success: function (res) {
+                set_Guide_update(selectedText,'update');
+                issuc = true;
+            }, error: function (error) {
+                console.log(error);
             }
         });
 
@@ -269,13 +277,10 @@ function get_Guide_update(title) {
             var ttext = " ";
             for(var k=0;k<res.length;k++) {
                 ttemp = Object.values(res[k]);
-                for (var i = 1; i < ttemp.length; i++) {
-                    ttext += ttemp[i];
-                    ttext += " - ";
-                }
+                ttext += ttemp.join("-");
+                ttext += "\n"
                 $('#update').val(ttext); // async 로 작동함
             }
-
         }, error: function (error) {
             console.log(error);
         }

@@ -4,12 +4,12 @@ import lombok.Data;
 
 @Data
 public class Image {
-    private String id;
+    private String key;
     private String path;
-    private String dockey;
+    private String documentKey;
 
-    public Image(String path, String dockey) {
+    public Image(String path, String documentKey) {
         this.path = path;
-        this.dockey = dockey;
+        this.documentKey = documentKey;
     }
 }

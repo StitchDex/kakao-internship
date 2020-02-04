@@ -29,9 +29,9 @@
             <label for="inputPassword" class="sr-only">Password</label>
             <input type="password" name="password" id="inputPassword" placeholder="비밀번호"
                    class="form-control form-control-lg" autocomplete="current-password"
-                   oninvalid="this.setCustomValidity('사내 계정 비밀번호를 입력해주세요.')"
+                   oninvalid="this.setCustomValidity('사내 계정 비밀번호를 입력해주세요. 비밀번호는 32자 이하입니다.')"
                    oninput="setCustomValidity('')"
-                   required/>
+                   required pattern=".{1,32}"/>
             <div th:if="${param.error}" class="text-danger">
                 <small>사내 계정과 비밀번호가 유효하지 않습니다. 확인 후 다시 시도 해주세요.<br>
                 </small>

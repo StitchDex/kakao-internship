@@ -13,6 +13,8 @@ import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,10 +44,11 @@ public class UploadService {
     @Autowired
     private UploadMapper uploadMapper;
 
+    @Autowired
+    PlatformTransactionManager txManager;
 
     //need Transactions
     public JSONObject createImage(MultipartFile upload, Authentication auth) throws IOException, JSONException {
-
         JSONObject json = new JSONObject();
         Tenth2OutputStream os = null;
 
@@ -92,6 +95,7 @@ public class UploadService {
         return !file.exists();
     }
 
+<<<<<<< HEAD
 
     public void updateImageUrl(Object urls) throws IOException {
         HashMap hashMap = (HashMap) urls;
@@ -108,18 +112,24 @@ public class UploadService {
 
         if (!insert.isEmpty()) {
             uploadMapper.insertImaging(insert, docId); //새로추가된 이미지와 문서 연결 : 이미징 테이블에 추가
+=======
+    public void updateImaging(String id, List insertUrl, List deleteUrl) throws IOException {
+        if(!insertUrl.isEmpty()){
+            uploadMapper.createImaging(insertUrl, id); //새로추가된 이미지와 문서 연결 : 이미징 테이블에 추가
+>>>>>>> d6ad47e43182ea919a5c7134c5ba1a14e1f1bde4
         }
 
-        if (!delete.isEmpty()) {
-            uploadMapper.deleteImaging(delete, docId); //이미징 테이블에서 연결관계 해제
+        if (!deleteUrl.isEmpty()) {
+            uploadMapper.deleteImaging(deleteUrl, id); //이미징 테이블에서 연결관계 해제
         }
 
         List<Image> trashList = uploadMapper.findTrash();
         int pn = 0;
         while (pn != trashList.size()) {
-            if (!deleteImage(trashList.get(pn).getPath())) {//DELETE FAIL
+            if (!deleteImage(trashList.get(pn).getPath())) { //DELETE FAIL
                 trashList.remove(pn);
-            } else { //DELETE SUCCESS
+            }
+            else { //DELETE SUCCESS
                 pn++;
             }
         }

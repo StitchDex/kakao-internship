@@ -96,13 +96,15 @@ public class AdminController {
     @PostMapping(value = "edit_doc", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     void updateGuideDoc(HttpServletRequest req, @RequestBody Map<String, Object> parm) throws Exception {
-
         String id = (String) parm.get("id");
         String content = (String) parm.get("content");
-        List<String> img_url = (List<String>) parm.get("img_url");
 
         guideDocService.updateGuideDoc(id, content); // guide_doc edit
+<<<<<<< HEAD
 
+=======
+        uploadService.updateImaging(id, (List)parm.get("insertUrl"), (List)parm.get("deleteUrl")); // update Imaging table
+>>>>>>> d6ad47e43182ea919a5c7134c5ba1a14e1f1bde4
 
         logger.info("edit : {}", id);
     }
@@ -192,12 +194,5 @@ public class AdminController {
     public @ResponseBody
     void updateTags(@RequestBody Object tags) {
         guideTagService.updateGuideTag(tags);
-    }
-
-    @RequestMapping(value = "imageurl", method = RequestMethod.POST)
-    public @ResponseBody
-    void updateImageUrl(@RequestBody Object urls) throws IOException {
-        uploadService.updateImageUrl(urls);
-        logger.info("{}", urls);
     }
 }
