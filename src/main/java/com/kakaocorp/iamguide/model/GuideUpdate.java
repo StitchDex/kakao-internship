@@ -6,9 +6,9 @@ import java.sql.Timestamp;
 
 @Data
 public class GuideUpdate {
-    private int updateKey;
-    private String adminId;
-    private String documentTitle;
-    private Timestamp updateTime;
-    private String updateTypeCUD;
+    private int UPDATE_KEY;
+    private String ADMIN_ID;
+    private String DOCUMENT_TITLE;
+    private Timestamp UPDATE_TIME;
+    private String UPDATE_TYPE_CUD;
 }

@@ -263,13 +263,10 @@ function get_Guide_update(title) {
             var ttext = " ";
             for(var k=0;k<res.length;k++) {
                 ttemp = Object.values(res[k]);
-                for (var i = 1; i < ttemp.length; i++) {
-                    ttext += ttemp[i];
-                    ttext += " - ";
-                }
+                ttext += ttemp.join("-");
+                ttext += "\n"
                 $('#update').val(ttext); // async 로 작동함
             }
-
         }, error: function (error) {
             console.log(error);
         }
