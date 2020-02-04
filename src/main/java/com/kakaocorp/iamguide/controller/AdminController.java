@@ -99,12 +99,8 @@ public class AdminController {
         String id = (String) parm.get("id");
         String content = (String) parm.get("content");
 
-        guideDocService.updateGuideDoc(id, content); // guide_doc edit
-<<<<<<< HEAD
-
-=======
-        uploadService.updateImaging(id, (List)parm.get("insertUrl"), (List)parm.get("deleteUrl")); // update Imaging table
->>>>>>> d6ad47e43182ea919a5c7134c5ba1a14e1f1bde4
+        guideDocService.updateGuideDoc(id, content); // guide_doc edit=
+        uploadService.updateImaging(id, (List) parm.get("insertUrl"), (List) parm.get("deleteUrl")); // update Imaging table
 
         logger.info("edit : {}", id);
     }

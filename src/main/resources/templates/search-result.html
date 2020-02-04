@@ -4,13 +4,22 @@
       layout:decorate="layout/default">
 
 <div layout:fragment="content">
-    <div class="container-fluid" style="margin-top: 100px">
+    <div class="container-fluid" id="guide_first" style="margin-top: 100px">
         <h1>검색 결과</h1>
         <ul>
             <li th:each="result : ${Results}" >
                 <a th:text="${result.title}" th:href="@{/guide(doc_key=${result.id})}"></a>
             </li>
         </ul>
+    </div>
+
+    <div class="container-fluid" id="guide_content" style="display: none;margin-top:100px">
+        <input id="selected" hidden="hidden" th:value="${selected}">
+        <h1 id="guide-title"></h1>
+
+        <div id="Guide_Doc">
+
+        </div>
     </div>
 </div>
 </html>

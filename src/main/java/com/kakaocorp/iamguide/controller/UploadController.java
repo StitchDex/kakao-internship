@@ -24,7 +24,6 @@ import java.io.*;
 public class UploadController {
 
     private Logger logger = LoggerFactory.getLogger(CommonController.class);
-    private static final String IMAGE_DEFAULT_PATH = "/iam_user_guide/guide/**";
 
     @Autowired
     private UploadService uploadService;
@@ -42,12 +41,11 @@ public class UploadController {
 
     }
 
-    @RequestMapping(value = IMAGE_DEFAULT_PATH, method = RequestMethod.GET)
+    @RequestMapping(value = "get_image/{uuid}", method = RequestMethod.GET)
     public @ResponseBody
-    byte[] ImageDownload(HttpServletRequest request) throws IOException {
+    byte[] ImageDownload(HttpServletRequest request, @PathVariable("uuid") String uuid) throws IOException {
         byte[] imageData = null;
-
-        imageData = uploadService.retrieveImage(request.getRequestURI());
+        imageData = uploadService.retrieveImage(uuid);
 
         logger.info("{},{}", "imageUpload", request.getRequestURI());
         return imageData;

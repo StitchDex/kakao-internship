@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -23,16 +22,25 @@
 </style>
 <headr th:with="admin = ${#authentication.getDetails()}"></headr>
 <body id="treeBody">
+<nav class="navbar navbar-expand-lg navbar-light fixed-top" style="background:#ffde00">
+    <div class="container-fluid">
+        <div class="navbar-header">
+                <img src="/images/kakao%20CI_black.png" alt=Kakao style="width:100px;
+                height: auto;">
+        </div>
+    </div>
+</nav>
 <input type="hidden" id="admin_name" th:if="${#authentication.getDetails() != null}"
        th:value="${#authentication.getName()}"/>
-<div id="edit_tree" class="scroll-box"></div>
-<input type="button" id="save_tree_button" onclick="create_root();" value="root create"></input>
-
-
+<div id="edit_tree" class="scroll-box" style="margin-top:50px"></div>
+<input class="btn btn-outline-dark my-2 my-sm-0" type="button" id="save_tree_button" onclick="create_root();" value="root create" style="margin-left: 10px"></input>
 <script type="text/javascript" th:src="@{/js/jquery.min.js}" src="../../static/js/jquery.min.js"></script>
 <script type="text/javascript" th:src="@{/js/jstree.js}" src="../../static/js/jstree.js"></script>
 <script type="text/javascript" th:src="@{/js/admin_tree.js}" src="../../static/js/admin_tree.js"></script>
 <script type="text/javascript" th:src="@{/js/bootstrap.min.js}" src="../../static/js/bootstrap.min.js"></script>
 <script type="text/javascript" th:src="@{/js/guide.js}" src="../../static/js/guide.js"></script>
+<script>
+    $(this).jstree('open_all')
+</script>
 </body>
 </html>

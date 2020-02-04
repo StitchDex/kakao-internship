@@ -10,23 +10,8 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
                 <h3 ><a href="/guide" class="sidebar-heading list-group-item-action ">가이드목록</a></h3>
                 <strong>IAM</strong>
             </div>
-            <div class="sidebar-header" style="border-bottom: solid gray;">
-                    <div class = 'scroll-box' id="jstree"></div>
-            </div>
-            <div class="admin_button" sec:authorize="hasRole('ROLE_ADMIN')"
-                 style="margin-left: 70px;margin-top: 20px;">
-            <ul class="list-unstyled components">
-                <button type="button" id = "button1" class="btn btn-info" onclick="location.href='/admin'"
-                        style="color: #212529;background-color: #ffc10780;border-color: #ffc10700;width: 130px">문서 편집으로</button>
-            </ul>
-            <ul class="list-unstyled components">
-            <button type="button" id = "button2" class="btn btn-info" onclick="location.href='/admin/admin_auth'"
-                    style="color: #212529;background-color: #ffc10780;border-color: #ffc10700;width: 130px"> 관리자 권한으로</button>
-            </ul>
-            <ul class="list-unstyled components">
-            <button type="button" id = "admin_tree_button" class="btn btn-info"
-                    style="color: #212529;background-color: #ffc10780;border-color: #ffc10700;width: 130px"> 가이드 트리 편집</button>
-            </ul>
+            <div class="scroll-box sidebar-header container" style="height: 1000px;width: 300px">
+                    <div id="jstree"></div>
             </div>
         </nav>
     </div>

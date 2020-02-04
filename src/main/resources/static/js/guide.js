@@ -9,9 +9,12 @@ var beforeTags = new Set();
 var afterTags;
 var beforeImageUrl = new Set();
 var afterImageUrl = new Set();
+var depth2Dir = new Array();
+var depth2Dir_num;
 //document ready
 $(function () {
     hidden_num=0;
+    depth2Dir=0;
     var searched = $('#selected').val();
     $('#jstree').jstree({
         'core': {
@@ -30,7 +33,7 @@ $(function () {
                 },
                 'success': function (data) {
                     for(i=0;i<data.length;i++){
-                        var temp=(data[i].state);
+                        var temp =(data[i].state);
                         if(!temp) {
                             hidden[hidden_num++] = data[i].id;
                         }
@@ -51,9 +54,10 @@ $(function () {
         'plugins' : ["types", "state","wholerow"]
     })
         .on('ready.jstree', function(){
-            make_hide();
-            $('#jstree').jstree('select_node', "DOC" + searched);
-        $(this).jstree('open_all')
+            before_tree_open();
+            $(this).jstree('open_node','DIR0');
+            $('#jstree').jstree('select_node', "DOC" + searched); // for search_result
+
     });
     $('#jstree').jstree('clear_state');
 
@@ -63,17 +67,27 @@ $(function () {
 $('#jstree').on('select_node.jstree', function (e, data) {
     selectedData = data.node.id;
     selectedText = data.node.text;
+
     //click dir_node
     if(selectedData.startsWith("DIR")){
-        //no event
+        $(this).jstree('open_node',selectedData);
+        console.log(selectedData);
     }
     //click page_node
     else {
         $('#guide_first').css("display","none");
         $('#guide_content').show();
+        $(this).jstree('close_all');
+        $(this).jstree(true)._open_to(selectedData);
         LoadDocText();
     }
 });
+
+function before_tree_open() {
+    for(var i=0;i<hidden.length;i++) {
+        $("#jstree").jstree(true).hide_node(hidden[i]);
+    }
+}
 
 function LoadDocText(search_key) {
     let dockey = selectedData.substring(3, selectedData.length);
@@ -111,11 +125,7 @@ function LoadDocText(search_key) {
     }
 }
 
-function make_hide() {
-    for(var i=0;i<hidden.length;i++) {
-        $("#jstree").jstree(true).hide_node(hidden[i]);
-    }
-}
+
 //make user editor and set html data
 function make_editor(res){
     ClassicEditor
@@ -187,24 +197,6 @@ function edit_save_button_click() {
         selectedData = selectedData.substring(3);
         const edit_doc = admin_editor.getData();
         var token = $("meta[name='_csrf']").attr("content");
-<<<<<<< HEAD
-        $.ajax({
-            url: '/admin/edit_doc',
-            headers: {"X-CSRF-TOKEN": token},
-            data: sendData,
-            method: 'POST',
-            dataType: 'html',
-            contentType: 'application/json',
-            success: function (res) {
-                set_Guide_update(selectedText,'update');
-                issuc = true;
-            }, error: function (error) {
-                console.log(error);
-            }
-        });
-=======
->>>>>>> d6ad47e43182ea919a5c7134c5ba1a14e1f1bde4
-
         //IMAGE URL
         //Get before URL
         //Get after URL
