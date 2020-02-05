@@ -21,8 +21,12 @@
         font-size: 15pt;
     }
 </style>
-<headr th:with="admin = ${#authentication.getDetails()}"></headr>
+<header th:with="admin = ${#authentication.getDetails()}"></header>
 <body id="treeBody">
+<div class="bg-kakao d-flex" style="height: 50px">
+    <label>Tree EDITOR</label>
+</div>
+
 <input type="hidden" id="admin_name" th:if="${#authentication.getDetails() != null}"
        th:value="${#authentication.getName()}"/>
 <div id="edit_tree" class="scroll-box"></div>
