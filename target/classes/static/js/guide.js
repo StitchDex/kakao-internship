@@ -305,7 +305,7 @@ function init_select_tagging(){
     var dockey = selectedData.substring(3);
     $.ajax({
         'async':false,
-        'url':'admin/getTags',
+        'url':'/admin/getTags',
         'data':{'doc_key':dockey},
         'success':function(data){
             $.each(data, function(key, val){
@@ -317,7 +317,7 @@ function init_select_tagging(){
     $('select.select2-tagging').select2(
         {
             'ajax':{
-                'url':'admin/suggestTags',
+                'url':'/admin/suggestTags',
                 'data':function(params) {
                     return {'tag':params.term};
                 },

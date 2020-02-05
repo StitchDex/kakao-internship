@@ -195,7 +195,7 @@ function create_node(sendData){
     var title = sendData.text;
     sendData = JSON.stringify(sendData);
     $.ajax({
-        url: 'admin/admin_tree/create',
+        url: '/admin/admin_tree/create',
         headers: {"X-CSRF-TOKEN": token},
         data: sendData,
         method: 'POST',
@@ -216,7 +216,7 @@ function update_node(sendData,what){
     var title = sendData.text;
     sendData = JSON.stringify(sendData);
     $.ajax({
-        url: 'admin/admin_tree/update',
+        url: '/admin/admin_tree/update',
         headers: {"X-CSRF-TOKEN": token},
         data: sendData,
         method: 'POST',
@@ -236,7 +236,7 @@ function delete_node(sendData,title,what){
 
     sendData = JSON.stringify({'id':sendData, 'type':what});
     $.ajax({
-        url: 'admin/admin_tree/delete',
+        url: '/admin/admin_tree/delete',
         headers: {"X-CSRF-TOKEN": token},
         data: sendData,
         method: 'POST',

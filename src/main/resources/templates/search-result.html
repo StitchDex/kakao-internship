@@ -8,7 +8,7 @@
         <h1>검색 결과</h1>
         <ul>
             <li th:each="result : ${Results}" >
-                <a th:text="${result.title}" th:href="@{/guide(doc_key=${result.id})}"></a>
+                <a th:text="${result.title}" th:href="@{./guide(doc_key=${result.id})}"></a>
             </li>
         </ul>
     </div>
