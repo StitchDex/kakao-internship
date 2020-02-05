@@ -23,10 +23,12 @@
         insert into GUIDE_DOCUMENT(DOCUMENT_TITLE,DOCUMENT_TEXT,DIRECTORY_KEY,DOCUMENT_STATE)
         values(#{text},#{content},#{parent},#{state})
     </insert>
+
     <update id="updateGuideTree">
         update GUIDE_DOCUMENT SET DOCUMENT_TITLE=#{text}, DIRECTORY_KEY=#{parent}, DOCUMENT_STATE=#{state}
         where DOCUMENT_KEY=#{key}
     </update>
+
     <delete id="deleteGuideTree">
         delete from GUIDE_DOCUMENT where DOCUMENT_KEY=#{key}
     </delete>

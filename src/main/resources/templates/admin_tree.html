@@ -22,12 +22,6 @@
 </style>
 <header th:with="admin = ${#authentication.getDetails()}"></header>
 <body id="treeBody">
-<<<<<<< HEAD
-<div class="bg-kakao d-flex" style="height: 50px">
-    <label>Tree EDITOR</label>
-</div>
-
-=======
 <nav class="navbar navbar-expand-lg navbar-light fixed-top" style="background:#ffde00">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -36,7 +30,6 @@
         </div>
     </div>
 </nav>
->>>>>>> 373a0eb5623578208664011b0fec45f80ac07e8f
 <input type="hidden" id="admin_name" th:if="${#authentication.getDetails() != null}"
        th:value="${#authentication.getName()}"/>
 <div id="edit_tree" class="scroll-box" style="margin-top:50px"></div>
