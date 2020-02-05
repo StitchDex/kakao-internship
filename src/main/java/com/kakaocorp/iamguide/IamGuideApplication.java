@@ -15,6 +15,10 @@ public class IamGuideApplication extends SpringBootServletInitializer {
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+<<<<<<< HEAD
+        return builder.sources(SpringApplicationBuilder.class);
+=======
         return builder.sources(IamGuideApplication.class);
+>>>>>>> 373a0eb5623578208664011b0fec45f80ac07e8f
     }
 }

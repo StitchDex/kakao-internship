@@ -9,9 +9,12 @@
     </properties>
     <root id="archive" name="ROOT.war">
       <element id="artifact" artifact-name="iam-guide:war exploded" />
+<<<<<<< HEAD
+=======
       <element id="directory" name="META-INF">
         <element id="file-copy" path="$PROJECT_DIR$/target/classes/META-INF/MANIFEST.MF" />
       </element>
+>>>>>>> 373a0eb5623578208664011b0fec45f80ac07e8f
     </root>
   </artifact>
 </component>
