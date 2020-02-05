@@ -2,11 +2,14 @@ package com.kakaocorp.iamguide.service;
 
 
 import com.kakaocorp.iamguide.IamUtils;
+import com.kakaocorp.iamguide.controller.CommonController;
 import com.kakaocorp.iamguide.dao.UploadMapper;
 import com.kakaocorp.iamguide.model.Image;
 import net.daum.tenth2.Tenth2File;
 import net.daum.tenth2.Tenth2OutputStream;
 import net.daum.tenth2.util.Tenth2Util;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.configurationprocessor.json.JSONException;
@@ -25,6 +28,9 @@ import java.util.*;
 
 @Service
 public class UploadService {
+
+    private Logger logger = LoggerFactory.getLogger(UploadService.class);
+
     @Autowired
     private TransactionTemplate txTemplate;
 
@@ -101,6 +107,7 @@ public class UploadService {
         if (!insertUrl.isEmpty()) {
             for(int i=0;i<insertUrl.size();i++){
                 String temp = insertUrl.get(i).toString().substring(11);
+                logger.info("insert_img: {}",temp);
                 insertUrl.set(i,temp);
             }
             uploadMapper.createImaging(insertUrl, id); //새로추가된 이미지와 문서 연결 : 이미징 테이블에 추가
@@ -109,6 +116,7 @@ public class UploadService {
         if (!deleteUrl.isEmpty()) {
             for(int i=0;i<deleteUrl.size();i++){
                 String temp = deleteUrl.get(i).toString().substring(11);
+                logger.info("delete_img: {}",temp);
                 deleteUrl.set(i,temp);
             }
             uploadMapper.deleteImaging(deleteUrl, id); //이미징 테이블에서 연결관계 해제

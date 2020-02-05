@@ -13,7 +13,7 @@ public interface GuideUpdateMapper {
     void createGuideUpdate(@Param("ADMIN_ID") String id, @Param("DOCUMENT_TITLE") String title,
                            @Param("UPDATE_TYPE_CUD") String crud);
 
-    List<GuideUpdate> retrieveGuideUpdate(@Param("title") String title);
+    GuideUpdate retrieveGuideUpdate(@Param("title") String title);
 
 }
 

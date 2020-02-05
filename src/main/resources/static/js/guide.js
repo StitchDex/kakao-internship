@@ -188,7 +188,7 @@ function edit_button_click() {
 //admin edit_save_button click
 function edit_save_button_click() {
     if (admin_editor == null) {
-        alert("Error");
+        alert("편집 버튼을 눌러주세요");
     }
     else {
         //Editor Save
@@ -219,8 +219,7 @@ function edit_save_button_click() {
         contentType: 'application/json',
         // refresh page
         success: function (res) {
-                set_Guide_update(selectedText,'update');
-                issuc = true;
+            issuc = true;
             }, error: function (error) {
                 console.log(error);
             }
@@ -237,7 +236,7 @@ function edit_save_button_click() {
 
         insertTags = substract(Array.from(afterTags), Array.from(beforeTags));
         deleteTags = substract(Array.from(beforeTags), Array.from(afterTags));
-
+        set_Guide_update(selectedText, 'update');
         var issuc = false;
         $.ajax({
             'url': '/admin/updateTags',
@@ -266,14 +265,9 @@ function get_Guide_update(title) {
         url: '/admin/get_update?title=' + title,
         method: 'GET',
         success: function (res) {
-            var ttemp = new Array();
-            var ttext = " ";
-            for(var k=0;k<res.length;k++) {
-                ttemp = Object.values(res[k]);
-                ttext += ttemp.join("-");
-                ttext += "\n"
-                $('#update').val(ttext); // async 로 작동함
-            }
+
+            $("#guide-update").text(res);
+            console.log(res);
         }, error: function (error) {
             console.log(error);
         }
