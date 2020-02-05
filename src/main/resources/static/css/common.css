@@ -159,7 +159,6 @@ a, a:hover {
 }
 .dropdown {
     float: left;
-    overflow: hidden;
 }
 
 /* Dropdown button */
@@ -172,4 +171,18 @@ a, a:hover {
     background-color: inherit;
     font-family: inherit; /* Important for vertical align on mobile phones */
     margin: 0; /* Important for vertical align on mobile phones */
+}
+
+.dropdown-menu>li>a {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+}
+
+.dropdown-menu>li>a:hover {
+    background-color: #e9ecef;
 }

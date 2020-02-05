@@ -12,13 +12,15 @@
                 </div>
                 <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
                     <div class="nav-item active" sec:authorize="hasRole('ROLE_ADMIN')">
-                        <button class="btn btn-outline-dark my-2 my-sm-0 dropdown-toggle" type="button" data-toggle="dropdown">ADMIN
-                            <span class="caret"></span></button>
-                        <ul class="dropdown-menu" style="left: 450px">
-                            <li><a href="/admin">문서편집</a></li>
-                            <li><a href="/admin/admin_auth">관리자 권한</a></li>
-                            <li><a href="#" id = "admin_tree_button">가이드 트리 편집</a></li>
-                        </ul>
+                        <div class="dropdown">
+                            <button class="btn btn-outline-dark my-2 my-sm-0 dropdown-toggle" type="button" data-toggle="dropdown">ADMIN
+                                <span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li><a href="/admin">문서편집</a></li>
+                                <li><a href="/admin/admin_auth">관리자 권한</a></li>
+                                <li><a href="#" id = "admin_tree_button">가이드 트리 편집</a></li>
+                            </ul>
+                        </div>
                     </div>
                     <li class="nav-item active" style="margin-top: 5px"><label class="text-dark mr-2 "
                                                                                style="margin-left:25px; font-size:larger">태그

@@ -97,6 +97,7 @@ function LoadDocText(search_key) {
     }
     if (!isNaN(dockey)) {
         $.ajax({
+            async:false,
             url: '/guide/menu?doc_key=' + dockey,
             method: 'GET',
             success: function (res) {//set DOCUMENT_TEXT in editor area
@@ -180,7 +181,7 @@ function edit_button_click() {
             }
         );
 
-    $('select.select2-tagging').prop('disabled', true);
+    $('select.select2-tagging').prop('disabled', false);
 
 }
 
