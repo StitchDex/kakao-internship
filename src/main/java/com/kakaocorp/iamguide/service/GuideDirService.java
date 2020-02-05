@@ -12,11 +12,11 @@ public class GuideDirService {
 
     @CacheEvict(cacheNames ="treeCache",allEntries = true)
     public void createGuideDir(String parent, String text, boolean state) {
-        if (parent.length() > 1) {
-            parent = parent.substring(3);
-        } else if (parent.equals("#")) {
+
+        if (parent.equals("#")) {
             guideDirMapper.createGuideRootDir(text, state);
         } else {
+            parent=parent.substring(3);
             guideDirMapper.createGuideDir(parent, text, state);
         }
     }
