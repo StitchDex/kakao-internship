@@ -14,14 +14,14 @@
     <div id="guide_content" style="margin-left: 20px; display: none">
         <div class="container">
             <h1 id="guide-title"></h1>
-            <p id="guide-update">das</p>
+            <p id="guide-update"></p>
             <div class="container" id="Guide_Doc" style="margin-left: 30px"></div>
-            <div>
+            <div class="container">
+                <select class="custom-select select2-tagging" name="tags" multiple="multiple"></select>
                 <button style="margin-left:50px; color: #212529;background-color: #ffc10780;border-color: #ffc10700;width: 130px;height: 40px" type="button" class="btn btn-info"  id="edit_button" onclick="edit_button_click();">편집</button>  <!--editor readonly : false-->
                 <button style="margin-left:30px;color: #212529;background-color: #ffc10780;border-color: #ffc10700;width: 130px;height: 40px" type="button" class="btn btn-info" id="edit_save_button" onclick="edit_save_button_click();" >저장</button>  <!--// ajax save guide_doc_text-->
             </div>
         </div>
-        <select class="custom-select select2-tagging" name="tags" multiple="multiple"></select>
     </div>
 </div>
 </html>
