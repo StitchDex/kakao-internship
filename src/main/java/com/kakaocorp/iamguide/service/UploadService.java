@@ -14,7 +14,6 @@ import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -49,13 +48,14 @@ public class UploadService {
 
     //need Transactions
     public JSONObject createImage(MultipartFile upload, Authentication auth) throws IOException, JSONException {
+        final String PREFIX = "/get_image/";
         JSONObject json = new JSONObject();
         Tenth2OutputStream os = null;
 
         long imageSize = upload.getSize();
         String imageName = upload.getOriginalFilename();
         String imagePath = IamUtils.getTenthPath(serviceId, imageName, auth);
-
+        String uuid = IamUtils.wrapImagePath();
         try {
             //tenth upload
             os = new Tenth2OutputStream(imagePath, upload.getBytes().length);
@@ -71,17 +71,17 @@ public class UploadService {
             } catch (IOException e) {
             }
         }
-
         json.put("uploaded", 1);
         json.put("fileName", imageName);
-        json.put("url", imagePath);
-        uploadMapper.createImage(imagePath); // Image table Only
+        json.put("url", PREFIX+uuid);
+        uploadMapper.createImage(imagePath,uuid); // Image table Only
         return json;
     }
 
-    public byte[] retrieveImage(String imagePath) throws IOException {
+    public byte[] retrieveImage(String uuid) throws IOException {
         byte[] imageData = null;
-        String uploadPath = URLDecoder.decode(imagePath, "UTF-8");
+        String uploadPath = uploadMapper.retrieveImage(uuid);
+        //String uploadPath = URLDecoder.decode(imagePath, "UTF-8");
 
         imageData = Tenth2Util.get(uploadPath);
 
@@ -95,12 +95,22 @@ public class UploadService {
         return !file.exists();
     }
 
+
     public void updateImaging(String id, List insertUrl, List deleteUrl) throws IOException {
-        if(!insertUrl.isEmpty()){
+
+        if (!insertUrl.isEmpty()) {
+            for(int i=0;i<insertUrl.size();i++){
+                String temp = insertUrl.get(i).toString().substring(11);
+                insertUrl.set(i,temp);
+            }
             uploadMapper.createImaging(insertUrl, id); //새로추가된 이미지와 문서 연결 : 이미징 테이블에 추가
         }
 
         if (!deleteUrl.isEmpty()) {
+            for(int i=0;i<deleteUrl.size();i++){
+                String temp = deleteUrl.get(i).toString().substring(11);
+                deleteUrl.set(i,temp);
+            }
             uploadMapper.deleteImaging(deleteUrl, id); //이미징 테이블에서 연결관계 해제
         }
 
@@ -109,8 +119,7 @@ public class UploadService {
         while (pn != trashList.size()) {
             if (!deleteImage(trashList.get(pn).getPath())) { //DELETE FAIL
                 trashList.remove(pn);
-            }
-            else { //DELETE SUCCESS
+            } else { //DELETE SUCCESS
                 pn++;
             }
         }

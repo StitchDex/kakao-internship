@@ -2,10 +2,9 @@ package com.kakaocorp.iamguide.security;
 
 import com.daum.mis.remote.client.HelloIdentityServiceClient;
 import com.kakaocorp.iamguide.GuideDictionary;
-import com.kakaocorp.iamguide.model.Admin;
+
 import com.kakaocorp.iamguide.model.UserInfo;
 import com.kakaocorp.iamguide.service.CommonService;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;

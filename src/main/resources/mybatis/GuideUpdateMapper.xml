@@ -4,12 +4,15 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="com.kakaocorp.iamguide.dao.GuideUpdateMapper">
-        <insert id="createGuideUpdate">
+
+    <insert id="createGuideUpdate">
+
             insert into GUIDE_UPDATE(ADMIN_ID,DOCUMENT_TITLE,UPDATE_TIME,UPDATE_TYPE_CUD)
             values(#{ADMIN_ID},#{DOCUMENT_TITLE},CURRENT_TIMESTAMP,#{UPDATE_TYPE_CUD})
         </insert>
 
-        <select id="retrieveGuideUpdate" resultType="com.kakaocorp.iamguide.model.GuideUpdate">
+    <select id="retrieveGuideUpdate" resultType="com.kakaocorp.iamguide.model.GuideUpdate">
             select * from GUIDE_UPDATE where DOCUMENT_TITLE=#{title}
         </select>
+
 </mapper>

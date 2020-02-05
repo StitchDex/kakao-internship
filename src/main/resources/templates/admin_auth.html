@@ -3,7 +3,8 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout/default">
     <div layout:fragment="content" class="container-fluid" style="margin-top: 100px">
-        <div class="d-flex flex-column mb-3">
+        <div id="guide_first">
+        <div class="container d-flex flex-column mb-3">
             <div class="d-flex flex-row justify-content-center">
                 <div class="d-flex justify-content-between" style="width: 1020px">
                     <div class="p-2">
@@ -21,7 +22,6 @@
                     <ul class="list-group w-100" id="addList">
                         <button class="btn btn-info col-sm mt-3 insert-admin" style="width: 1020px" onclick="insertClick()">추가 완료</button>
                     </ul>
-                        <!-- 관리자 추가 리스트 올 자리 -->
                 </div>
             </div>
             <div class="d-flex flex-row justify-content-center">
@@ -38,6 +38,16 @@
                 <div class="p-2">
                     <label id="select-count">0</label><label>개 선택</label>
                 </div>
+            </div>
+        </div>
+        </div>
+
+        <div class="container-fluid" id="guide_content" style="display: none;">
+            <input id="selected" hidden="hidden" th:value="${selected}">
+            <h1 id="guide-title"></h1>
+
+            <div id="Guide_Doc">
+
             </div>
         </div>
     </div>
