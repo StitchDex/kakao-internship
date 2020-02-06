@@ -13,54 +13,7 @@ var depth2Dir = new Array();
 var depth2Dir_num;
 //document ready
 $(function () {
-    hidden_num=0;
-    depth2Dir=0;
-    var searched = $('#selected').val();
 
-    $('#jstree').jstree({
-        'core': {
-            'multiple': false,
-            "check_callback": true,
-            'themes': {
-                'icon' : true,
-                'responsive': true
-            },
-            'data':  {
-                'url' : '/guide/tree',
-                'type': "GET",
-                'dataType' : 'json',
-                'data' : function(node){
-                    return {"id": node.id == "#" ? "IAM" : node.id };
-                },
-                'success': function (data) {
-                    for(i=0;i<data.length;i++){
-                        var temp =(data[i].state);
-                        if(!temp) {
-                            hidden[hidden_num++] = data[i].id;
-                        }
-                    }
-                    console.log(data);
-                }
-             }
-        },
-        'types' : {
-            "DIR": {
-                "icon" : "far fa-folder"
-            },
-            "DOC": {
-                "icon" : "far fa-file",
-                "max_children" : 0,
-            },
-        },
-        'plugins' : ["types", "state","wholerow"]
-    })
-        .on('ready.jstree', function(){
-            before_tree_open();
-            $(this).jstree('open_node','DIR0');
-
-    });
-    $('#jstree').jstree('clear_state');
-    $('#jstree').jstree('select_node', "DOC" + searched); // for search_result
 });
 
 //click tree_node
@@ -71,12 +24,11 @@ $('#jstree').on('select_node.jstree', function (e, data) {
     //click dir_node
     if(selectedData.startsWith("DIR")){
         $(this).jstree('open_node',selectedData);
-        console.log(selectedData);
     }
     //click page_node
     else {
-        $(this).jstree('close_all');
-        $(this).jstree(true)._open_to(selectedData);
+        $('#jstree').jstree('clear_state');
+        //$('#jstree').jstree(true)._open_to(selectedData);
         loadDoc();
     }
 });
@@ -241,14 +193,8 @@ function get_Guide_update(title) {
         url: '/admin/get_update?title=' + title,
         method: 'GET',
         success: function (res) {
-            var ttemp = new Array();
-            var ttext = " ";
-            for(var k=0;k<res.length;k++) {
-                ttemp = Object.values(res[k]);
-                ttext += ttemp.join("-");
-                ttext += "\n"
-                $('#update').val(ttext); // async 로 작동함
-            }
+            $("#guide-update").text(res);
+            console.log(res);
         }, error: function (error) {
             console.log(error);
         }

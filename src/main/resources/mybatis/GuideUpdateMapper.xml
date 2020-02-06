@@ -12,7 +12,10 @@
         </insert>
 
     <select id="retrieveGuideUpdate" resultType="com.kakaocorp.iamguide.model.GuideUpdate">
-            select * from GUIDE_UPDATE where DOCUMENT_TITLE=#{title}
+            select ADMIN_ID,UPDATE_TIME,UPDATE_TYPE_CUD
+            from GUIDE_UPDATE
+            where DOCUMENT_TITLE=#{title}
+            AND UPDATE_KEY IN(SELECT MAX(UPDATE_KEY) FROM GUIDE_UPDATE WHERE DOCUMENT_TITLE=#{title})
         </select>
 
 </mapper>

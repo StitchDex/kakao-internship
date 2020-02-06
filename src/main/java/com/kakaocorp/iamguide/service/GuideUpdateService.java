@@ -14,8 +14,10 @@ public class GuideUpdateService {
     @Autowired
     private GuideUpdateMapper guideUpdateMapper;
 
-    public List<GuideUpdate> retrieveGuideUpdate(String DOCUMENT_TITLE){
-        return guideUpdateMapper.retrieveGuideUpdate(DOCUMENT_TITLE);
+    public String retrieveGuideUpdate(String DOCUMENT_TITLE){
+        GuideUpdate temp = guideUpdateMapper.retrieveGuideUpdate(DOCUMENT_TITLE);
+        String retrieveUpdate = temp.getADMIN_ID()+" " + temp.getUPDATE_TYPE_CUD()+ " at "+ temp.getUPDATE_TIME();
+        return retrieveUpdate;
     }
     public void createGuideUpdate(String ADMIN_ID, String DOCUMENT_TITLE, String UPDATE_TYPE_CUD){
         guideUpdateMapper.createGuideUpdate(ADMIN_ID,DOCUMENT_TITLE,UPDATE_TYPE_CUD);

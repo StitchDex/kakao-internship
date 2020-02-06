@@ -129,10 +129,11 @@ public class AdminController {
      */
     @GetMapping("get_update")
     public @ResponseBody
-    List<GuideUpdate> retrieveGuideUpdate(HttpServletRequest req, @RequestParam("title") String title) {
+    String retrieveGuideUpdate(HttpServletRequest req, @RequestParam("title") String title) {
         logger.info("/guide_update{}", title);
         return guideUpdateService.retrieveGuideUpdate(title);
     }
+
 
     /**
      * AJAX : admin(AUTHENTICATED)
