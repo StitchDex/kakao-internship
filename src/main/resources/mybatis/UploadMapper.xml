@@ -46,7 +46,8 @@
     </delete>
 
     <select id="findTrash" resultType="com.kakaocorp.iamguide.model.Image">
-        SELECT IMAGE_KEY as id, IMAGE_PATH as path, IMAGE_UUID as uuid, FROM GUIDE_IMAGE
+        SELECT IMAGE_KEY as id, IMAGE_PATH as path, IMAGE_UUID as uuid
+        FROM GUIDE_IMAGE
         WHERE IMAGE_KEY NOT IN (
 	        SELECT IMAGE_KEY FROM GUIDE_IMAGING
         )

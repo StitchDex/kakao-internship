@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class Image {
-    private String key;
+    private String id;
     private String path;
     private String documentKey;
     private String uuid;

@@ -46,6 +46,7 @@ public class AdminController {
         return "admin_tree";
     }
 
+
     @PostMapping(value = "admin_tree/create", produces = MediaType.APPLICATION_JSON_VALUE)
     public String createGuideTree(HttpServletRequest req, @RequestBody Map<String, Object> parm) throws Exception {
         String parent = (String) parm.get("parent");
@@ -96,7 +97,7 @@ public class AdminController {
      */
     @PostMapping(value = "edit_doc", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    void updateGuideDoc(HttpServletRequest req, @RequestBody Map<String, Object> parm) throws Exception {
+    boolean updateGuideDoc(HttpServletRequest req, @RequestBody Map<String, Object> parm) throws Exception {
         String id = (String) parm.get("id");
         String content = (String) parm.get("content");
 
@@ -104,6 +105,7 @@ public class AdminController {
         uploadService.updateImaging(id, (List) parm.get("insertUrl"), (List) parm.get("deleteUrl")); // update Imaging table
 
         logger.info("edit : {}", id);
+        return true;
     }
 
     /**

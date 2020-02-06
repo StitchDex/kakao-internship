@@ -19,7 +19,6 @@ public class GuideDocService {
     @Autowired
     GuideDocMapper guideDocMapper;
 
-    @Cacheable(cacheNames = "treeCache")
     public List<GuideDoc> retrieveGuideTreeList() {
         List<GuideDoc> guideTreeList = guideDocMapper.retrieveGuideTreeList();
         for (int i = 0; i < guideTreeList.size(); i++) {
@@ -34,7 +33,6 @@ public class GuideDocService {
         return guideTreeList;
     }
 
-    @CacheEvict(cacheNames = "treeCache", allEntries = true)
     public void createGuideTree(String parent, String text, boolean state) {
         if (parent.length() < 1)
             parent = "0";
@@ -43,13 +41,11 @@ public class GuideDocService {
         guideDocMapper.createGuideTree(parent, content, text, state);
     }
 
-    @CacheEvict(cacheNames = "treeCache", allEntries = true)
     public void deleteGuideTree(String key) {
         key = key.substring(3);
         guideDocMapper.deleteGuideTree(key);
     }
 
-    @CacheEvict(cacheNames = "treeCache", allEntries = true)
     public void updateGuideTree(String key, String parent, String text, boolean state) {
         key = key.substring(3);
         if (parent.length() < 1)
