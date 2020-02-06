@@ -94,7 +94,7 @@ function loadDoc(search_key) {
         dockey = search_key;
     }
     if (!isNaN(dockey)) {
-        if(window.location.pathname == "/admin"){
+        if(window.location.pathname.startsWith("/admin")){
             location.href='/admin/document?doc_key='+dockey;
         }
         else {
