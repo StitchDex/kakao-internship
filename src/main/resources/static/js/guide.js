@@ -59,7 +59,7 @@ $(function () {
             $(this).jstree('open_node','DIR0');
 
     });
-    //$('#jstree').jstree('clear_state');
+    $('#jstree').jstree('clear_state');
     $('#jstree').jstree('select_node', "DOC" + searched); // for search_result
 });
 

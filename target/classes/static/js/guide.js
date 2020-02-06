@@ -59,7 +59,7 @@ $(function () {
             $(this).jstree('open_node','DIR0');
 
     });
-    //$('#jstree').jstree('clear_state');
+    $('#jstree').jstree('clear_state');
     $('#jstree').jstree('select_node', "DOC" + searched); // for search_result
 });
 
@@ -89,13 +89,17 @@ function before_tree_open() {
 
 function loadDoc(search_key) {
     let dockey = selectedData.substring(3, selectedData.length);
-    console.log(window.location.pathname);
 
     if(search_key != null) {
         dockey = search_key;
     }
     if (!isNaN(dockey)) {
-        location.href='/guide/document?doc_key='+dockey;
+        if(window.location.pathname == "/admin"){
+            location.href='/admin/document?doc_key='+dockey;
+        }
+        else {
+            location.href='/guide/document?doc_key='+dockey;
+        }
     } else {
         console.log("document key error");
     }
