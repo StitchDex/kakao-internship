@@ -55,21 +55,19 @@ $(function () {
             },
         },
         'plugins': ["types", "state", "wholerow"]
-    })
-        .on('ready.jstree', function () {
-            before_tree_open();
-            cur = $(this).jstree('get_node', 'DOC' + documentKey);
-            if (documentKey == null) {
-                $(this).jstree('close_all');
-                $(this).jstree('open_node', 'DIR0');
-            } else {
-                select_open($(this).jstree('open_node', 'DIR0'));
-            }
-        });
-
+    }).delegate("a", "dblclick", function () {
+        $(this).parents(".jstree:eq(0)").jstree("toggle_node", this);
+    }).on('ready.jstree', function () {
+        before_tree_open($(this).jstree('close_all'),$(this).jstree('open_node', 'DIR0'));
+        cur = $('#jstree').jstree('get_node', 'DOC' + documentKey);
+        if (documentKey != null) {
+            select_open();
+        }
+    });
     if (documentKey == null) { // admin_main, guide_main
         return;
     }
+
     $.ajax({
         'url': '/guide/menu',
         'data': {'doc_key': documentKey},
@@ -101,7 +99,8 @@ $('#jstree').on('select_node.jstree', function (e, data) {
 
     //click dir_node
     if (selectedData.startsWith("DIR")) {
-        $(this).jstree('open_node', selectedData);
+        data.node.state.opened ? $(this).jstree('close_node', selectedData)
+            : $(this).jstree('open_node', selectedData);
     }
     //click page_node
     else {
@@ -111,11 +110,10 @@ $('#jstree').on('select_node.jstree', function (e, data) {
 });
 
 function select_open() {
-
     while (cur.id != "DIR0") {
         $('#jstree').jstree('open_node', cur.parent);
         let cur_p = cur.parent;
-        cur = $('#jstree').jstree('get_node',cur_p);
+        cur = $('#jstree').jstree('get_node', cur_p);
     }
 }
 
@@ -235,9 +233,9 @@ function edit_save_button_click() {
             contentType: 'application/json',
             // refresh page
             success: function (res) {
-                set_Guide_update(selectedText, 'update');
+                res?set_Guide_update($('#guide-title').text(), 'update'):alert('error');
             }, error: function (error) {
-                console.log(error);
+                alert('저장 실패');
             }
         });
 
