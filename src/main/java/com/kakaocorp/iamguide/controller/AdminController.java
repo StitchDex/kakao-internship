@@ -201,4 +201,11 @@ public class AdminController {
         }
         return "admin-document";
     }
+
+    @GetMapping(value = "search")
+    public String getSearchResults(@RequestParam("tag") String tag, Model model) {
+        model.addAttribute("Results", guideTagService.retrieveGuideList(tag));
+        model.addAttribute("test", "test");
+        return "search-result";
+    }
 }

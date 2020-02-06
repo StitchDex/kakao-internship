@@ -11,9 +11,86 @@ var beforeImageUrl = new Set();
 var afterImageUrl = new Set();
 var depth2Dir = new Array();
 var depth2Dir_num;
+var documentKey;
 //document ready
 $(function () {
+<<<<<<< HEAD
 
+=======
+    hidden_num=0;
+    depth2Dir=0;
+    documentKey = $('#selected').val();
+
+    $('#jstree').jstree({
+        'core': {
+            'multiple': false,
+            "check_callback": true,
+            'themes': {
+                'icon' : true,
+                'responsive': true
+            },
+            'data':  {
+                'url' : '/guide/tree',
+                'type': "GET",
+                'dataType' : 'json',
+                'data' : function(node){
+                    return {"id": node.id == "#" ? "IAM" : node.id };
+                },
+                'success': function (data) {
+                    for(i=0;i<data.length;i++){
+                        var temp =(data[i].state);
+                        if(!temp) {
+                            hidden[hidden_num++] = data[i].id;
+                        }
+                    }
+                    console.log(data);
+                }
+             }
+        },
+        'types' : {
+            "DIR": {
+                "icon" : "far fa-folder"
+            },
+            "DOC": {
+                "icon" : "far fa-file",
+                "max_children" : 0,
+            },
+        },
+        'plugins' : ["types", "state","wholerow"]
+    })
+        .on('ready.jstree', function(){
+            before_tree_open();
+            $(this).jstree('open_node','DIR0');
+
+    });
+    $('#jstree').jstree('clear_state');
+    $('#jstree').jstree('select_node', "DOC" + documentKey); // for search_result
+
+    $.ajax({
+        'url':'/guide/menu',
+        'data':{'doc_key':documentKey},
+        'success':function (res) {
+            var title = res.title;
+            $('#guide-title').text(title);
+            if(admin_editor!=null){ // change doc while edit
+                admin_editor.destroy(true);
+                make_editor(res.text);
+            }
+            else if(doc_editor!=null){ // change doc
+                doc_editor.destroy();
+                make_editor(res.text);
+            }
+            else{ // document_ready
+                make_editor(res.text);
+            }
+            get_Guide_update(res.title);
+            init_select_tagging();
+        },
+        'error':function () {
+
+        },
+    });
+>>>>>>> ea6cb83a599904bc89a700654fba5e4c5b2b0541
 });
 
 //click tree_node
@@ -122,10 +199,9 @@ function edit_save_button_click() {
     }
     else {
         //Editor Save
-        var dockey = selectedData.substring(3, selectedData.length);
+        var dockey = documentKey;
         admin_editor.set('isReadOnly', true);
         //+)check the doc is edit (if or editor method)
-        selectedData = selectedData.substring(3);
         const edit_doc = admin_editor.getData();
         var token = $("meta[name='_csrf']").attr("content");
         //IMAGE URL
@@ -170,7 +246,7 @@ function edit_save_button_click() {
             'url': '/admin/updateTags',
             'contentType': 'application/json',
             'async': false,
-            'data': JSON.stringify({'insert': insertTags, 'delete': deleteTags, 'doc_key': selectedData}),
+            'data': JSON.stringify({'insert': insertTags, 'delete': deleteTags, 'doc_key': dockey}),
             'headers': {"X-CSRF-TOKEN": token},
             'method': 'POST',
             'success': function () {
@@ -193,6 +269,10 @@ function get_Guide_update(title) {
         url: '/admin/get_update?title=' + title,
         method: 'GET',
         success: function (res) {
+<<<<<<< HEAD
+=======
+
+>>>>>>> ea6cb83a599904bc89a700654fba5e4c5b2b0541
             $("#guide-update").text(res);
             console.log(res);
         }, error: function (error) {
@@ -200,7 +280,6 @@ function get_Guide_update(title) {
         }
     });
 }
-
 
 //set guide_update when save button clicked
 function set_Guide_update(title,type) {
@@ -224,7 +303,7 @@ function set_Guide_update(title,type) {
 
 function init_select_tagging(){
     var ret = [];
-    var dockey = selectedData.substring(3);
+    var dockey = documentKey;
     $.ajax({
         'async':false,
         'url':'/admin/getTags',
@@ -277,8 +356,6 @@ function init_select_tagging(){
 }
 
 function substract(a,b) { return $(a).not(b).get(); }
-
-
 function UrlParse(text) {
     var m,
         urls = [],
@@ -295,5 +372,12 @@ function menu_tag(tag_name){
     location.href = "/guide/search?tag=%23" + tag_name;
 }
 
-//admin_tree
-
+$('#search-result-item').on('click', function () {
+    var doc_key=$(this).attr('value');
+    if(window.location.pathname.startsWith("/admin")){
+        location.href='/admin/document?doc_key='+doc_key;
+    }
+    else {
+        location.href='/guide/document?doc_key='+doc_key;
+    }
+})

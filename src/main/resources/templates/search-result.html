@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout/default">
 
@@ -7,17 +8,11 @@
     <div class="container" id="guide_first">
         <h1>검색 결과</h1>
         <ul class="list-group mt-3">
-            <a th:each="result : ${Results}" th:text="${result.title}" th:href="@{/guide(doc_key=${result.id})}"
-               class="list-group-item list-group-item-action" style="display: block; color: #0a6aa1" ></a>
+            <a id="search-result-item" th:each="result : ${Results}" th:text="${result.title}" th:attr="value=${result.getId()}"
+               class="list-group-item list-group-item-action" style="display: block; color: #0a6aa1" >
+            </a>
         </ul>
-    </div>
-    <div class="container" id="guide_content" style="display: none;">
-        <input id="selected" hidden="hidden" th:value="${selected}">
-        <h1 id="guide-title"></h1>
-
-        <div id="Guide_Doc">
-
-        </div>
+        <!--th:href="@{/guide/document(doc_key=${result.id})}"-->
     </div>
 </div>
 </html>
