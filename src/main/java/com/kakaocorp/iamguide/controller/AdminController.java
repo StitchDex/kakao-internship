@@ -129,7 +129,7 @@ public class AdminController {
      */
     @GetMapping("get_update")
     public @ResponseBody
-    List<GuideUpdate> retrieveGuideUpdate(HttpServletRequest req, @RequestParam("title") String title) {
+    String retrieveGuideUpdate(HttpServletRequest req, @RequestParam("title") String title) {
         logger.info("/guide_update{}", title);
         return guideUpdateService.retrieveGuideUpdate(title);
     }
@@ -199,5 +199,12 @@ public class AdminController {
             model.addAttribute("selected", doc_key);
         }
         return "admin-document";
+    }
+
+    @GetMapping(value = "search")
+    public String getSearchResults(@RequestParam("tag") String tag, Model model) {
+        model.addAttribute("Results", guideTagService.retrieveGuideList(tag));
+        model.addAttribute("test", "test");
+        return "search-result";
     }
 }
