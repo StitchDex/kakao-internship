@@ -12,13 +12,11 @@ var afterImageUrl = new Set();
 var depth2Dir = new Array();
 var depth2Dir_num;
 var documentKey;
+let cur;
 //document ready
 $(function () {
-<<<<<<< HEAD
-
-=======
-    hidden_num=0;
-    depth2Dir=0;
+    hidden_num = 0;
+    depth2Dir = 0;
     documentKey = $('#selected').val();
 
     $('#jstree').jstree({
@@ -26,71 +24,74 @@ $(function () {
             'multiple': false,
             "check_callback": true,
             'themes': {
-                'icon' : true,
+                'icon': true,
                 'responsive': true
             },
-            'data':  {
-                'url' : '/guide/tree',
+            'data': {
+                'url': '/guide/tree',
                 'type': "GET",
-                'dataType' : 'json',
-                'data' : function(node){
-                    return {"id": node.id == "#" ? "IAM" : node.id };
+                'dataType': 'json',
+                'data': function (node) {
+                    return {"id": node.id == "#" ? "IAM" : node.id};
                 },
                 'success': function (data) {
-                    for(i=0;i<data.length;i++){
-                        var temp =(data[i].state);
-                        if(!temp) {
+                    for (i = 0; i < data.length; i++) {
+                        var temp = (data[i].state);
+                        if (!temp) {
                             hidden[hidden_num++] = data[i].id;
                         }
                     }
                     console.log(data);
                 }
-             }
+            }
         },
-        'types' : {
+        'types': {
             "DIR": {
-                "icon" : "far fa-folder"
+                "icon": "far fa-folder"
             },
             "DOC": {
-                "icon" : "far fa-file",
-                "max_children" : 0,
+                "icon": "far fa-file",
+                "max_children": 0,
             },
         },
-        'plugins' : ["types", "state","wholerow"]
+        'plugins': ["types", "state", "wholerow"]
     })
-        .on('ready.jstree', function(){
+        .on('ready.jstree', function () {
             before_tree_open();
-            $(this).jstree('open_node','DIR0');
+            cur = $(this).jstree('get_node', 'DOC' + documentKey);
+            if (documentKey == null) {
+                $(this).jstree('close_all');
+                $(this).jstree('open_node', 'DIR0');
+            } else {
+                select_open($(this).jstree('open_node', 'DIR0'));
+            }
+        });
 
-    });
-    $('#jstree').jstree('clear_state');
-    $('#jstree').jstree('select_node', "DOC" + documentKey); // for search_result
-
+    if (documentKey == null) { // admin_main, guide_main
+        return;
+    }
     $.ajax({
-        'url':'/guide/menu',
-        'data':{'doc_key':documentKey},
-        'success':function (res) {
+        'url': '/guide/menu',
+        'data': {'doc_key': documentKey},
+        'success': function (res) {
             var title = res.title;
             $('#guide-title').text(title);
-            if(admin_editor!=null){ // change doc while edit
+            if (admin_editor != null) { // change doc while edit
                 admin_editor.destroy(true);
                 make_editor(res.text);
-            }
-            else if(doc_editor!=null){ // change doc
+            } else if (doc_editor != null) { // change doc
                 doc_editor.destroy();
                 make_editor(res.text);
-            }
-            else{ // document_ready
+            } else { // document_ready
                 make_editor(res.text);
             }
             get_Guide_update(res.title);
             init_select_tagging();
         },
-        'error':function () {
+        'error': function () {
 
         },
     });
->>>>>>> ea6cb83a599904bc89a700654fba5e4c5b2b0541
 });
 
 //click tree_node
@@ -99,19 +100,27 @@ $('#jstree').on('select_node.jstree', function (e, data) {
     selectedText = data.node.text;
 
     //click dir_node
-    if(selectedData.startsWith("DIR")){
-        $(this).jstree('open_node',selectedData);
+    if (selectedData.startsWith("DIR")) {
+        $(this).jstree('open_node', selectedData);
     }
     //click page_node
     else {
         $('#jstree').jstree('clear_state');
-        //$('#jstree').jstree(true)._open_to(selectedData);
         loadDoc();
     }
 });
 
+function select_open() {
+
+    while (cur.id != "DIR0") {
+        $('#jstree').jstree('open_node', cur.parent);
+        let cur_p = cur.parent;
+        cur = $('#jstree').jstree('get_node',cur_p);
+    }
+}
+
 function before_tree_open() {
-    for(var i=0;i<hidden.length;i++) {
+    for (var i = 0; i < hidden.length; i++) {
         $("#jstree").jstree(true).hide_node(hidden[i]);
     }
 }
@@ -119,15 +128,14 @@ function before_tree_open() {
 function loadDoc(search_key) {
     let dockey = selectedData.substring(3, selectedData.length);
 
-    if(search_key != null) {
+    if (search_key != null) {
         dockey = search_key;
     }
     if (!isNaN(dockey)) {
-        if(window.location.pathname.startsWith("/admin")){
-            location.href='/admin/document?doc_key='+dockey;
-        }
-        else {
-            location.href='/guide/document?doc_key='+dockey;
+        if (window.location.pathname.startsWith("/admin")) {
+            location.href = '/admin/document?doc_key=' + dockey;
+        } else {
+            location.href = '/guide/document?doc_key=' + dockey;
         }
     } else {
         console.log("document key error");
@@ -136,13 +144,13 @@ function loadDoc(search_key) {
 
 
 //make user editor and set html data
-function make_editor(res){
+function make_editor(res) {
     ClassicEditor
         .create(document.querySelector('#Guide_Doc'),
         )
         .then(editor => {
-            editor.set('isReadOnly',true);
-            doc_editor=editor;
+            editor.set('isReadOnly', true);
+            doc_editor = editor;
             doc_editor.setData(res);
         })
         .catch(error => {
@@ -157,13 +165,13 @@ function edit_button_click() {
     beforeImageUrl = new Set(UrlParse(temp));
     doc_editor.destroy(true);
     ClassicEditor
-        .create( document.querySelector( '#Guide_Doc' ), {
-                extraPlugins:[MyCustomUploadAdapterPlugin],
-                toolbar: ["bold", "heading","imageTextAlternative","imageStyle:full", "imageUpload", "indent", "outdent",
+        .create(document.querySelector('#Guide_Doc'), {
+                extraPlugins: [MyCustomUploadAdapterPlugin],
+                toolbar: ["bold", "heading", "imageTextAlternative", "imageStyle:full", "imageUpload", "indent", "outdent",
                     "italic", "link", "numberedList", "bulletedList", "insertTable", "tableColumn", "tableRow", "mergeTableCells", "alignment:left",
                     "alignment:right", "alignment:center", "alignment:justify", "alignment", "fontSize", "underline", "undo", "redo"],
                 image: {
-                    toolbar: [ 'imageTextAlternative', '|', 'imageStyle:alignLeft', 'imageStyle:full', 'imageStyle:alignRight' ],
+                    toolbar: ['imageTextAlternative', '|', 'imageStyle:alignLeft', 'imageStyle:full', 'imageStyle:alignRight'],
                     styles: [
                         'full',
                         'alignLeft',
@@ -180,11 +188,11 @@ function edit_button_click() {
                 }
             }
         )
-        .then( editor => {
-            admin_editor=editor;
+        .then(editor => {
+            admin_editor = editor;
         })
-        .catch( error => {
-            alert("편집 버튼 에디터 오류");
+        .catch(error => {
+                alert("편집 버튼 에디터 오류");
             }
         );
 
@@ -196,8 +204,7 @@ function edit_button_click() {
 function edit_save_button_click() {
     if (admin_editor == null) {
         alert("Error");
-    }
-    else {
+    } else {
         //Editor Save
         var dockey = documentKey;
         admin_editor.set('isReadOnly', true);
@@ -212,18 +219,23 @@ function edit_save_button_click() {
         var inserUrl = substract(Array.from(afterImageUrl), Array.from(beforeImageUrl));
         var deleteUrl = substract(Array.from(beforeImageUrl), Array.from(afterImageUrl));
         //Insert URL to DB & Delete URL from DB
-        var sendData = JSON.stringify({"id": dockey, "content": edit_doc, "insertUrl": inserUrl, "deleteUrl":deleteUrl});
+        var sendData = JSON.stringify({
+            "id": dockey,
+            "content": edit_doc,
+            "insertUrl": inserUrl,
+            "deleteUrl": deleteUrl
+        });
 
         $.ajax({
-        url: '/admin/edit_doc',
-        headers: {"X-CSRF-TOKEN": token},
-        data: sendData,
-        method: 'POST',
-        dataType: 'html',
-        contentType: 'application/json',
-        // refresh page
-        success: function (res) {
-                set_Guide_update(selectedText,'update');
+            url: '/admin/edit_doc',
+            headers: {"X-CSRF-TOKEN": token},
+            data: sendData,
+            method: 'POST',
+            dataType: 'html',
+            contentType: 'application/json',
+            // refresh page
+            success: function (res) {
+                set_Guide_update(selectedText, 'update');
             }, error: function (error) {
                 console.log(error);
             }
@@ -269,10 +281,6 @@ function get_Guide_update(title) {
         url: '/admin/get_update?title=' + title,
         method: 'GET',
         success: function (res) {
-<<<<<<< HEAD
-=======
-
->>>>>>> ea6cb83a599904bc89a700654fba5e4c5b2b0541
             $("#guide-update").text(res);
             console.log(res);
         }, error: function (error) {
@@ -282,8 +290,8 @@ function get_Guide_update(title) {
 }
 
 //set guide_update when save button clicked
-function set_Guide_update(title,type) {
-    var sendData = JSON.stringify({"admin": $('#admin_name').val(),"title": title, "CRUD": type});
+function set_Guide_update(title, type) {
+    var sendData = JSON.stringify({"admin": $('#admin_name').val(), "title": title, "CRUD": type});
     console.log(sendData);
     var token = $("meta[name='_csrf']").attr("content");
     $.ajax({
@@ -291,8 +299,8 @@ function set_Guide_update(title,type) {
         headers: {"X-CSRF-TOKEN": token},
         data: sendData,
         method: 'POST',
-        dataType:'html',
-        contentType:'application/json',
+        dataType: 'html',
+        contentType: 'application/json',
         success: function (res) {
             console.log("update");
         }, error: function (error) {
@@ -301,83 +309,84 @@ function set_Guide_update(title,type) {
     });
 }
 
-function init_select_tagging(){
+function init_select_tagging() {
     var ret = [];
     var dockey = documentKey;
     $.ajax({
-        'async':false,
-        'url':'/admin/getTags',
-        'data':{'doc_key':dockey},
-        'success':function(data){
-            $.each(data, function(key, val){
-                ret.push({"id" : key, "text":val.tag, "selected":true});
+        'async': false,
+        'url': '/admin/getTags',
+        'data': {'doc_key': dockey},
+        'success': function (data) {
+            $.each(data, function (key, val) {
+                ret.push({"id": key, "text": val.tag, "selected": true});
             });
         }
     });
 
     $('select.select2-tagging').select2(
         {
-            'ajax':{
-                'url':'/admin/suggestTags',
-                'data':function(params) {
-                    return {'tag':params.term};
+            'ajax': {
+                'url': '/admin/suggestTags',
+                'data': function (params) {
+                    return {'tag': params.term};
                 },
-                'processResults':function(data) {
+                'processResults': function (data) {
                     data = $.map(data, function (obj) {
                         obj.id = obj.id || obj.tag; // replace pk with your identifier
                         obj.text = obj.text || obj.tag; // replace pk with your identifier
                         return obj;
                     });
-                    return {results : data};
+                    return {results: data};
                 }
             },
-            'tags':true,
-            'allowClear':true,
-            'disabled':true,
-            'tokenSeparators':[',',' '], //태그 구분자 추가
-            'createTag':function(params){ //태그 공백 제거
+            'tags': true,
+            'allowClear': true,
+            'disabled': true,
+            'tokenSeparators': [',', ' '], //태그 구분자 추가
+            'createTag': function (params) { //태그 공백 제거
                 var term = $.trim(params.term);
-                if(term == '') {
+                if (term == '') {
                     return null;
-                }
-                else {
-                    return {'id':term, 'text':term,'newTag':true};
+                } else {
+                    return {'id': term, 'text': term, 'newTag': true};
                 }
             }
         }
     );
 
     var options = "";
-    $.each(ret, function(key, val){
-        options += "<option selected='selected' value='" + val.text + "'>" + val.text +"</option>"
+    $.each(ret, function (key, val) {
+        options += "<option selected='selected' value='" + val.text + "'>" + val.text + "</option>"
         beforeTags.add(val.text);
     });
     $('select.select2-tagging').html(options);
 }
 
-function substract(a,b) { return $(a).not(b).get(); }
+function substract(a, b) {
+    return $(a).not(b).get();
+}
+
 function UrlParse(text) {
     var m,
         urls = [],
         str = text,
         rex = /[sS][rR][cC]\s*=\s*(?:'|")([^("|')]*)(?:'|")/g;
 
-    while ( m = rex.exec( str ) ) {
-        urls.push( m[1] );
+    while (m = rex.exec(str)) {
+        urls.push(m[1]);
     }
     return urls;
 }
 
-function menu_tag(tag_name){
+function menu_tag(tag_name) {
     location.href = "/guide/search?tag=%23" + tag_name;
 }
 
 $('#search-result-item').on('click', function () {
-    var doc_key=$(this).attr('value');
-    if(window.location.pathname.startsWith("/admin")){
-        location.href='/admin/document?doc_key='+doc_key;
+    var doc_key = $(this).attr('value');
+    if (window.location.pathname.startsWith("/admin")) {
+        location.href = '/admin/document?doc_key=' + doc_key;
+    } else {
+        location.href = '/guide/document?doc_key=' + doc_key;
     }
-    else {
-        location.href='/guide/document?doc_key='+doc_key;
-    }
-})
+});

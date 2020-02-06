@@ -16,7 +16,6 @@ a, a:hover {
     text-decoration: none
 }
 
-
 #loginBody {
     display: -ms-flexbox;
     display: -webkit-box;
@@ -120,43 +119,7 @@ a, a:hover {
     flex-wrap: nowrap;
 }
 
-.scroll-box {
-    width: 100%;
-    height: auto;
-    overflow-x: auto;
-    overflow-y: auto;
-}
 
-.scroll-box::-webkit-scrollbar {
-    width: .4em;
-    height: .4em;
-}
-
-.scroll-box::-webkit-scrollbar,
-.scroll-box::-webkit-scrollbar-thumb {
-    overflow: visible;
-    border-radius: 4px;
-}
-
-.scroll-box::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, .2);
-}
-
-.cover-bar {
-    position: absolute;
-    background: #fff;;
-    height: 100%;
-    top: 0;
-    right: 0;
-    width: .4em;
-    -webkit-transition: all .5s;
-    opacity: 1;
-}
-
-.scroll-bar-wrap:hover .cover-bar {
-    opacity: 0;
-    -webkit-transition: all .5s;
-}
 .dropdown {
     float: left;
 }
@@ -189,10 +152,11 @@ a, a:hover {
 
 #jstree-div::-webkit-scrollbar {
     -webkit-appearance: none;
-    width: 7px;
+    height: 5px;
 }
 #jstree-div::-webkit-scrollbar-thumb {
     border-radius: 2px;
+    width: 7px;
     background-color: rgba(0, 0, 0, .5);
     -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
 }

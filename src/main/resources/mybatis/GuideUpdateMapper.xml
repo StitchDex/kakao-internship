@@ -15,10 +15,5 @@
             from GUIDE_UPDATE
             where DOCUMENT_TITLE=#{title}
             AND UPDATE_KEY IN(SELECT MAX(UPDATE_KEY) FROM GUIDE_UPDATE WHERE DOCUMENT_TITLE=#{title})
-<<<<<<< HEAD
-        </select>
-
-=======
     </select>
->>>>>>> ea6cb83a599904bc89a700654fba5e4c5b2b0541
 </mapper>
