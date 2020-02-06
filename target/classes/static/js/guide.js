@@ -75,11 +75,11 @@ $('#jstree').on('select_node.jstree', function (e, data) {
     }
     //click page_node
     else {
-        $('#guide_first').css("display","none");
-        $('#guide_content').show();
         $(this).jstree('close_all');
         $(this).jstree(true)._open_to(selectedData);
         LoadDocText();
+        $('#guide_first').css("display","none");
+        $('#guide_content').show();
     }
 });
 
@@ -206,8 +206,6 @@ function edit_save_button_click() {
         var inserUrl = substract(Array.from(afterImageUrl), Array.from(beforeImageUrl));
         var deleteUrl = substract(Array.from(beforeImageUrl), Array.from(afterImageUrl));
         //Insert URL to DB & Delete URL from DB
-        var updateUrls = {"insertUrl":inserUrl, "deleteUrl":deleteUrl};
-
         var sendData = JSON.stringify({"id": dockey, "content": edit_doc, "insertUrl": inserUrl, "deleteUrl":deleteUrl});
 
         $.ajax({
@@ -220,7 +218,6 @@ function edit_save_button_click() {
         // refresh page
         success: function (res) {
                 set_Guide_update(selectedText,'update');
-                issuc = true;
             }, error: function (error) {
                 console.log(error);
             }

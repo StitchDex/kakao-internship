@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lagn="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
     <head th:replace="fragments/config :: configFragment"></head>
-
-    <div class="d-flex" id="wrapper">
-            <header th:replace="fragments/header :: headerFragment"></header>
-            <section th:replace="fragments/sidebar :: sidebarFragment"></section>
-            <div layout:fragment="content"></div>
-    </div>
-    <footer th:replace="fragments/footer :: footerFragment"></footer>
+    <body>
+        <header th:replace="fragments/header :: headerFragment"></header>
+        <div class="row ml-3 mt-3" style="text-align: left; height: 100%">
+            <nav th:replace="fragments/sidebar :: sidebarFragment" class="col-sm-2"></nav>
+            <div layout:fragment="content" class="container-fluid"></div>
+        </div>
+        <footer th:replace="fragments/footer :: footerFragment"></footer>
+    </body>
 </html>

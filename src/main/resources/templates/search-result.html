@@ -4,16 +4,14 @@
       layout:decorate="layout/default">
 
 <div layout:fragment="content">
-    <div class="container-fluid" id="guide_first" style="margin-top: 100px">
+    <div class="container" id="guide_first">
         <h1>검색 결과</h1>
-        <ul>
-            <li th:each="result : ${Results}" >
-                <a th:text="${result.title}" th:href="@{/guide(doc_key=${result.id})}"></a>
-            </li>
+        <ul class="list-group mt-3">
+            <a th:each="result : ${Results}" th:text="${result.title}" th:href="@{/guide(doc_key=${result.id})}"
+               class="list-group-item list-group-item-action" style="display: block; color: #0a6aa1" ></a>
         </ul>
     </div>
-
-    <div class="container-fluid" id="guide_content" style="display: none;margin-top:100px">
+    <div class="container" id="guide_content" style="display: none;">
         <input id="selected" hidden="hidden" th:value="${selected}">
         <h1 id="guide-title"></h1>
 

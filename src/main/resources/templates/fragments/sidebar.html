@@ -2,18 +2,12 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
 xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<section th:fragment="sidebarFragment">
-    <div class="wrapper" style="margin-top: 80px;margin-left: 15px; max-width: 300px">
-        <!-- Sidebar  -->
-        <nav id="sidebar">
-            <div class="sidebar-header">
-                <h3 ><a href="/guide" class="sidebar-heading list-group-item-action ">가이드목록</a></h3>
-                <strong>IAM</strong>
-            </div>
-            <div class="scroll-box sidebar-header container" style="height: 1000px;width: 300px">
-                    <div id="jstree"></div>
-            </div>
-        </nav>
+<nav th:fragment="sidebarFragment" id="sidebar">
+    <div class="sidebar-header">
+        <h3><a href="/guide" class="sidebar-heading list-group-item-action" style="display:block; text-align:center;"><strong>가이드목록</strong></a></h3>
     </div>
-    </section>
+    <div id="jstree-div" style="overflow-x: scroll; height: 95%">
+        <div id="jstree" style="width:300px;"></div>
+    </div>
+</nav>
 </html>
