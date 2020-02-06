@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 
@@ -190,5 +191,13 @@ public class AdminController {
     public @ResponseBody
     void updateTags(@RequestBody Object tags) {
         guideTagService.updateGuideTag(tags);
+    }
+
+    @GetMapping("document")
+    public String guideDocumentPage(@RequestParam(required = false) String doc_key, Model model){
+        if (doc_key != null) {
+            model.addAttribute("selected", doc_key);
+        }
+        return "admin-document";
     }
 }

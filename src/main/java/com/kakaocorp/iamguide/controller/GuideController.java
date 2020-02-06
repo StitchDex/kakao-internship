@@ -58,5 +58,13 @@ public class GuideController {
         model.addAttribute("test", "test");
         return "search-result";
     }
+
+    @GetMapping("document")
+    public String guideDocumentPage(@RequestParam(required = false) String doc_key, Model model){
+        if (doc_key != null) {
+            model.addAttribute("selected", doc_key);
+        }
+        return "guide-document";
+    }
 }
 

@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -42,10 +41,7 @@ public class CommonController {
     }
 
     @GetMapping("/guide")
-    public String guidePage(@RequestParam(required = false) String doc_key, Model model) {
-        if (doc_key != null) {
-            model.addAttribute("selected", doc_key);
-        }
-        return "/guide";
+    public String guideMainPage() {
+        return "guide-main";
     }
 }

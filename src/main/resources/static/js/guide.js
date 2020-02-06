@@ -16,6 +16,7 @@ $(function () {
     hidden_num=0;
     depth2Dir=0;
     var searched = $('#selected').val();
+
     $('#jstree').jstree({
         'core': {
             'multiple': false,
@@ -56,11 +57,10 @@ $(function () {
         .on('ready.jstree', function(){
             before_tree_open();
             $(this).jstree('open_node','DIR0');
-            $('#jstree').jstree('select_node', "DOC" + searched); // for search_result
 
     });
-    $('#jstree').jstree('clear_state');
-
+    //$('#jstree').jstree('clear_state');
+    $('#jstree').jstree('select_node', "DOC" + searched); // for search_result
 });
 
 //click tree_node
@@ -77,9 +77,7 @@ $('#jstree').on('select_node.jstree', function (e, data) {
     else {
         $(this).jstree('close_all');
         $(this).jstree(true)._open_to(selectedData);
-        LoadDocText();
-        $('#guide_first').css("display","none");
-        $('#guide_content').show();
+        loadDoc();
     }
 });
 
@@ -89,38 +87,19 @@ function before_tree_open() {
     }
 }
 
-function LoadDocText(search_key) {
+function loadDoc(search_key) {
     let dockey = selectedData.substring(3, selectedData.length);
 
     if(search_key != null) {
         dockey = search_key;
     }
     if (!isNaN(dockey)) {
-        $.ajax({
-            async:false,
-            url: '/guide/menu?doc_key=' + dockey,
-            method: 'GET',
-            success: function (res) {//set DOCUMENT_TEXT in editor area
-                var title = res.title;
-                res = res.text;
-                $('#guide-title').text(title);
-                if(admin_editor!=null){ // change doc while edit
-                    admin_editor.destroy(true);
-                    make_editor(res);
-                }
-                else if(doc_editor!=null){ // change doc
-                    doc_editor.destroy();
-                    make_editor(res);
-                }
-                else{ // document_ready
-                    make_editor(res);
-                }
-            }, error: function (error) {
-                console.log(error);
-            }
-        });
-        get_Guide_update(selectedText);
-        init_select_tagging();
+        if(window.location.pathname == "/admin"){
+            location.href='/admin/document?doc_key='+dockey;
+        }
+        else {
+            location.href='/guide/document?doc_key='+dockey;
+        }
     } else {
         console.log("document key error");
     }
@@ -136,7 +115,6 @@ function make_editor(res){
             editor.set('isReadOnly',true);
             doc_editor=editor;
             doc_editor.setData(res);
-
         })
         .catch(error => {
                 console.error(error);

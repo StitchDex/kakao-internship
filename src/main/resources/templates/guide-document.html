@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/default">
+
+<div layout:fragment="content">
+    <div class="container" id="guide_content">
+        <input id="selected" hidden="hidden" th:value="${selected}">
+        <h1 id="guide-title"></h1>
+        <div id="Guide_Doc"></div>
+    </div>
+</div>
+</html>
