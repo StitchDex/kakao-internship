@@ -21,6 +21,11 @@ public class CommonAccessDeniedHandler implements AccessDeniedHandler {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if(auth != null){
             log.info("Admin '" + auth.getName() + "' attempted to access the protected URL: " + req.getRequestURL());
+            if(auth.getAuthorities().stream()
+                    .anyMatch(r -> r.getAuthority().equals("ROLE_USER"))){
+                res.sendRedirect("/guide");
+                return;
+            }
             if(req.getRequestURI().equalsIgnoreCase("/login")){
                 res.sendRedirect("/guide");
                 return;
