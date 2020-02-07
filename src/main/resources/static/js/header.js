@@ -13,7 +13,8 @@ $(document).ready(function() {
                 });
                 return {'results' : ret};
 
-            }
+            },
+            'delay': 200
         },
         'placeholder':"#Tag Search",
         'maximumInputLength': 20,

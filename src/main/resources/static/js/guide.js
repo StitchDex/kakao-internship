@@ -388,3 +388,12 @@ $('.search-result-item').on('click', function () {
         location.href = '/guide/document?doc_key=' + doc_key;
     }
 });
+
+$('.search-result-tag').on('click', function () {
+    var tag = $(this).attr('value');
+    if (window.location.pathname.startsWith("/admin")) {
+        location.href = "/admin/search?tag=" + encodeURIComponent(tag);
+    } else {
+        location.href = "/guide/search?tag=" + encodeURIComponent(tag);
+    }
+});
