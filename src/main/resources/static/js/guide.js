@@ -58,7 +58,7 @@ $(function () {
     }).delegate("a", "dblclick", function () {
         $(this).parents(".jstree:eq(0)").jstree("toggle_node", this);
     }).on('ready.jstree', function () {
-        before_tree_open($(this).jstree('close_all'),$(this).jstree('open_node', 'DIR0'));
+        before_tree_open($(this).jstree('close_all'), $(this).jstree('open_node', 'DIR0'));
         cur = $('#jstree').jstree('get_node', 'DOC' + documentKey);
         if (documentKey != null) {
             select_open();
@@ -83,8 +83,8 @@ $(function () {
             } else { // document_ready
                 make_editor(res.text);
             }
-            get_Guide_update(res.title);
             init_select_tagging();
+            get_Guide_update(res.title);
         },
         'error': function () {
 
@@ -155,6 +155,7 @@ function make_editor(res) {
                 console.error(error);
             }
         );
+
 }
 
 //admin_edit_button click
@@ -233,7 +234,7 @@ function edit_save_button_click() {
             contentType: 'application/json',
             // refresh page
             success: function (res) {
-                res?set_Guide_update($('#guide-title').text(), 'update'):alert('error');
+                res ? set_Guide_update($('#guide-title').text(), 'update') : alert('error');
             }, error: function (error) {
                 alert('저장 실패');
             }
@@ -276,11 +277,10 @@ function edit_save_button_click() {
 function get_Guide_update(title) {
     console.log(title);
     $.ajax({
-        url: '/admin/get_update?title=' + title,
+        url: '/guide/get_update?title=' + title,
         method: 'GET',
         success: function (res) {
             $("#guide-update").text(res);
-            console.log(res);
         }, error: function (error) {
             console.log(error);
         }
@@ -306,13 +306,24 @@ function set_Guide_update(title, type) {
         }
     });
 }
+$('#guide-tag').on('click','a',function(event){
+    let tag = event.target.text.substr(1);
+    menu_tag(tag);
+});
+function show_guide_tag(ret) {
+    let temp = "";
+    $.each(ret, function (index, item) {
+        temp = item.text;
+        $("#guide-tag").append("<a href='#'>"+item.text+"</a>");
+    });
+}
 
 function init_select_tagging() {
     var ret = [];
     var dockey = documentKey;
     $.ajax({
         'async': false,
-        'url': '/admin/getTags',
+        'url': '/guide/getTags',
         'data': {'doc_key': dockey},
         'success': function (data) {
             $.each(data, function (key, val) {
@@ -320,37 +331,37 @@ function init_select_tagging() {
             });
         }
     });
-
-    $('select.select2-tagging').select2(
-        {
-            'ajax': {
-                'url': '/admin/suggestTags',
-                'data': function (params) {
-                    return {'tag': params.term};
+    window.location.pathname.startsWith("/guide") ? show_guide_tag(ret) :
+        $('select.select2-tagging').select2(
+            {
+                'ajax': {
+                    'url': '/admin/suggestTags',
+                    'data': function (params) {
+                        return {'tag': params.term};
+                    },
+                    'processResults': function (data) {
+                        data = $.map(data, function (obj) {
+                            obj.id = obj.id || obj.tag; // replace pk with your identifier
+                            obj.text = obj.text || obj.tag; // replace pk with your identifier
+                            return obj;
+                        });
+                        return {results: data};
+                    }
                 },
-                'processResults': function (data) {
-                    data = $.map(data, function (obj) {
-                        obj.id = obj.id || obj.tag; // replace pk with your identifier
-                        obj.text = obj.text || obj.tag; // replace pk with your identifier
-                        return obj;
-                    });
-                    return {results: data};
-                }
-            },
-            'tags': true,
-            'allowClear': true,
-            'disabled': true,
-            'tokenSeparators': [',', ' '], //태그 구분자 추가
-            'createTag': function (params) { //태그 공백 제거
-                var term = $.trim(params.term);
-                if (term == '') {
-                    return null;
-                } else {
-                    return {'id': term, 'text': term, 'newTag': true};
+                'tags': true,
+                'allowClear': true,
+                'disabled': true,
+                'tokenSeparators': [',', ' '], //태그 구분자 추가
+                'createTag': function (params) { //태그 공백 제거
+                    var term = $.trim(params.term);
+                    if (term == '') {
+                        return null;
+                    } else {
+                        return {'id': term, 'text': term, 'newTag': true};
+                    }
                 }
             }
-        }
-    );
+        );
 
     var options = "";
     $.each(ret, function (key, val) {

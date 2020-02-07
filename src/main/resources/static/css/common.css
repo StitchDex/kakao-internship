@@ -164,3 +164,13 @@ a, a:hover {
 .list-group-item-action{
     cursor: pointer;
 }
+
+main {
+    margin-top: 60px;
+    padding: 20px
+}
+#tag_list > ul a{
+    list-style-type: none;
+    float: left;
+    margin-left: 10px;
+}

@@ -15,8 +15,9 @@ selectAccount.select2({
             return {results : ret}
         }
     }, //ajax end
-    'placeholder': '아이디를 검색하고 추가 버튼을 눌러주세요. (최대 10명까지)',
+    'placeholder': '아이디를 검색하고 추가 버튼을 눌러주세요. (최대 5명)',
     'minimumInputLength': 2,
+    'maximumInputLength': 20,
     'language': 'ko',
     'allowClear': true,
 });
@@ -52,9 +53,10 @@ function deleteAdd(param){
 
 $('.insert-admin').click(function(e) {
     e.preventDefault();
+    var admin_list = [];
 
-    if($("#ccList").children("li").length > 10) {
-        alert("참조는 최대 10명까지만 추가가 가능합니다.");
+    if($("#addList").children("li").length > 4) {
+        alert("동시에 5명까지 추가가 가능합니다.");
         return;
     }
 
@@ -96,7 +98,7 @@ function insertClick() {
     $.each(selected, function (key, val) {
         var temp = {'adminEmpNo':val.getAttribute('empno'), 'adminAccountId':val.getAttribute('accountid'), 'adminName':val.getAttribute('empname')};
         admin_list.push(temp);
-    })
+    });
 
     if(admin_list.length == 0) return;
 

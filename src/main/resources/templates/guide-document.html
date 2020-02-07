@@ -7,7 +7,15 @@
     <div class="container" id="guide_content">
         <input id="selected" hidden="hidden" th:value="${selected}">
         <h1 id="guide-title"></h1>
-        <div id="Guide_Doc"></div>
+        <div class="row-3">
+            <p style="font-size:0.8em" id="guide-update"></p>
+        </div>
+        <hr>
+        <div class="row" id="tag_list" style="padding-left: 15px">
+            <p>Tag list:</p>
+            <ul style="padding-left:15px" id="guide-tag"></ul>
+        </div>
+        <div id="Guide_Doc" style="margin-left: 30px"></div>
     </div>
 </div>
 </html>
