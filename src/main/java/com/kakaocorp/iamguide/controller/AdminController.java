@@ -1,5 +1,6 @@
 package com.kakaocorp.iamguide.controller;
 
+import com.kakaocorp.iamguide.model.GuideDoc;
 import com.kakaocorp.iamguide.model.GuideUpdate;
 import com.kakaocorp.iamguide.service.*;
 import org.slf4j.LoggerFactory;
@@ -206,8 +207,15 @@ public class AdminController {
 
     @GetMapping(value = "search")
     public String getSearchResults(@RequestParam("tag") String tag, Model model) {
-        model.addAttribute("Results", guideTagService.retrieveGuideList(tag));
+        ArrayList<GuideDoc> result = (ArrayList<GuideDoc>) guideTagService.retrieveGuideList(tag);
+        for(int i = 0; i < result.size(); i++){
+            String id = result.get(i).getId();
+            result.get(i).setTags(guideTagService.retrieveGuideTagList(id));
+        }
+
+        model.addAttribute("Results", result);
         model.addAttribute("test", "test");
+        model.addAttribute("tag",tag);
         return "search-result";
     }
 }
