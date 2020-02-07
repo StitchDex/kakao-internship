@@ -16,6 +16,7 @@ $(document).ready(function() {
             }
         },
         'placeholder':"#Tag Search",
+        'maximumInputLength': 20,
         'minimumInputLength': 1
     });
 });

@@ -32,7 +32,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login").anonymous()
                 .antMatchers("/admin/**","/admin").hasRole("ADMIN")
                 .anyRequest().authenticated()
-
        .and()
                 .formLogin()
                 .loginPage("/login")
@@ -44,13 +43,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler);
         http.sessionManagement().invalidSessionUrl("/login").maximumSessions(1) .expiredUrl("/login");
-
     }
 
 
     @Override
     public void configure(WebSecurity web){
-        web.ignoring().antMatchers("/js/**", "/css/**", "/images/**", "/webjars/**", "/fonts/**");
+        web.ignoring().antMatchers("/js/**", "/css/**", "/images/**", "/fonts/**");
     }
 
 }

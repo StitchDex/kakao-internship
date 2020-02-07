@@ -380,7 +380,7 @@ function menu_tag(tag_name) {
     location.href = "/guide/search?tag=%23" + tag_name;
 }
 
-$('#search-result-item').on('click', function () {
+$('.search-result-item').on('click', function () {
     var doc_key = $(this).attr('value');
     if (window.location.pathname.startsWith("/admin")) {
         location.href = '/admin/document?doc_key=' + doc_key;
