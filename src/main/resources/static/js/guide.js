@@ -83,8 +83,8 @@ $(function () {
             } else { // document_ready
                 make_editor(res.text);
             }
-            get_Guide_update(res.title);
             init_select_tagging();
+            get_Guide_update(res.title);
         },
         'error': function () {
 
@@ -155,6 +155,7 @@ function make_editor(res) {
                 console.error(error);
             }
         );
+
 }
 
 //admin_edit_button click
@@ -280,7 +281,6 @@ function get_Guide_update(title) {
         method: 'GET',
         success: function (res) {
             $("#guide-update").text(res);
-            console.log(res);
         }, error: function (error) {
             console.log(error);
         }
