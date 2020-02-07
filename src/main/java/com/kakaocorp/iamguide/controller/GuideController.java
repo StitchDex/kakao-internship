@@ -1,8 +1,11 @@
 package com.kakaocorp.iamguide.controller;
 
 import com.kakaocorp.iamguide.model.GuideDoc;
+import com.kakaocorp.iamguide.model.GuideTag;
 import com.kakaocorp.iamguide.service.GuideDocService;
 import com.kakaocorp.iamguide.service.GuideTagService;
+import com.kakaocorp.iamguide.service.GuideUpdateService;
+import groovy.transform.Trait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +28,8 @@ public class GuideController {
     private GuideDocService guideDocService;
     @Autowired
     private GuideTagService guideTagService;
-
+    @Autowired
+    private GuideUpdateService guideUpdateService;
 
     @GetMapping(value = "tree", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
@@ -60,11 +64,24 @@ public class GuideController {
     }
 
     @GetMapping("document")
-    public String guideDocumentPage(@RequestParam(required = false) String doc_key, Model model){
+    public String guideDocumentPage(@RequestParam(required = false) String doc_key, Model model) {
         if (doc_key != null) {
             model.addAttribute("selected", doc_key);
         }
         return "guide-document";
+    }
+
+    @GetMapping("get_update")
+    public @ResponseBody
+    String retrieveGuideUpdate(@RequestParam("title") String title) {
+        logger.info("/guide_update{}", title);
+        return guideUpdateService.retrieveGuideUpdate(title);
+    }
+
+    @RequestMapping(value = "getTags")
+    public @ResponseBody
+    List<GuideTag> retrieveTags(@RequestParam("doc_key") String doc_key) {
+        return guideTagService.retrieveGuideTagList(doc_key);
     }
 }
 

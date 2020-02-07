@@ -125,16 +125,7 @@ public class AdminController {
         logger.info("edit : {}", title);
     }
 
-    /**
-     * AJAX : admin(AUTHENTICATED)
-     * get Guide_Update
-     */
-    @GetMapping("get_update")
-    public @ResponseBody
-    String retrieveGuideUpdate(HttpServletRequest req, @RequestParam("title") String title) {
-        logger.info("/guide_update{}", title);
-        return guideUpdateService.retrieveGuideUpdate(title);
-    }
+
 
 
     /**
@@ -178,11 +169,7 @@ public class AdminController {
         commonService.deleteAdmin(admins);
     }
 
-    @RequestMapping(value = "getTags")
-    public @ResponseBody
-    List retrieveTags(@RequestParam("doc_key") String doc_key) {
-        return guideTagService.retrieveGuideTagList(doc_key);
-    }
+
 
     @RequestMapping(value = "suggestTags")
     public @ResponseBody

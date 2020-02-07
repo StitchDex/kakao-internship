@@ -169,3 +169,8 @@ main {
     margin-top: 60px;
     padding: 20px
 }
+#tag_list > ul a{
+    list-style-type: none;
+    float: left;
+    margin-left: 10px;
+}
