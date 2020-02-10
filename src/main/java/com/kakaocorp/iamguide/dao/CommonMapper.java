@@ -12,6 +12,8 @@ public interface CommonMapper {
     String isAdmin(@Param("admin_id") String username) throws Exception;
 
     List<Admin> getAdminList() throws Exception;
+
     void createAdmin(List admins) throws Exception;
+
     void deleteAdmin(List admins) throws Exception;
 }

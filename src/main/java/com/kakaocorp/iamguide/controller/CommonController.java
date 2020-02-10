@@ -1,10 +1,7 @@
 package com.kakaocorp.iamguide.controller;
 
-import com.kakaocorp.iamguide.service.CommonService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -12,10 +9,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class CommonController {
-    private Logger logger = LoggerFactory.getLogger(CommonController.class);
 
-    @Autowired
-    private CommonService commonService;
+    private Logger logger = LoggerFactory.getLogger(CommonController.class);
 
     @GetMapping("/")
     public String indexPage(Authentication auth) {
@@ -25,11 +20,6 @@ public class CommonController {
             return "/login";
     }
 
-    /**
-     * PAGE: login (AUTHENTICATED)
-     *
-     * @return
-     */
     @GetMapping("/login")
     public ModelAndView loginPage() {
         return new ModelAndView("login");
@@ -37,11 +27,13 @@ public class CommonController {
 
     @GetMapping("/admin")
     public String adminPage(Authentication auth) {
+        logger.info("adminPage {}", auth.getName());
         return "/admin";
     }
 
     @GetMapping("/guide")
-    public String guideMainPage() {
+    public String guideMainPage(Authentication auth) {
+        logger.info("guideMainPage {}", auth.getName());
         return "guide-main";
     }
 }

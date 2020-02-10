@@ -84,7 +84,7 @@ $(function () {
                 make_editor(res.text);
             }
             init_select_tagging();
-            get_Guide_update(res.title);
+            $('#guide-update').text( get_Guide_update(documentKey));
         },
         'error': function () {
 
@@ -196,7 +196,8 @@ function edit_button_click() {
         );
 
     $('select.select2-tagging').prop('disabled', false);
-
+    $("#document-tag-list button.close").attr("disabled", false);
+    $("#document-tag-list *").css("background-color", "#FFFFFF");
 }
 
 //admin edit_save_button click
@@ -206,6 +207,13 @@ function edit_save_button_click() {
     } else {
         //Editor Save
         var dockey = documentKey;
+        var recentUpdate = get_Guide_update(dockey);
+        var beforeUpdate = $('#guide-update').text();
+        if(recentUpdate != beforeUpdate) {
+            var reply = confirm("다른 작업자의 결과물과 충돌이 발생했습니다. 현재문서를 저장할 경우 문제가 생길 수 있습니다.\n 저장하시겠습니까?")
+            if(reply == false) return;
+        }
+
         admin_editor.set('isReadOnly', true);
         //+)check the doc is edit (if or editor method)
         const edit_doc = admin_editor.getData();
@@ -242,9 +250,12 @@ function edit_save_button_click() {
 
         //Tag Select2
         afterTags = new Set();
-        $.each($('select.select2-tagging option:selected'), function (key, val) {
+        $('#document-tag-list').children('div').each(function () {
+            afterTags.add($(this).data('value'));
+        })
+        /*$.each($('select.select2-tagging option:selected'), function (key, val) {
             afterTags.add(val.text);
-        });
+        });*/
 
         var insertTags = [];
         var deleteTags = [];
@@ -274,22 +285,26 @@ function edit_save_button_click() {
 }
 
 //get guide_update when node is selected
-function get_Guide_update(title) {
-    console.log(title);
+function get_Guide_update(dockey) {
+    var returnValue = "";
+    console.log(dockey);
     $.ajax({
-        url: '/guide/get_update?title=' + title,
+        url: '/guide/get_update?documentKey=' + dockey,
+        async : false,
         method: 'GET',
         success: function (res) {
-            $("#guide-update").text(res);
+            returnValue = res;
         }, error: function (error) {
             console.log(error);
         }
     });
+
+    return returnValue;
 }
 
 //set guide_update when save button clicked
 function set_Guide_update(title, type) {
-    var sendData = JSON.stringify({"admin": $('#admin_name').val(), "title": title, "CRUD": type});
+    var sendData = JSON.stringify({"admin": $('#admin_name').val(), "documentKey" : documentKey, "title": title, "CRUD": type});
     console.log(sendData);
     var token = $("meta[name='_csrf']").attr("content");
     $.ajax({
@@ -313,25 +328,40 @@ $('#guide-tag').on('click','a',function(event){
 function show_guide_tag(ret) {
     let temp = "";
     $.each(ret, function (index, item) {
-        temp = item.text;
-        $("#guide-tag").append("<a href='#'>"+item.text+"</a>");
+        $("#guide-tag").append("<a href='#'>"+item+"</a>");
     });
 }
 
+$('.select2-tagging').on("select2-open",function () {
+    $(this).select2('positionDropdown', true);
+})
+
+function deleteAdd(param){
+    $(param).parent("div").remove();
+}
+
 function init_select_tagging() {
-    var ret = [];
+    var tagList = [];
     var dockey = documentKey;
+
+    //SELECT Tags FROM GUIDE_TAGGING WHERE (documentKey)
     $.ajax({
         'async': false,
         'url': '/guide/getTags',
         'data': {'doc_key': dockey},
         'success': function (data) {
             $.each(data, function (key, val) {
-                ret.push({"id": key, "text": val.tag, "selected": true});
+                //MAKE TAG LIST at admin-documnet.HTML
+                var tagDiv = $('<div class="p-1 mr-1" style="border:1px solid darkgrey; border-radius: 3px" data-value="' + val.tag + '">' + val.tag + '<button class="close deleteTag" onclick="deleteAdd(this)"><span style="color: red" aria-hidden="true">×</span></button>' +'</div>');
+                $('#document-tag-list').append(tagDiv);
+                tagList.push(val.tag);
             });
+            $("#document-tag-list button.close").attr("disabled", "disabled").off('click');
+            $("#document-tag-list *").css("background-color", "#BABABA");
         }
     });
-    window.location.pathname.startsWith("/guide") ? show_guide_tag(ret) :
+
+    window.location.pathname.startsWith("/guide") ? show_guide_tag(tagList) :
         $('select.select2-tagging').select2(
             {
                 'ajax': {
@@ -362,13 +392,7 @@ function init_select_tagging() {
                 }
             }
         );
-
-    var options = "";
-    $.each(ret, function (key, val) {
-        options += "<option selected='selected' value='" + val.text + "'>" + val.text + "</option>"
-        beforeTags.add(val.text);
-    });
-    $('select.select2-tagging').html(options);
+    beforeTags = new Set(tagList);
 }
 
 function substract(a, b) {
@@ -391,11 +415,43 @@ function menu_tag(tag_name) {
     location.href = "/guide/search?tag=%23" + tag_name;
 }
 
+$('.select2-tagging').on('select2:select',function (e) {
+    var val = e.params.data.text;
+    if(tagCheck(val)) {
+        var tagDiv = $('<div class="p-1 mr-1" style="border:1px solid darkgrey; border-radius: 3px" data-value="' + val + '">' + val + '<button class="close deleteTag" onclick="deleteAdd(this)"><span style="color: red" aria-hidden="true">×</span></button>' +'</div>');
+        $('#document-tag-list').append(tagDiv);
+    }
+    else {
+        alert("이미 포함되어 있는 태그 입니다.")
+    }
+
+    $('.select2-tagging').val(null).trigger('change');
+})
+
+function tagCheck(input){
+    var ret = true
+    $('#document-tag-list').children('div').each(function (index) {
+        if($(this).data('value')==input) {
+            ret = false;
+        }
+    })
+    return ret; //중복 값 없음
+}
+
 $('.search-result-item').on('click', function () {
     var doc_key = $(this).attr('value');
     if (window.location.pathname.startsWith("/admin")) {
         location.href = '/admin/document?doc_key=' + doc_key;
     } else {
         location.href = '/guide/document?doc_key=' + doc_key;
+    }
+});
+
+$('.search-result-tag').on('click', function () {
+    var tag = $(this).attr('value');
+    if (window.location.pathname.startsWith("/admin")) {
+        location.href = "/admin/search?tag=" + encodeURIComponent(tag);
+    } else {
+        location.href = "/guide/search?tag=" + encodeURIComponent(tag);
     }
 });

@@ -33,9 +33,9 @@
     <delete id="deleteTagging">
         DELETE FROM GUIDE_TAGGING
         WHERE DOCUMENT_KEY = #{doc_key} AND TAG IN (
-            <foreach collection="delete" item="item" separator=",">
-                #{item}
-            </foreach>
+        <foreach collection="delete" item="item" separator=",">
+            #{item}
+        </foreach>
         )
     </delete>
     <delete id="deleteTrash">

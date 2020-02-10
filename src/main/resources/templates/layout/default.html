@@ -3,10 +3,15 @@
     <head th:replace="fragments/config :: configFragment"></head>
     <body>
         <header th:replace="fragments/header :: headerFragment"></header>
-        <div class="row ml-3 mt-3" style="text-align: left; min-height: 100%; margin-bottom: 49px">
-            <nav th:replace="fragments/sidebar :: sidebarFragment" class="col-sm-2"></nav>
-            <div layout:fragment="content" class="container"></div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3 col-xl-3 col-xs-12">
+                <div th:replace="fragments/sidebar :: sidebarFragment"></div>
+                </div>
+                <div layout:fragment="content" class="col-md-9 col-xl-9 col-xs-12"></div>
+            </div>
         </div>
-        <footer th:replace="fragments/footer :: footerFragment" style="vertical-align: sub"></footer>
+        <footer th:replace="fragments/footer :: footerFragment"></footer>
+
     </body>
 </html>

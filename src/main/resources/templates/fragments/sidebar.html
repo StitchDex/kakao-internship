@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
-xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<nav th:fragment="sidebarFragment" id="sidebar">
-    <div class="sidebar-header">
-        <h3><a href="/guide" class="sidebar-heading list-group-item-action" style="display:block; text-align:center;"><strong>가이드목록</strong></a></h3>
-    </div>
-    <div id="jstree-div" style="width:300px;overflow-x: scroll; height:auto">
-        <div id="jstree" style=""></div>
-    </div>
-</nav>
+<div th:fragment="sidebarFragment" id="sidebar" style="padding-top: 5px;">
+        <div class="container">
+        <div id="jstree-div" style="overflow-x: scroll; height:auto;text-align: left">
+            <h3><strong>가이드 목록</strong></h3>
+            <div id="jstree"></div>
+        </div>
+        </div>
+</div>
 </html>

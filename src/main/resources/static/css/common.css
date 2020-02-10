@@ -46,7 +46,10 @@ a, a:hover {
     line-height: 52px;
     background-position: 0 0
 }
-
+body { padding-top: 70px; }
+/*@media screen and (max-width: 991px) {
+    body { padding-top: 150px; }
+}*/
 #loginBody .form-signin {
     width: 100%;
     max-width: 500px;

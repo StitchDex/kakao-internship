@@ -14,7 +14,7 @@ import java.util.List;
 
 
 @Service
-public class CommonService {
+public class AdminService {
     private Logger logger = LoggerFactory.getLogger(CommonController.class);
     @Autowired
     private CommonMapper commonMapper;
