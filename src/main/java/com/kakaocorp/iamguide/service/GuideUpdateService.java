@@ -14,13 +14,23 @@ public class GuideUpdateService {
     @Autowired
     private GuideUpdateMapper guideUpdateMapper;
 
-    public String retrieveGuideUpdate(String DOCUMENT_KEY){
+    public String retrieveGuideUpdate(String DOCUMENT_KEY) {
         GuideUpdate temp = guideUpdateMapper.retrieveGuideUpdate(DOCUMENT_KEY);
-        String retrieveUpdate = temp.getADMIN_ID()+" " + temp.getUPDATE_TYPE_CUD()+ " at "+ temp.getUPDATE_TIME();
+        String retrieveUpdate = temp.getADMIN_ID() + " " + temp.getUPDATE_TYPE_CUD() + " at " + temp.getUPDATE_TIME();
         return retrieveUpdate;
     }
-    public void createGuideUpdate(String ADMIN_ID, String DOCUMENT_KEY, String DOCUMENT_TITLE, String UPDATE_TYPE_CUD){
-        guideUpdateMapper.createGuideUpdate(ADMIN_ID, DOCUMENT_KEY, DOCUMENT_TITLE, UPDATE_TYPE_CUD);
+
+    public void createGuideUpdate(String ADMIN_ID, String DOCUMENT_KEY, String DOCUMENT_TITLE, String UPDATE_TYPE_CUD) {
+
+        if (DOCUMENT_KEY == null || DOCUMENT_KEY.startsWith("DIR")) {
+            DOCUMENT_KEY = null;
+            guideUpdateMapper.createGuideUpdate(ADMIN_ID, DOCUMENT_KEY, DOCUMENT_TITLE, UPDATE_TYPE_CUD);
+        } else if (DOCUMENT_KEY.startsWith("DOC")) {
+            DOCUMENT_KEY = DOCUMENT_KEY.substring(3);
+            guideUpdateMapper.createGuideUpdate(ADMIN_ID, DOCUMENT_KEY, DOCUMENT_TITLE, UPDATE_TYPE_CUD);
+        } else {
+            guideUpdateMapper.createGuideUpdate(ADMIN_ID, DOCUMENT_KEY, DOCUMENT_TITLE, UPDATE_TYPE_CUD);
+        }
     }
 }
 

@@ -72,7 +72,7 @@ $(function () {
         'url': '/guide/menu',
         'data': {'doc_key': documentKey},
         'success': function (res) {
-            if(res.state == 0) { //HIDDEN GUIDE 
+            if(res.state == 0) { //HIDDEN GUIDE
                 location.href = "/guide";
             }
             var title = res.title;
@@ -245,7 +245,7 @@ function edit_save_button_click() {
             contentType: 'application/json',
             // refresh page
             success: function (res) {
-                res ? set_Guide_update($('#guide-title').text(), 'update') : alert('error');
+                res ? set_Guide_update($('#guide-title').text(),documentKey, 'update') : alert('error');
             }, error: function (error) {
                 alert('저장 실패');
             }
@@ -306,8 +306,8 @@ function get_Guide_update(dockey) {
 }
 
 //set guide_update when save button clicked
-function set_Guide_update(title, type) {
-    var sendData = JSON.stringify({"admin": $('#admin_name').val(), "documentKey" : documentKey, "title": title, "CRUD": type});
+function set_Guide_update(title, key, type) {
+    var sendData = JSON.stringify({"admin": $('#admin_name').val(), "documentKey" : key, "title": title, "CRUD": type});
     console.log(sendData);
     var token = $("meta[name='_csrf']").attr("content");
     $.ajax({

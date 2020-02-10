@@ -1,3 +1,4 @@
+const domain = 'http://guide.at.kakaocrop.com/admin/imageupload';
 class MyUploadAdapter {
     constructor( loader ) {
         this.loader = loader;
@@ -18,7 +19,8 @@ class MyUploadAdapter {
     _initRequest() {
         const xhr = this.xhr = new XMLHttpRequest();
         //여기서는 POST 요청과 json으로 응답을 받지만 어떤 포맷으로 하든 너의 선택이다.
-        xhr.open( 'POST', 'http://guide.at.kakaocrop.com/admin/imageupload', true );
+        xhr.open( 'POST', domain, true );
+        //xhr.open( 'POST', 'http://localhost:8080/admin/imageupload', true );
         console.log(this.xhr);
         xhr.responseType = 'json';
     }
