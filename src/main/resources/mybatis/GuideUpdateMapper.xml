@@ -16,5 +16,4 @@
             where DOCUMENT_KEY=#{documentKey}
             AND UPDATE_KEY IN(SELECT MAX(UPDATE_KEY) FROM GUIDE_UPDATE WHERE DOCUMENT_KEY=#{documentKey})
     </select>
-
 </mapper>
