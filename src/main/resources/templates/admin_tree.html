@@ -20,7 +20,7 @@
     }
 </style>
 <header th:with="admin = ${#authentication.getDetails()}"></header>
-<body id="treeBody">
+<body id="treeBody" style="padding-top:0px">
 <nav class="navbar navbar-expand-lg navbar-light" style="background:#ffde00">
     <div class="container">
         <div class="navbar-header">
@@ -31,11 +31,11 @@
 </nav>
 <input type="hidden" id="admin_name" th:if="${#authentication.getDetails() != null}"
        th:value="${#authentication.getName()}"/>
-<div id="edit_tree" class="container" style="margin-top:10px;border-bottom-style: groove"></div>
+<div id="edit_tree" style="margin-top:10px;border-bottom-style: groove"></div>
 <div class="container">
     <input class="btn btn-outline-dark my-2 my-sm-0" type="button" id="save_tree_button" onclick="create_root();"
            value="루트 폴더 생성">
-    <p style="color: dodgerblue">마우스 우클릭과 드래그 앤 드랍을 통해 트리를 수정할 수 있습니다.</p>
+    <p class="text-info">마우스 우클릭과 드래그 앤 드랍을 통해 트리를 수정할 수 있습니다.</p>
 </div>
 <script type="text/javascript" th:src="@{/js/jquery.min.js}" src="../../static/js/jquery.min.js"></script>
 <script type="text/javascript" th:src="@{/js/jstree.js}" src="../../static/js/jstree.js"></script>

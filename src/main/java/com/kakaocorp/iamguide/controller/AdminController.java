@@ -118,12 +118,11 @@ public class AdminController {
     void createGuideUpdate(HttpServletRequest req, @RequestBody Map<String, Object> parm) throws Exception {
 
         String admin = (String) parm.get("admin");
+        String documentKey = (String) parm.get("documentKey");
         String title = (String) parm.get("title");
         String CRUD = (String) parm.get("CRUD");
 
-        guideUpdateService.createGuideUpdate(admin, title, CRUD); // guide_doc edit
-
-        logger.info("edit : {}", title);
+        guideUpdateService.createGuideUpdate(admin, documentKey, title, CRUD); // guide_doc edit
     }
 
 

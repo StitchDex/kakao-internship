@@ -47,7 +47,7 @@ function onload() {
     );
 }
 
-function deleteAdd(param){
+function deleteAdd1(param){
     $(param).parent("li").remove();
 }
 
@@ -66,7 +66,7 @@ $('.insert-admin').click(function(e) {
             'memberAccountId': selectAccount[0].accountId,
             'memberEmpNo': selectAccount[0].employeeNo,
             'personName': selectAccount[0].personName};
-        var deleteBtn = $('<button class="close deleteCC" onclick="deleteAdd(this)"><span aria-hidden="true">×</span></button>');
+        var deleteBtn = $('<button class="close deleteCC" onclick="deleteAdd1(this)"><span aria-hidden="true">×</span></button>');
 
         // 중복 검사
         var liArr = $("select.select-account-all").children("option");

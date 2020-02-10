@@ -81,9 +81,9 @@ public class GuideController {
 
     @GetMapping("get_update")
     public @ResponseBody
-    String retrieveGuideUpdate(@RequestParam("title") String title) {
-        logger.info("/guide_update{}", title);
-        return guideUpdateService.retrieveGuideUpdate(title);
+    String retrieveGuideUpdate(@RequestParam("documentKey") String documentKey) {
+        logger.info("/guide_update{}", documentKey);
+        return guideUpdateService.retrieveGuideUpdate(documentKey);
     }
 
     @RequestMapping(value = "getTags")

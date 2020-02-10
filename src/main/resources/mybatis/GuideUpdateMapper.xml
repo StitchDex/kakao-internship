@@ -6,14 +6,14 @@
 <mapper namespace="com.kakaocorp.iamguide.dao.GuideUpdateMapper">
 
     <insert id="createGuideUpdate">
-            insert into GUIDE_UPDATE(ADMIN_ID,DOCUMENT_TITLE,UPDATE_TIME,UPDATE_TYPE_CUD)
-            values(#{ADMIN_ID},#{DOCUMENT_TITLE},CURRENT_TIMESTAMP,#{UPDATE_TYPE_CUD})
+            insert into GUIDE_UPDATE(ADMIN_ID,DOCUMENT_KEY, DOCUMENT_TITLE,UPDATE_TIME,UPDATE_TYPE_CUD)
+            values(#{ADMIN_ID},#{DOCUMENT_KEY},#{DOCUMENT_TITLE},CURRENT_TIMESTAMP,#{UPDATE_TYPE_CUD})
     </insert>
 
     <select id="retrieveGuideUpdate" resultType="com.kakaocorp.iamguide.model.GuideUpdate">
             select ADMIN_ID,UPDATE_TIME,UPDATE_TYPE_CUD
             from GUIDE_UPDATE
-            where DOCUMENT_TITLE=#{title}
-            AND UPDATE_KEY IN(SELECT MAX(UPDATE_KEY) FROM GUIDE_UPDATE WHERE DOCUMENT_TITLE=#{title})
+            where DOCUMENT_KEY=#{documentKey}
+            AND UPDATE_KEY IN(SELECT MAX(UPDATE_KEY) FROM GUIDE_UPDATE WHERE DOCUMENT_KEY=#{documentKey})
     </select>
 </mapper>
