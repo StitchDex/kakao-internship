@@ -6,11 +6,26 @@
 
 <div layout:fragment="content">
     <div class="container" id="guide_first">
-        <h1>검색 결과</h1>
+        <h1>
+            <STRONG th:text="'&#34;' + ${tag} + '&#34;' + ' 에 대한 검색결과'"></STRONG>
+        </h1>
+        <hr>
         <ul class="list-group mt-3">
-            <a th:each="result : ${Results}" th:text="${result.title}" th:attr="value=${result.getId()}"
-               class="list-group-item list-group-item-action search-result-item" style="display: block; color: #0a6aa1" >
-            </a>
+            <div class="mb-3 searched-area" th:each="result : ${Results}">
+                <div class="row" style="border: solid 1px; border-radius: 3px; border-color: #0a6aa1">
+                    <div th:attr="value=${result.getId()}" th:text="${result.title}"
+                         class="col-2 list-group-item-action search-result-item pt-3 pb-3" style="display: block; color: #0a6aa1; border-right: dashed 1px" >
+                    </div>
+                    <div class="col-10" style="text-align: right">
+                        <div class="row ">
+                            <div th:if="${tagItem} == ${tag}" th:each="tagItem : ${result.getTags()}" th:text="${tagItem} + '&nbsp&nbsp'" th:attr="value=${tagItem}"
+                                 class="list-group-item-action pt-3 pb-3 search-result-tag" style="display: block; color:orangered"></div>
+                            <div th:unless="${tagItem} == ${tag}" th:each="tagItem : ${result.getTags()}" th:text="${tagItem} + '&nbsp&nbsp'" th:attr="value=${tagItem}"
+                                 class="list-group-item-action pt-3 pb-3 search-result-tag" style="display: block"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </ul>
     </div>
 </div>
