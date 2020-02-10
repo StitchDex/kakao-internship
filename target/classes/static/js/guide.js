@@ -72,7 +72,7 @@ $(function () {
         'url': '/guide/menu',
         'data': {'doc_key': documentKey},
         'success': function (res) {
-            if(res.state == 0) { //HIDDEN GUIDE 
+            if(res.state == 0) { //HIDDEN GUIDE
                 location.href = "/guide";
             }
             var title = res.title;
