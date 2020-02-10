@@ -188,7 +188,6 @@ function make_disable() {
 
 function get_json_data(tree, $node) {
     var temp = tree.get_node($node);
-
     var json_data = {
         'id': temp.id,
         'parent': temp.parent,
@@ -244,7 +243,6 @@ function update_node(sendData, what) {
 }
 
 function delete_node(sendData, title, what) {
-
     sendData = JSON.stringify({'id': sendData, 'type': what});
     $.ajax({
         url: '/admin/admin_tree/delete',

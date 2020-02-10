@@ -1,6 +1,10 @@
 package com.kakaocorp.iamguide.controller;
 
 import com.kakaocorp.iamguide.model.GuideDoc;
+<<<<<<< HEAD
+=======
+import com.kakaocorp.iamguide.model.GuideUpdate;
+>>>>>>> 75b638c9af5656ffcc2a3e6e9138e2bad160bee6
 import com.kakaocorp.iamguide.service.*;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -199,4 +203,20 @@ public class AdminController {
     }
 
 
+<<<<<<< HEAD
+=======
+    @GetMapping(value = "search")
+    public String getSearchResults(@RequestParam("tag") String tag, Model model) {
+        ArrayList<GuideDoc> result = (ArrayList<GuideDoc>) guideTagService.retrieveGuideList(tag);
+        for(int i = 0; i < result.size(); i++){
+            String id = result.get(i).getId();
+            result.get(i).setTags(guideTagService.retrieveGuideTagList(id));
+        }
+
+        model.addAttribute("Results", result);
+        model.addAttribute("test", "test");
+        model.addAttribute("tag",tag);
+        return "search-result";
+    }
+>>>>>>> 75b638c9af5656ffcc2a3e6e9138e2bad160bee6
 }

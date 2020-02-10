@@ -47,9 +47,15 @@ a, a:hover {
     background-position: 0 0
 }
 body { padding-top: 70px; }
+<<<<<<< HEAD
 /*@media screen and (max-width: 991px) {
     body { padding-top: 150px; }
 }*/
+=======
+@media screen and (max-width: 991px) {
+    body { padding-top: 190px; }
+}
+>>>>>>> 75b638c9af5656ffcc2a3e6e9138e2bad160bee6
 #loginBody .form-signin {
     width: 100%;
     max-width: 500px;

@@ -32,8 +32,14 @@ public class IamAuthentication implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 75b638c9af5656ffcc2a3e6e9138e2bad160bee6
         String username = authentication.getName();
         String password = (String) authentication.getCredentials();
+
+/*
         if (username.equals("local") && password.equals("local")) {
             DevAdmin user = new DevAdmin();
             List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
@@ -43,9 +49,14 @@ public class IamAuthentication implements AuthenticationProvider {
             return result;
         }
         throw new BadCredentialsException("인증되지 않은 사용자 입니다.");
+<<<<<<< HEAD
     }
        /* String username = authentication.getName();
         String password = (String) authentication.getCredentials();
+=======
+*/
+
+>>>>>>> 75b638c9af5656ffcc2a3e6e9138e2bad160bee6
         try {
             // Hello MIS client
             HelloIdentityServiceClient client = HelloIdentityServiceClient.getHelloIdentityServiceClient();

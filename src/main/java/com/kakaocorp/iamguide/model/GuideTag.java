@@ -7,5 +7,4 @@ public class GuideTag {
     private String tag;
     private String documentKey;
     private String parent;
-
 }
