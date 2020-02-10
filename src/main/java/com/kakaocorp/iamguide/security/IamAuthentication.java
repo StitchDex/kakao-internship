@@ -1,8 +1,10 @@
 package com.kakaocorp.iamguide.security;
 
+import com.daum.mis.remote.client.HelloIdentityServiceClient;
 import com.kakaocorp.iamguide.GuideDictionary;
 
 import com.kakaocorp.iamguide.model.DevAdmin;
+import com.kakaocorp.iamguide.model.UserInfo;
 import com.kakaocorp.iamguide.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -32,31 +34,10 @@ public class IamAuthentication implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-<<<<<<< HEAD
-=======
 
->>>>>>> 75b638c9af5656ffcc2a3e6e9138e2bad160bee6
         String username = authentication.getName();
         String password = (String) authentication.getCredentials();
 
-/*
-        if (username.equals("local") && password.equals("local")) {
-            DevAdmin user = new DevAdmin();
-            List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
-            roles.add(new SimpleGrantedAuthority(ROLE + GuideDictionary.ADMIN));
-            UsernamePasswordAuthenticationToken result = new UsernamePasswordAuthenticationToken(username, password, roles);
-            result.setDetails(user);
-            return result;
-        }
-        throw new BadCredentialsException("인증되지 않은 사용자 입니다.");
-<<<<<<< HEAD
-    }
-       /* String username = authentication.getName();
-        String password = (String) authentication.getCredentials();
-=======
-*/
-
->>>>>>> 75b638c9af5656ffcc2a3e6e9138e2bad160bee6
         try {
             // Hello MIS client
             HelloIdentityServiceClient client = HelloIdentityServiceClient.getHelloIdentityServiceClient();
@@ -82,7 +63,7 @@ public class IamAuthentication implements AuthenticationProvider {
             e.printStackTrace();
             throw new BadCredentialsException(e.getMessage());
         }
-    }*/
+    }
 
     @Override
     public boolean supports(Class<?> aClass) {

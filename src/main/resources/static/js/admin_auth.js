@@ -53,8 +53,7 @@ function deleteAdd1(param){
 
 $('.insert-admin').click(function(e) {
     e.preventDefault();
-    var admin_list = [];
-
+    var addList = [];
     if($("#addList").children("li").length > 4) {
         alert("동시에 5명까지 추가가 가능합니다.");
         return;
@@ -87,7 +86,7 @@ $('.insert-admin').click(function(e) {
         $("#addList").prepend(li);
         $('.select2-account').val(null).trigger('change');
     }
-})
+});
 
 function insertClick() {
 
@@ -113,8 +112,9 @@ function insertClick() {
             alert('성공적으로 추가되었습니다.');
             $('#addList').children('li').remove();
         },
-        'error':function(){
-            alert('에러 발생');
+        'error':function(error){
+            alert('추가 에러 발생');
+            console.log(error);
         }
     });
 }
@@ -151,8 +151,9 @@ function deleteClick() {
             onload();
             alert('성공적으로 삭제되었습니다.');
         },
-        'error':function(){
-            alert('에러 발생')
+        'error':function(error){
+            alert('삭제 에러 발생');
+            console.log(error);
         }
     });
 

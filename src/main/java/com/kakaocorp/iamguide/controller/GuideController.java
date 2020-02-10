@@ -79,40 +79,17 @@ public class GuideController {
      */
     @GetMapping(value = "search")
     public String getSearchResults(@RequestParam("tag") String tag, Model model) {
-<<<<<<< HEAD
-=======
+
         ArrayList<GuideDoc> result = (ArrayList<GuideDoc>) guideTagService.retrieveGuideList(tag);
-        for(int i = 0; i < result.size(); i++){
+        for (int i = 0; i < result.size(); i++) {
             String id = result.get(i).getId();
             result.get(i).setTags(guideTagService.retrieveGuideTagList(id));
         }
 
         model.addAttribute("Results", result);
         model.addAttribute("test", "test");
-        model.addAttribute("tag",tag);
+        model.addAttribute("tag", tag);
         return "search-result";
-    }
->>>>>>> 75b638c9af5656ffcc2a3e6e9138e2bad160bee6
-
-        List<GuideDoc> result = guideTagService.retrieveGuideList(tag);
-
-        for(int i = 0; i < result.size(); i++){
-            String id = result.get(i).getId();
-            result.get(i).setTags(guideTagService.retrieveGuideTagList(id));
-        }
-
-<<<<<<< HEAD
-        model.addAttribute("Results", result);
-        model.addAttribute("test", "test");
-        model.addAttribute("tag",tag);
-        return "search-result";
-=======
-    @GetMapping("get_update")
-    public @ResponseBody
-    String retrieveGuideUpdate(@RequestParam("documentKey") String documentKey) {
-        logger.info("/guide_update{}", documentKey);
-        return guideUpdateService.retrieveGuideUpdate(documentKey);
->>>>>>> 75b638c9af5656ffcc2a3e6e9138e2bad160bee6
     }
 
 }
