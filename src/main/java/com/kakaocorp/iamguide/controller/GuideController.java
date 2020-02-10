@@ -22,7 +22,6 @@ import java.util.List;
 @RequestMapping("/guide/**")
 public class GuideController {
 
-
     private Logger logger = LoggerFactory.getLogger(CommonController.class);
 
     @Autowired
@@ -45,32 +44,6 @@ public class GuideController {
         return guideDocService.retrieveGuideDoc(doc_key);
     }
 
-    /*
-     * 태그 검색 자동완성 데이터 가져오기
-     */
-    @GetMapping(value = "tag")
-    public @ResponseBody
-    List getTags(@RequestParam("tag") String tag) {
-        return guideTagService.suggestGuideTagList(tag);
-    }
-
-    /*
-     * 검색결과 출력
-     */
-    @GetMapping(value = "search")
-    public String getSearchResults(@RequestParam("tag") String tag, Model model) {
-        ArrayList<GuideDoc> result = (ArrayList<GuideDoc>) guideTagService.retrieveGuideList(tag);
-        for(int i = 0; i < result.size(); i++){
-            String id = result.get(i).getId();
-            result.get(i).setTags(guideTagService.retrieveGuideTagList(id));
-        }
-
-        model.addAttribute("Results", result);
-        model.addAttribute("test", "test");
-        model.addAttribute("tag",tag);
-        return "search-result";
-    }
-
     @GetMapping("document")
     public String guideDocumentPage(@RequestParam(required = false) String doc_key, Model model) {
         if (doc_key != null) {
@@ -91,5 +64,33 @@ public class GuideController {
     List<GuideTag> retrieveTags(@RequestParam("doc_key") String doc_key) {
         return guideTagService.retrieveGuideTagList(doc_key);
     }
+
+    /*
+     * 태그 검색 자동완성 데이터 가져오기
+     */
+    @GetMapping(value = "tag")
+    public @ResponseBody
+    List getTags(@RequestParam("tag") String tag) {
+        return guideTagService.suggestGuideTagList(tag);
+    }
+
+    /*
+     * 검색결과 출력
+     */
+    @GetMapping(value = "search")
+    public String getSearchResults(@RequestParam("tag") String tag, Model model) {
+
+        ArrayList<GuideDoc> result = (ArrayList<GuideDoc>) guideTagService.retrieveGuideList(tag);
+        for (int i = 0; i < result.size(); i++) {
+            String id = result.get(i).getId();
+            result.get(i).setTags(guideTagService.retrieveGuideTagList(id));
+        }
+
+        model.addAttribute("Results", result);
+        model.addAttribute("test", "test");
+        model.addAttribute("tag", tag);
+        return "search-result";
+    }
+
 }
 

@@ -1,3 +1,4 @@
+/*
 package com.kakaocorp.iamguide.config;
 
 import net.daum.tenth2.Tenth2Authentication;
@@ -48,3 +49,4 @@ public class TenthConfiguration {
     }
 }
 
+*/

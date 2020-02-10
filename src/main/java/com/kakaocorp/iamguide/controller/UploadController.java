@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -25,7 +26,7 @@ public class UploadController {
     private UploadService uploadService;
 
     @RequestMapping(value = "admin/imageupload", method = RequestMethod.POST)
-    public void ImageUpload(Authentication auth, HttpServletResponse response, @RequestParam("upload") MultipartFile upload) throws IOException, JSONException {
+    public void imageUpload(Authentication auth, HttpServletResponse response, @RequestParam("upload") MultipartFile upload) throws IOException, JSONException {
         JSONObject json = uploadService.createImage(upload, auth);
 
         response.setCharacterEncoding("utf-8");
@@ -39,7 +40,7 @@ public class UploadController {
 
     @RequestMapping(value = "get_image/{uuid}", method = RequestMethod.GET)
     public @ResponseBody
-    byte[] ImageDownload(HttpServletRequest request, @PathVariable("uuid") String uuid) throws IOException {
+    byte[] imageDownload(HttpServletRequest request, @PathVariable("uuid") String uuid) throws IOException {
         byte[] imageData = null;
         imageData = uploadService.retrieveImage(uuid);
 

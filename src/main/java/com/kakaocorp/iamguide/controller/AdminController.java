@@ -1,7 +1,7 @@
 package com.kakaocorp.iamguide.controller;
 
 import com.kakaocorp.iamguide.model.GuideDoc;
-import com.kakaocorp.iamguide.model.GuideUpdate;
+
 import com.kakaocorp.iamguide.service.*;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +23,7 @@ public class AdminController {
     private Logger logger = LoggerFactory.getLogger(CommonController.class);
 
     @Autowired
-    private CommonService commonService;
+    private AdminService adminService;
     @Autowired
     private GuideDocService guideDocService;
     @Autowired
@@ -37,16 +36,19 @@ public class AdminController {
     private UploadService uploadService;
 
 
-    @GetMapping("admin_auth")
-    public String admin_authPage() {
-        return "admin_auth";
+    @GetMapping("document")
+    public String guideDocumentPage(@RequestParam(required = false) String doc_key, Model model) {
+        if (doc_key != null) {
+            model.addAttribute("selected", doc_key);
+        }
+        return "admin-document";
     }
+
 
     @GetMapping("admin_tree")
     public String admin_treePage() {
         return "admin_tree";
     }
-
 
     @PostMapping(value = "admin_tree/create", produces = MediaType.APPLICATION_JSON_VALUE)
     public String createGuideTree(HttpServletRequest req, @RequestBody Map<String, Object> parm) throws Exception {
@@ -125,8 +127,10 @@ public class AdminController {
         guideUpdateService.createGuideUpdate(admin, documentKey, title, CRUD); // guide_doc edit
     }
 
-
-
+    @GetMapping("admin_auth")
+    public String admin_authPage() {
+        return "admin_auth";
+    }
 
     /**
      * AJAX : admin(AUTHENTICATED)
@@ -137,7 +141,7 @@ public class AdminController {
     List suggest(HttpServletRequest req, @RequestParam String accountId) throws Exception {
         logger.debug("Query : {}", accountId);
         if (accountId != null && !accountId.isEmpty()) {
-            List ret = commonService.suggest(accountId);
+            List ret = adminService.suggest(accountId);
             return ret;
         }
         return new ArrayList<>();
@@ -150,7 +154,7 @@ public class AdminController {
     @RequestMapping("getadminall")
     public @ResponseBody
     List getAdminList() throws Exception {
-        return commonService.getAdminList();
+        return adminService.getAdminList();
     }
 
     /**
@@ -160,16 +164,28 @@ public class AdminController {
     @RequestMapping(value = "insertAdmin", method = RequestMethod.POST)
     public @ResponseBody
     void createAdmin(@RequestBody List<Object> admins) throws Exception {
-        commonService.createAdmin(admins);
+        adminService.createAdmin(admins);
     }
 
     @RequestMapping(value = "deleteAdmin", method = RequestMethod.POST)
     public @ResponseBody
     void deleteAdmin(@RequestBody List<Object> admins) throws Exception {
-        commonService.deleteAdmin(admins);
+        adminService.deleteAdmin(admins);
     }
 
+    @GetMapping(value = "search")
+    public String getSearchResults(@RequestParam("tag") String tag, Model model) {
+        ArrayList<GuideDoc> result = (ArrayList<GuideDoc>) guideTagService.retrieveGuideList(tag);
+        for (int i = 0; i < result.size(); i++) {
+            String id = result.get(i).getId();
+            result.get(i).setTags(guideTagService.retrieveGuideTagList(id));
+        }
 
+        model.addAttribute("Results", result);
+        model.addAttribute("test", "test");
+        model.addAttribute("tag", tag);
+        return "search-result";
+    }
 
     @RequestMapping(value = "suggestTags")
     public @ResponseBody
@@ -183,25 +199,4 @@ public class AdminController {
         guideTagService.updateGuideTag(tags);
     }
 
-    @GetMapping("document")
-    public String guideDocumentPage(@RequestParam(required = false) String doc_key, Model model){
-        if (doc_key != null) {
-            model.addAttribute("selected", doc_key);
-        }
-        return "admin-document";
-    }
-
-    @GetMapping(value = "search")
-    public String getSearchResults(@RequestParam("tag") String tag, Model model) {
-        ArrayList<GuideDoc> result = (ArrayList<GuideDoc>) guideTagService.retrieveGuideList(tag);
-        for(int i = 0; i < result.size(); i++){
-            String id = result.get(i).getId();
-            result.get(i).setTags(guideTagService.retrieveGuideTagList(id));
-        }
-
-        model.addAttribute("Results", result);
-        model.addAttribute("test", "test");
-        model.addAttribute("tag",tag);
-        return "search-result";
-    }
 }

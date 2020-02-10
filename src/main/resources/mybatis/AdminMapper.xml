@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
-<mapper namespace="com.kakaocorp.iamguide.dao.CommonMapper">
+<mapper namespace="com.kakaocorp.iamguide.dao.AdminMapper">
     <select id="isAdmin" resultType="String">
         SELECT ADMIN_ACCOUNT_ID FROM ADMIN WHERE ADMIN_ACCOUNT_ID = #{admin_id}
     </select>
