@@ -20,7 +20,7 @@
 
         <div class="form-group">
             <label for="inputId" class="sr-only">ID</label>
-            <input type="text" name="username" placeholder="ID" maxlength="20"
+            <input type="text" name="username" placeholder="ID" maxlength="14"
                    id="inputId" class="form-control form-control-lg" autocomplete="username"
                    oninvalid="this.setCustomValidity('사내 계정을 입력해주세요.')"
                    oninput="setCustomValidity('')" required autofocus/>
@@ -30,7 +30,7 @@
             <input type="password" name="password" id="inputPassword" placeholder="비밀번호"
                    maxlength="32"
                    class="form-control form-control-lg" autocomplete="current-password"
-                   oninvalid="this.setCustomValidity('사내 계정 비밀번호를 입력해주세요. 비밀번호는 32자 이하입니다.')"
+                   oninvalid="this.setCustomValidity('사내 계정 비밀번호를 입력해주세요.')"
                    oninput="setCustomValidity('')"
                    required pattern=".{1,32}"/>
             <div th:if="${param.error}" class="text-danger">

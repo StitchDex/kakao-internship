@@ -78,6 +78,15 @@ $('.insert-admin').click(function(e) {
             }
         }
 
+        var addliArr = $("#addList").children("li");
+        for(i=0; i<addliArr.length; i++) {
+            if(data.memberAccountId == $(addliArr[i]).attr('accountid')) {
+                $('.select2-account').val(null).trigger('change');
+                alert("이미 추가된 아이디 입니다.");
+                return;
+            }
+        }
+
         var li = $('<li class="list-group-item"></li>')
             .attr('empNo', data.memberEmpNo)
             .attr('accountId', data.memberAccountId)

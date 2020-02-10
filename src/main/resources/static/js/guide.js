@@ -72,6 +72,9 @@ $(function () {
         'url': '/guide/menu',
         'data': {'doc_key': documentKey},
         'success': function (res) {
+            if(res.state == 0) { //HIDDEN GUIDE
+                location.href = "/guide";
+            }
             var title = res.title;
             $('#guide-title').text(title);
             if (admin_editor != null) { // change doc while edit
@@ -210,7 +213,7 @@ function edit_save_button_click() {
         var recentUpdate = get_Guide_update(dockey);
         var beforeUpdate = $('#guide-update').text();
         if(recentUpdate != beforeUpdate) {
-            var reply = confirm("다른 작업자의 결과물과 충돌이 발생했습니다. 현재문서를 저장할 경우 문제가 생길 수 있습니다.\n 저장하시겠습니까?")
+            var reply = confirm("다른 작업자의 결과물과 충돌이 발생했습니다.\n현재문서를 저장할 경우 문제가 생길 수 있습니다.\n저장하시겠습니까?")
             if(reply == false) return;
         }
 

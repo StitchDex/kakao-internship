@@ -11,7 +11,8 @@
         </h1>
         <hr>
         <ul class="list-group mt-3">
-            <div class="mb-3 searched-area" th:each="result : ${Results}">
+            <div th:if="${Results.size()}==0">검색결과가 존재하지 않습니다.</div>
+            <div th:unless="${Results.size()}==0" class="mb-3 searched-area" th:each="result : ${Results}">
                 <div class="row" style="border: solid 1px; border-radius: 3px; border-color: #0a6aa1">
                     <div th:attr="value=${result.getId()}" th:text="${result.title}"
                          class="col-2 list-group-item-action search-result-item pt-3 pb-3" style="display: block; color: #0a6aa1; border-right: dashed 1px" >

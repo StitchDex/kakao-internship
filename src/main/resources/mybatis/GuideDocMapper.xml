@@ -5,7 +5,7 @@
 
 <mapper namespace="com.kakaocorp.iamguide.dao.GuideDocMapper">
     <select id="retrieveGuideDoc" resultType="com.kakaocorp.iamguide.model.GuideDoc">
-        select DOCUMENT_TITLE as title, DOCUMENT_TEXT as text from GUIDE_DOCUMENT where DOCUMENT_KEY=#{id}
+        select DOCUMENT_TITLE as title, DOCUMENT_TEXT as text, DOCUMENT_STATE as state from GUIDE_DOCUMENT where DOCUMENT_KEY=#{id}
      </select>
     <update id="updateGuideDoc">
         update GUIDE_DOCUMENT SET DOCUMENT_TEXT=#{content} where DOCUMENT_KEY=#{id}
