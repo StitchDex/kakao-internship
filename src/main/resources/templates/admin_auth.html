@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/default">
+<div layout:fragment="content">
+    <div class="container">
+        <div class="container p-2">
+            <label style="font-size: x-large"> 사내계정(다중 선택 가능)
+                <select class="custom-select select2-account" name="accounts" style="width:700px"></select>
+            </label>
+            <button class="btn btn-info mt-1 ml-2 btn-sm insert-admin" style="margin-bottom: 8px">추가</button>
+        </div>
+            <ul class="list-group" id="addList">
+                <div class="container p-2 mt-3">
+                <button class="btn btn-info col-sm w-100 insert-admin" style="width: 1020px"
+                        onclick="insertClick()">
+                    추가 완료</button>
+                </div>
+            </ul>
+        <div class="container p-2">
+            <select class="custom-select select-account-all" onload onchange="onChange()" style="height: 300px"
+                    multiple="multiple"></select>
+        </div>
+        <div class="container p-2">
+            <button class="btn btn-info col-sm delete-admin" onclick="deleteClick()">삭제
+            </button>
+        </div>
+        <div class="container p-2">
+            <label id="select-count">0</label><label>개 선택</label>
+        </div>
+    </div>
+</div>
+</html>

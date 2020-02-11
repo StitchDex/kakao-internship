@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/default">
+
+<div layout:fragment="content">
+    <div class="container" id="guide_content">
+        <input id="selected" hidden="hidden" th:value="${selected}">
+        <h1 id="guide-title"></h1>
+        <div class="row-3">
+            <p style="font-size:0.8em" id="guide-update"></p>
+        </div>
+        <hr style="width: 300px">
+        <div class="row" id="tag_list" style="padding-left: 15px">
+            <p>Tag list:</p>
+            <ul style="padding-left:15px" id="guide-tag"></ul>
+        </div>
+        <div id="Guide_Doc" style="margin-left: 30px"></div>
+    </div>
+</div>
+</html>
