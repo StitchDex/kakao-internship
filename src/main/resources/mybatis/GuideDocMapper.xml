@@ -19,9 +19,9 @@
         select concat("DIR", gdr.DIR_KEY), gdr.DIR_NAME, if(gdr.DIR_KEY = gdr.DIR_PARENT_KEY , "#", concat("DIR",gdr.DIR_PARENT_KEY)),gdr.DIR_STATE
         from GUIDE_DIR as gdr
     </select>
-    <insert id="createGuideTree">
-        insert into GUIDE_DOCUMENT(DOCUMENT_TITLE,DOCUMENT_TEXT,DIRECTORY_KEY,DOCUMENT_STATE)
-        values(#{text},#{content},#{parent},#{state})
+    <insert id="createGuideTree" useGeneratedKeys="true" keyProperty="id" parameterType="com.kakaocorp.iamguide.model.GuideDoc">
+        insert into GUIDE_DOCUMENT(DIRECTORY_KEY,DOCUMENT_TITLE,DOCUMENT_TEXT,DOCUMENT_STATE)
+        values(#{parent},#{title},#{text},#{state})
     </insert>
 
     <update id="updateGuideTree">

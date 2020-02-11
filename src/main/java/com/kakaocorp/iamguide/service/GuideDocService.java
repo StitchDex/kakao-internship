@@ -33,12 +33,19 @@ public class GuideDocService {
         return guideTreeList;
     }
 
-    public void createGuideTree(String parent, String text, boolean state) {
+    public String createGuideTree(String parent, String text, boolean state) {
+        final String EMPTY_STRING = " ";
         if (parent.length() < 1)
             parent = "0";
         parent = parent.substring(3);
-        String content = " ";
-        guideDocMapper.createGuideTree(parent, content, text, state);
+        GuideDoc guideDoc = new GuideDoc();
+        guideDoc.setParent(parent);
+        guideDoc.setText(EMPTY_STRING);
+        guideDoc.setTitle(text);
+        guideDoc.setState(true);
+
+        guideDocMapper.createGuideTree(guideDoc);
+        return guideDoc.getId();
     }
 
     public void deleteGuideTree(String key) {

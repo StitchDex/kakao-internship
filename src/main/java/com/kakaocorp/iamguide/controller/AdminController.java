@@ -51,22 +51,25 @@ public class AdminController {
     }
 
     @PostMapping(value = "admin_tree/create", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String createGuideTree(HttpServletRequest req, @RequestBody Map<String, Object> parm) throws Exception {
+    @ResponseBody
+    public int createGuideTree(@RequestBody Map<String, Object> parm) throws Exception {
+
         String parent = (String) parm.get("parent");
         String text = (String) parm.get("text");
         String type = (String) parm.get("type");
         boolean state = (boolean) parm.get("state");
 
         if (type.equals("DOC")) {
-            guideDocService.createGuideTree(parent, text, state);
+            return Integer.parseInt(guideDocService.createGuideTree(parent, text, state));
         } else {
             guideDirService.createGuideDir(parent, text, state);
         }
-        return "redirect:admin/admin_tree";
+        return -1;
     }
 
     @PostMapping(value = "admin_tree/update", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String updateGuideTree(HttpServletRequest req, @RequestBody Map<String, Object> parm) throws Exception {
+    public String updateGuideTree(HttpServletRequest res, @RequestBody Map<String, Object> parm) throws Exception {
+
         String key = (String) parm.get("id");
         String parent = (String) parm.get("parent");
         String text = (String) parm.get("text");
@@ -100,7 +103,8 @@ public class AdminController {
      */
     @PostMapping(value = "edit_doc", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    boolean updateGuideDoc(HttpServletRequest req, @RequestBody Map<String, Object> parm) throws Exception {
+        boolean updateGuideDoc(HttpServletRequest req, @RequestBody Map<String, Object> parm) throws Exception {
+
         String id = (String) parm.get("id");
         String content = (String) parm.get("content");
 
@@ -109,6 +113,7 @@ public class AdminController {
 
         logger.info("edit : {}", id);
         return true;
+
     }
 
     /**

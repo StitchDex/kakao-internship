@@ -16,8 +16,10 @@ public interface GuideDocMapper {
     GuideDoc retrieveGuideDoc(@Param("id") String id); // doc_key
 
     void updateGuideDoc(@Param("id") String id, @Param("content") String text);
-
-    void createGuideTree(@Param("parent") String parent, @Param("content") String content, @Param("text") String text, @Param("state") boolean state);
+/*
+    int createGuideTree(@Param("parent") String parent, @Param("content") String content, @Param("text") String text, @Param("state") boolean state);
+*/
+    void createGuideTree(GuideDoc guideDoc);
 
     void deleteGuideTree(@Param("key") String key);
 

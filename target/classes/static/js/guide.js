@@ -72,7 +72,7 @@ $(function () {
         'url': '/guide/menu',
         'data': {'doc_key': documentKey},
         'success': function (res) {
-            if(res.state == 0) { //HIDDEN GUIDE
+            if (res.state == 0) { //HIDDEN GUIDE
                 location.href = "/guide";
             }
             var title = res.title;
@@ -87,7 +87,7 @@ $(function () {
                 make_editor(res.text);
             }
             init_select_tagging();
-            $('#guide-update').text( get_Guide_update(documentKey));
+            $('#guide-update').text(get_Guide_update(documentKey));
         },
         'error': function () {
 
@@ -212,9 +212,9 @@ function edit_save_button_click() {
         var dockey = documentKey;
         var recentUpdate = get_Guide_update(dockey);
         var beforeUpdate = $('#guide-update').text();
-        if(recentUpdate != beforeUpdate) {
+        if (recentUpdate != beforeUpdate) {
             var reply = confirm("다른 작업자의 결과물과 충돌이 발생했습니다.\n현재문서를 저장할 경우 문제가 생길 수 있습니다.\n저장하시겠습니까?")
-            if(reply == false) return;
+            if (reply == false) return;
         }
 
         admin_editor.set('isReadOnly', true);
@@ -245,7 +245,7 @@ function edit_save_button_click() {
             contentType: 'application/json',
             // refresh page
             success: function (res) {
-                res ? set_Guide_update($('#guide-title').text(), 'update') : alert('error');
+                res ? set_Guide_update($('#guide-title').text(), documentKey, 'update') : alert('error');
             }, error: function (error) {
                 alert('저장 실패');
             }
@@ -265,7 +265,7 @@ function edit_save_button_click() {
 
         insertTags = substract(Array.from(afterTags), Array.from(beforeTags));
         deleteTags = substract(Array.from(beforeTags), Array.from(afterTags));
-
+        set_Guide_update(selectedText, 'update');
         var issuc = false;
         $.ajax({
             'url': '/admin/updateTags',
@@ -293,10 +293,11 @@ function get_Guide_update(dockey) {
     console.log(dockey);
     $.ajax({
         url: '/guide/get_update?documentKey=' + dockey,
-        async : false,
+        async: false,
         method: 'GET',
         success: function (res) {
             returnValue = res;
+            $("#guide-update").text(res);
         }, error: function (error) {
             console.log(error);
         }
@@ -306,8 +307,8 @@ function get_Guide_update(dockey) {
 }
 
 //set guide_update when save button clicked
-function set_Guide_update(title, type) {
-    var sendData = JSON.stringify({"admin": $('#admin_name').val(), "documentKey" : documentKey, "title": title, "CRUD": type});
+function set_Guide_update(title, key, type) {
+    var sendData = JSON.stringify({"admin": $('#admin_name').val(), "documentKey": key, "title": title, "CRUD": type});
     console.log(sendData);
     var token = $("meta[name='_csrf']").attr("content");
     $.ajax({
@@ -324,22 +325,24 @@ function set_Guide_update(title, type) {
         }
     });
 }
-$('#guide-tag').on('click','a',function(event){
+
+$('#guide-tag').on('click', 'a', function (event) {
     let tag = event.target.text.substr(1);
     menu_tag(tag);
 });
+
 function show_guide_tag(ret) {
     let temp = "";
     $.each(ret, function (index, item) {
-        $("#guide-tag").append("<a href='#'>"+item+"</a>");
+        $("#guide-tag").append("<a href='#'>" + item + "</a>");
     });
 }
 
-$('.select2-tagging').on("select2-open",function () {
+$('.select2-tagging').on("select2-open", function () {
     $(this).select2('positionDropdown', true);
 })
 
-function deleteAdd(param){
+function deleteAdd(param) {
     $(param).parent("div").remove();
 }
 
@@ -355,7 +358,7 @@ function init_select_tagging() {
         'success': function (data) {
             $.each(data, function (key, val) {
                 //MAKE TAG LIST at admin-documnet.HTML
-                var tagDiv = $('<div class="p-1 mr-1" style="border:1px solid darkgrey; border-radius: 3px" data-value="' + val.tag + '">' + val.tag + '<button class="close deleteTag" onclick="deleteAdd(this)"><span style="color: red" aria-hidden="true">×</span></button>' +'</div>');
+                var tagDiv = $('<div class="p-1 mr-1" style="border:1px solid darkgrey; border-radius: 3px" data-value="' + val.tag + '">' + val.tag + '<button class="close deleteTag" onclick="deleteAdd(this)"><span style="color: red" aria-hidden="true">×</span></button>' + '</div>');
                 $('#document-tag-list').append(tagDiv);
                 tagList.push(val.tag);
             });
@@ -418,23 +421,22 @@ function menu_tag(tag_name) {
     location.href = "/guide/search?tag=%23" + tag_name;
 }
 
-$('.select2-tagging').on('select2:select',function (e) {
+$('.select2-tagging').on('select2:select', function (e) {
     var val = e.params.data.text;
-    if(tagCheck(val)) {
-        var tagDiv = $('<div class="p-1 mr-1" style="border:1px solid darkgrey; border-radius: 3px" data-value="' + val + '">' + val + '<button class="close deleteTag" onclick="deleteAdd(this)"><span style="color: red" aria-hidden="true">×</span></button>' +'</div>');
+    if (tagCheck(val)) {
+        var tagDiv = $('<div class="p-1 mr-1" style="border:1px solid darkgrey; border-radius: 3px" data-value="' + val + '">' + val + '<button class="close deleteTag" onclick="deleteAdd(this)"><span style="color: red" aria-hidden="true">×</span></button>' + '</div>');
         $('#document-tag-list').append(tagDiv);
-    }
-    else {
+    } else {
         alert("이미 포함되어 있는 태그 입니다.")
     }
 
     $('.select2-tagging').val(null).trigger('change');
 })
 
-function tagCheck(input){
+function tagCheck(input) {
     var ret = true
     $('#document-tag-list').children('div').each(function (index) {
-        if($(this).data('value')==input) {
+        if ($(this).data('value') == input) {
             ret = false;
         }
     })

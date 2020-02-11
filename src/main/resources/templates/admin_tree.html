@@ -22,21 +22,17 @@
 <header th:with="admin = ${#authentication.getDetails()}"></header>
 <body id="treeBody" style="padding-top:0px">
 <nav class="navbar navbar-expand-lg navbar-light" style="background:#ffde00">
-    <div class="container">
         <div class="navbar-header">
             <img src="/images/kakao%20CI_black.png" alt=Kakao style="width:100px;
                 height: auto;">
         </div>
-    </div>
 </nav>
 <input type="hidden" id="admin_name" th:if="${#authentication.getDetails() != null}"
        th:value="${#authentication.getName()}"/>
 <div id="edit_tree" style="margin-top:10px;border-bottom-style: groove"></div>
-<div class="container">
-    <input class="btn btn-outline-dark my-2 my-sm-0" type="button" id="save_tree_button" onclick="create_root();"
+    <input class="btn btn-outline-dark my-2 my-sm-0 ml-2" type="button" id="save_tree_button" onclick="create_root();"
            value="루트 폴더 생성">
-    <p class="text-info">마우스 우클릭과 드래그 앤 드랍을 통해 트리를 수정할 수 있습니다.</p>
-</div>
+    <p class="text-info ml-2">마우스 우클릭과 드래그 앤 드랍을 통해 트리를 수정할 수 있습니다.</p>
 <script type="text/javascript" th:src="@{/js/jquery.min.js}" src="../../static/js/jquery.min.js"></script>
 <script type="text/javascript" th:src="@{/js/jstree.js}" src="../../static/js/jstree.js"></script>
 <script type="text/javascript" th:src="@{/js/admin_tree.js}" src="../../static/js/admin_tree.js"></script>
