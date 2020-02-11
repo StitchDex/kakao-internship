@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.kakaocorp.iamguide.dao.UploadMapper">
 
-    <insert id = "createImage">
+    <insert id="createImage">
         insert ignore into GUIDE_IMAGE(IMAGE_PATH,IMAGE_UUID)
         values(#{url},#{uuid})
     </insert>
@@ -19,29 +19,29 @@
         SELECT IMAGE_KEY, ${docId} as DOCUMENT_KEY
         FROM GUIDE_IMAGE
         WHERE IMAGE_UUID IN (
-            <foreach collection="insert" item="item" separator=",">
-                #{item}
-            </foreach>
+        <foreach collection="insert" item="item" separator=",">
+            #{item}
+        </foreach>
         )
     </insert>
 
     <delete id="deleteImaging" parameterType="java.util.List">
         DELETE FROM GUIDE_IMAGING
         WHERE DOCUMENT_KEY = ${docId} AND IMAGE_KEY IN(
-            SELECT IMAGE_KEY FROM GUIDE_IMAGE WHERE IMAGE_UUID IN(
-                <foreach collection="delete" item="item" separator=",">
-                    #{item}
-                </foreach>
-            )
+        SELECT IMAGE_KEY FROM GUIDE_IMAGE WHERE IMAGE_UUID IN(
+        <foreach collection="delete" item="item" separator=",">
+            #{item}
+        </foreach>
+        )
         )
     </delete>
 
     <delete id="deleteTrash" parameterType="java.util.List">
         DELETE FROM GUIDE_IMAGE
         WHERE IMAGE_KEY IN (
-	        <foreach collection="list" item="item" separator=",">
-                #{item.id}
-            </foreach>
+        <foreach collection="list" item="item" separator=",">
+            #{item.key}
+        </foreach>
         )
     </delete>
 

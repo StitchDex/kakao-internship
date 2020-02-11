@@ -96,8 +96,10 @@ $(function () {
                         "label": "이름수정",
                         "action": function (data) {
                             tree.edit($node, null, function (node, status) {
-                                if (node.text.length > 40) {
-                                    alert("40자 이하의 이름만 가능합니다.");
+                                node.text = $.trim(node.text);
+                                var textLength = node.text.length;
+                                if (textLength > 40 || textLength <= 0) {
+                                    alert("공백없이 1자 이상 40자 이하의 이름만 가능합니다.");
                                     location.reload();
                                     return;
                                 } else {
@@ -173,9 +175,6 @@ $(function () {
         })
 
 });
-$("#edit_tree").on("keydown", ".jstree-rename-input", function (data, e) {
-
-});
 
 //hidden -> disable
 function make_disable() {
@@ -209,10 +208,18 @@ function create_node(sendData) {
         dataType: 'html',
         contentType: 'application/json',
         success: function (res) {
-            set_Guide_update(title, 'create');
-            alert("tree create ok");
-            opener.document.location.reload();
-            location.reload();
+            if (res > 0) {
+                set_Guide_update(title, res, 'create');
+                alert("파일 생성 ok");
+                opener.document.location.reload();
+                location.reload();
+            } else {
+                set_Guide_update(title, null
+                    , 'create');
+                alert("폴더 생성");
+                opener.document.location.reload();
+                location.reload();
+            }
         }, error: function (error) {
             alert("트리 생성 오류");
             console.log(error);
@@ -220,7 +227,7 @@ function create_node(sendData) {
     });
 }
 
-function update_node(sendData, what) {
+function update_node(sendData) {
     var title = sendData.text;
     sendData = JSON.stringify(sendData);
     $.ajax({
@@ -231,7 +238,9 @@ function update_node(sendData, what) {
         dataType: 'html',
         contentType: 'application/json',
         success: function (res) {
-            set_Guide_update(title, 'change');
+            var temp = JSON.parse(sendData);
+            console.log(temp.id);
+            set_Guide_update(title, temp.id, 'change');
             alert("tree update ok");
             opener.document.location.reload();
             location.reload();
@@ -252,7 +261,8 @@ function delete_node(sendData, title, what) {
         dataType: 'html',
         contentType: 'application/json',
         success: function (res) {
-            set_Guide_update(title, 'delete');
+            var temp = JSON.parse(sendData);
+            set_Guide_update(title, temp.id, 'delete');
             alert("tree delete ok");
             opener.document.location.reload();
             location.reload();

@@ -30,5 +30,6 @@ com/kakaocorp/iamguide/GuideDictionary.class
 com/kakaocorp/iamguide/dao/GuideUpdateMapper.class
 com/kakaocorp/iamguide/controller/AdminController.class
 com/kakaocorp/iamguide/model/GuideDir.class
+com/kakaocorp/iamguide/config/TenthConfiguration.class
 com/kakaocorp/iamguide/controller/CommonController.class
 com/kakaocorp/iamguide/dao/AdminMapper.class
