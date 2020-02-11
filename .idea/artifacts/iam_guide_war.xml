@@ -7,7 +7,7 @@
         <packaging>war</packaging>
       </options>
     </properties>
-    <root id="archive" name="iam-guide-0.0.1-SNAPSHOT.war">
+    <root id="archive" name="ROOT.war">
       <element id="artifact" artifact-name="iam-guide:war exploded" />
     </root>
   </artifact>
