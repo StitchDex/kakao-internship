@@ -210,13 +210,13 @@ function create_node(sendData) {
         success: function (res) {
             if (res > 0) {
                 set_Guide_update(title, res, 'create');
-                alert("파일 생성 ok");
+                alert("파일 생성 성공");
                 opener.document.location.reload();
                 location.reload();
             } else {
                 set_Guide_update(title, null
                     , 'create');
-                alert("폴더 생성");
+                alert("폴더 생성 성공");
                 opener.document.location.reload();
                 location.reload();
             }
@@ -241,7 +241,7 @@ function update_node(sendData) {
             var temp = JSON.parse(sendData);
             console.log(temp.id);
             set_Guide_update(title, temp.id, 'change');
-            alert("tree update ok");
+            alert("트리 업데이트 성공");
             opener.document.location.reload();
             location.reload();
         }, error: function (error) {
@@ -263,7 +263,7 @@ function delete_node(sendData, title, what) {
         success: function (res) {
             var temp = JSON.parse(sendData);
             set_Guide_update(title, temp.id, 'delete');
-            alert("tree delete ok");
+            alert("트리 삭제 성공");
             opener.document.location.reload();
             location.reload();
         }, error: function (error) {

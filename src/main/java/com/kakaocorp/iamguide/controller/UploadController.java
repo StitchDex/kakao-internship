@@ -20,7 +20,7 @@ import java.io.*;
 @Controller
 public class UploadController {
 
-    private Logger logger = LoggerFactory.getLogger(CommonController.class);
+    private Logger logger = LoggerFactory.getLogger(UploadController.class);
 
     @Autowired
     private UploadService uploadService;

@@ -24,8 +24,7 @@ public class CommonAccessDeniedHandler implements AccessDeniedHandler {
 
             if(auth.getAuthorities().stream()
                     .anyMatch(r -> r.getAuthority().equals("ROLE_USER"))){
-                res.sendRedirect("/guide");
-                return;
+                res.sendError(HttpServletResponse.SC_FORBIDDEN);
             }
             if(req.getRequestURI().equalsIgnoreCase("/login")){
                 res.sendRedirect("/guide");

@@ -22,12 +22,16 @@
         <div th:switch="${code}">
             <div th:case="404">
                 <h5>접속 경로가 옳지 못합니다.</h5>
-                <label th:text="${path}" class="text-muted"></label><br>
+
             </div>
             <div th:case="403">
                 <p>해당 요청에 대한 권한이 없습니다.</p>
             </div>
+            <div th:case="400">
+                <p>잘못된 요청입니다.</p>
+            </div>
         </div>
+        <span th:text="${msg}"></span>
         <br>timestamp : <span th:text="${timestamp}"></span>
     </div>
 </main>
