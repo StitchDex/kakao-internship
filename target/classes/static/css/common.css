@@ -1,0 +1,180 @@
+@font-face {
+    font-family: Kakao;
+    src: local(Kakao), url(/fonts/KakaoRegular.eot?#iefix) format('embedded-opentype'), url(/fonts/KakaoRegular.woff) format('woff');
+    font-style: normal;
+    font-weight: normal;
+    unicode-range: U+0-10FFFF
+}
+
+html, body {
+    height: 100%;
+    font-family: 'Kakao', sans-serif !important
+}
+
+
+a, a:hover {
+    text-decoration: none
+}
+
+#loginBody {
+    display: -ms-flexbox;
+    display: -webkit-box;
+    display: flex;
+    -ms-flex-align: center;
+    -ms-flex-pack: center;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    padding-top: 40px;
+    padding-bottom: 40px
+}
+
+.link_logo {
+    display: block;
+    width: 90px;
+    height: 36px;
+    margin: 0 auto;
+    font-size: 24px;
+    line-height: 45px;
+    text-decoration: none;
+    background: url(../images/kakao.png) no-repeat;
+    background-size: contain;
+    width: 160px;
+    height: 50px;
+    font-size: 50px;
+    line-height: 52px;
+    background-position: 0 0
+}
+body { padding-top: 70px; }
+
+/*@media screen and (max-width: 991px) {
+    body { padding-top: 190px; }
+}*/
+#loginBody .form-signin {
+    width: 100%;
+    max-width: 500px;
+    padding: 15px;
+    margin: 0 auto
+}
+
+#loginBody .form-signin .checkbox {
+    font-weight: 400
+}
+
+#loginBody .form-signin .form-control:focus {
+    z-index: 2
+}
+
+.bg-kakao {
+    background-color: #ffde00;
+    border-color: #ffde00
+}
+
+.btn-kakao {
+    color: #333;
+    background-color: #ffde00;
+    border-color: #ffde00
+}
+
+.btn-kakao:hover, .btn-kakao:focus, .btn-kakao:active, .btn-kakao.active, .open .dropdown-toggle.btn-kakao {
+    color: #333;
+    background-color: #ffef3f;
+    border-color: #ffef3f
+}
+
+.btn-kakao:active, .btn-kakao.active, .open .dropdown-toggle.btn-kakao {
+    background-image: none
+}
+
+.btn-kakao.disabled, .btn-kakao[disabled], fieldset[disabled] .btn-kakao, .btn-kakao.disabled:hover, .btn-kakao[disabled]:hover, fieldset[disabled] .btn-kakao:hover, .btn-kakao.disabled:focus, .btn-kakao[disabled]:focus, fieldset[disabled] .btn-kakao:focus, .btn-kakao.disabled:active, .btn-kakao[disabled]:active, fieldset[disabled] .btn-kakao:active, .btn-kakao.disabled.active, .btn-kakao[disabled].active, fieldset[disabled] .btn-kakao.active {
+    background-color: #ffef3f;
+    border-color: #ffde00
+}
+
+.btn-kakao .badge {
+    color: #ffef3f;
+    background-color: #333
+}
+
+.ck.ck-editor {
+    min-width: 1100px;
+}
+
+.ck-editor__editable_inline {
+    min-height: 800px;
+}
+
+.ck.ck-editor__main > .ck-read-only {
+    border-style: none;
+}
+
+.select2-tag {
+    font-size: 20px;
+    width: 325px;
+    padding: 10px;
+    border: 0px;
+    outline: none;
+    float: left
+}
+
+.row {
+    text-align: center;
+    flex-wrap: nowrap;
+}
+
+
+.dropdown {
+    float: left;
+}
+
+/* Dropdown button */
+.dropdown .dropbtn {
+    font-size: 16px;
+    border: none;
+    outline: none;
+    color: white;
+    padding: 14px 16px;
+    background-color: inherit;
+    font-family: inherit; /* Important for vertical align on mobile phones */
+    margin: 0; /* Important for vertical align on mobile phones */
+}
+
+.dropdown-menu>li>a {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+}
+
+.dropdown-menu>li>a:hover {
+    background-color: #e9ecef;
+}
+
+#jstree-div::-webkit-scrollbar {
+    -webkit-appearance: none;
+    height: 5px;
+}
+#jstree-div::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    width: 7px;
+    background-color: rgba(0, 0, 0, .5);
+    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+}
+
+.list-group-item-action{
+    cursor: pointer;
+}
+
+main {
+    margin-top: 60px;
+    padding: 20px
+}
+#tag_list > ul a{
+    list-style-type: none;
+    float: left;
+    margin-left: 10px;
+}

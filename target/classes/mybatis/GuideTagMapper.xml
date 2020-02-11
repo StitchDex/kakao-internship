@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kakaocorp.iamguide.dao.GuideTagMapper">
+    <select id="retrieveGuideList" resultType="com.kakaocorp.iamguide.model.GuideDoc">
+        SELECT GD.DOCUMENT_KEY as id, GD.DOCUMENT_TITLE as title, GD.DOCUMENT_TEXT as text
+        FROM GUIDE_TAGGING as GT
+        JOIN GUIDE_DOCUMENT as GD
+        ON GT.DOCUMENT_KEY = GD.DOCUMENT_KEY
+        WHERE GT.TAG = #{tag} AND GD.DOCUMENT_STATE=1;
+    </select>
+    <select id="retrieveGuideTagList" resultType="com.kakaocorp.iamguide.model.GuideTag">
+        SELECT TAG as tag FROM GUIDE_TAGGING WHERE DOCUMENT_KEY = #{doc_key};
+    </select>
+    <select id="suggestGuideTagList" resultType="com.kakaocorp.iamguide.model.GuideTag">
+        SELECT DISTINCT TAG as tag FROM GUIDE_TAGGING WHERE TAG LIKE CONCAT("%", #{tag}, "%");
+    </select>
+    <insert id="createTag">
+        INSERT IGNORE INTO GUIDE_TAG
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item})
+        </foreach>
+    </insert>
+    <insert id="createTagging">
+        INSERT INTO GUIDE_TAGGING(DOCUMENT_KEY, TAG)
+        VALUES
+        <foreach collection="insert" item="item" separator=",">
+            (#{doc_key},#{item})
+        </foreach>
+    </insert>
+    <delete id="deleteTagging">
+        DELETE FROM GUIDE_TAGGING
+        WHERE DOCUMENT_KEY = #{doc_key} AND TAG IN (
+        <foreach collection="delete" item="item" separator=",">
+            #{item}
+        </foreach>
+        )
+    </delete>
+    <delete id="deleteTrash">
+        DELETE FROM GUIDE_TAG
+        WHERE TAG NOT IN (
+            SELECT TAG FROM GUIDE_TAGGING
+        )
+    </delete>
+</mapper>
