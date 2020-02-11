@@ -113,7 +113,7 @@ $('#jstree').on('select_node.jstree', function (e, data) {
 });
 
 function select_open() {
-    while (cur.id != "DIR0") {
+    while (cur.parent != "#") {
         $('#jstree').jstree('open_node', cur.parent);
         let cur_p = cur.parent;
         cur = $('#jstree').jstree('get_node', cur_p);
@@ -443,7 +443,7 @@ function tagCheck(input) {
     return ret; //중복 값 없음
 }
 
-$('.search-result-item').on('click', function () {
+$('.search-result-title').on('click', function () {
     var doc_key = $(this).attr('value');
     if (window.location.pathname.startsWith("/admin")) {
         location.href = '/admin/document?doc_key=' + doc_key;

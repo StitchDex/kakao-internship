@@ -10,6 +10,7 @@ import java.util.List;
 public class GuideDoc implements Serializable {
     private String id;
     private String parent;
+    private String parentTitle;
     private String title;
     private String text;
     private String type;
