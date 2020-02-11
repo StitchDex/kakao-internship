@@ -23,6 +23,7 @@
         <java.version>1.8</java.version>
         <maven.test.skip>true</maven.test.skip>
         <docker.image.prefix>springboot</docker.image.prefix>
+        <finalName>ROOT</finalName>
     </properties>
 
     <dependencies>
@@ -204,6 +205,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>ROOT</finalName>
     </build>
 
 
