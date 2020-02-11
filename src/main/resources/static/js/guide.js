@@ -2,7 +2,7 @@ let doc_editor; // for users
 let admin_editor; // for admin
 let selectedData; //current guide_document id
 let selectedText; //current guide_document title
-
+let isEditing;
 var hidden_num;
 var hidden = new Array();
 var beforeTags = new Set();
@@ -17,7 +17,7 @@ $(function () {
     hidden_num = 0;
     depth2Dir = 0;
     documentKey = $('#selected').val();
-
+    isEditing = false;
     $('#jstree').jstree({
         'core': {
             'multiple': false,
@@ -94,40 +94,6 @@ $(function () {
     });
 });
 
-<<<<<<< HEAD
-//click tree_node
-$('#jstree').on('select_node.jstree', function (e, data) {
-    selectedData = data.node.id;
-    selectedText = data.node.text;
-
-    //click dir_node
-    if (selectedData.startsWith("DIR")) {
-        data.node.state.opened ? $(this).jstree('close_node', selectedData)
-            : $(this).jstree('open_node', selectedData);
-    }
-    //click page_node
-    else {
-        $('#jstree').jstree('clear_state');
-        loadDoc();
-    }
-});
-
-function select_open() {
-    while (cur.parent != "#") {
-        $('#jstree').jstree('open_node', cur.parent);
-        let cur_p = cur.parent;
-        cur = $('#jstree').jstree('get_node', cur_p);
-    }
-}
-
-function before_tree_open() {
-    for (var i = 0; i < hidden.length; i++) {
-        $("#jstree").jstree(true).hide_node(hidden[i]);
-    }
-}
-
-=======
->>>>>>> 8d4b785e43a88859e6c349615c881fb7216acf62
 function loadDoc(search_key) {
     let dockey = selectedData.substring(3, selectedData.length);
 
@@ -147,6 +113,8 @@ function loadDoc(search_key) {
 
 //admin_edit_button click
 function edit_button_click() {
+    isEditing = !isEditing;
+    isEditing ? $('#edit_button').text('취소') : location.reload();
     var temp = doc_editor.getData();
     beforeImageUrl = new Set(UrlParse(temp));
     doc_editor.destroy(true);
@@ -409,9 +377,6 @@ function tagCheck(input) {
     return ret; //중복 값 없음
 }
 
-<<<<<<< HEAD
-$('.search-result-title').on('click', function () {
-=======
 $('#guide-tag').on('click', 'a', function (event) {
     let tag = event.target.text.substr(1);
     menu_tag(tag);
@@ -433,8 +398,7 @@ $('.select2-tagging').on('select2:select', function (e) {
     $('.select2-tagging').val(null).trigger('change');
 });
 
-$('.search-result-item').on('click', function () {
->>>>>>> 8d4b785e43a88859e6c349615c881fb7216acf62
+$('.search-result-title').on('click', function () {
     var doc_key = $(this).attr('value');
     if (window.location.pathname.startsWith("/admin")) {
         location.href = '/admin/document?doc_key=' + doc_key;
