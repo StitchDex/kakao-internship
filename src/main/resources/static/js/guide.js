@@ -1,8 +1,8 @@
-//for ckeditor
 let doc_editor; // for users
 let admin_editor; // for admin
 let selectedData; //current guide_document id
 let selectedText; //current guide_document title
+
 var hidden_num;
 var hidden = new Array();
 var beforeTags = new Set();
@@ -10,9 +10,8 @@ var afterTags;
 var beforeImageUrl = new Set();
 var afterImageUrl = new Set();
 var depth2Dir = new Array();
-var depth2Dir_num;
 var documentKey;
-let cur;
+
 //document ready
 $(function () {
     hidden_num = 0;
@@ -58,22 +57,23 @@ $(function () {
     }).delegate("a", "dblclick", function () {
         $(this).parents(".jstree:eq(0)").jstree("toggle_node", this);
     }).on('ready.jstree', function () {
-        before_tree_open($(this).jstree('close_all'), $(this).jstree('open_node', 'DIR0'));
-        cur = $('#jstree').jstree('get_node', 'DOC' + documentKey);
+        before_tree_open($(this).jstree('close_all'), open_root());
         if (documentKey != null) {
             select_open();
         }
+
     });
+    $('#jstree').jstree('clear_state');
     if (documentKey == null) { // admin_main, guide_main
         return;
     }
-
     $.ajax({
         'url': '/guide/menu',
         'data': {'doc_key': documentKey},
+        'async': false,
         'success': function (res) {
-            if (res.state == 0) { //HIDDEN GUIDE
-                location.href = "/guide";
+            if (res.state == 0 || res === "") { //HIDDEN GUIDE
+                location.href = "/error";
             }
             var title = res.title;
             $('#guide-title').text(title);
@@ -87,44 +87,12 @@ $(function () {
                 make_editor(res.text);
             }
             init_select_tagging();
-            $('#guide-update').text(get_Guide_update(documentKey));
+            get_Guide_update(documentKey);
         },
         'error': function () {
-
         },
     });
 });
-
-//click tree_node
-$('#jstree').on('select_node.jstree', function (e, data) {
-    selectedData = data.node.id;
-    selectedText = data.node.text;
-
-    //click dir_node
-    if (selectedData.startsWith("DIR")) {
-        data.node.state.opened ? $(this).jstree('close_node', selectedData)
-            : $(this).jstree('open_node', selectedData);
-    }
-    //click page_node
-    else {
-        $('#jstree').jstree('clear_state');
-        loadDoc();
-    }
-});
-
-function select_open() {
-    while (cur.id != "DIR0") {
-        $('#jstree').jstree('open_node', cur.parent);
-        let cur_p = cur.parent;
-        cur = $('#jstree').jstree('get_node', cur_p);
-    }
-}
-
-function before_tree_open() {
-    for (var i = 0; i < hidden.length; i++) {
-        $("#jstree").jstree(true).hide_node(hidden[i]);
-    }
-}
 
 function loadDoc(search_key) {
     let dockey = selectedData.substring(3, selectedData.length);
@@ -141,24 +109,6 @@ function loadDoc(search_key) {
     } else {
         console.log("document key error");
     }
-}
-
-
-//make user editor and set html data
-function make_editor(res) {
-    ClassicEditor
-        .create(document.querySelector('#Guide_Doc'),
-        )
-        .then(editor => {
-            editor.set('isReadOnly', true);
-            doc_editor = editor;
-            doc_editor.setData(res);
-        })
-        .catch(error => {
-                console.error(error);
-            }
-        );
-
 }
 
 //admin_edit_button click
@@ -206,7 +156,7 @@ function edit_button_click() {
 //admin edit_save_button click
 function edit_save_button_click() {
     if (admin_editor == null) {
-        alert("Error");
+        alert("편집 버튼을 누른 후 저장버튼을 눌러주세요");
     } else {
         //Editor Save
         var dockey = documentKey;
@@ -245,7 +195,7 @@ function edit_save_button_click() {
             contentType: 'application/json',
             // refresh page
             success: function (res) {
-                res ? set_Guide_update($('#guide-title').text(), documentKey, 'update') : alert('error');
+                res ? set_Guide_update($('#guide-title').text(), documentKey, 'update') : alert('문서 편집 에러');
             }, error: function (error) {
                 alert('저장 실패');
             }
@@ -281,13 +231,13 @@ function edit_save_button_click() {
         if (issuc) {
             beforeTags = new Set(afterTags);
         }
-        alert("save ok");
+        alert("저장 성공");
         self.close();
         location.reload();
     }
 }
 
-//get guide_update when node is selected
+//get guide_update on load
 function get_Guide_update(dockey) {
     var returnValue = "";
     console.log(dockey);
@@ -326,10 +276,6 @@ function set_Guide_update(title, key, type) {
     });
 }
 
-$('#guide-tag').on('click', 'a', function (event) {
-    let tag = event.target.text.substr(1);
-    menu_tag(tag);
-});
 
 function show_guide_tag(ret) {
     let temp = "";
@@ -338,9 +284,6 @@ function show_guide_tag(ret) {
     });
 }
 
-$('.select2-tagging').on("select2-open", function () {
-    $(this).select2('positionDropdown', true);
-})
 
 function deleteAdd(param) {
     $(param).parent("div").remove();
@@ -421,17 +364,6 @@ function menu_tag(tag_name) {
     location.href = "/guide/search?tag=%23" + tag_name;
 }
 
-$('.select2-tagging').on('select2:select', function (e) {
-    var val = e.params.data.text;
-    if (tagCheck(val)) {
-        var tagDiv = $('<div class="p-1 mr-1" style="border:1px solid darkgrey; border-radius: 3px" data-value="' + val + '">' + val + '<button class="close deleteTag" onclick="deleteAdd(this)"><span style="color: red" aria-hidden="true">×</span></button>' + '</div>');
-        $('#document-tag-list').append(tagDiv);
-    } else {
-        alert("이미 포함되어 있는 태그 입니다.")
-    }
-
-    $('.select2-tagging').val(null).trigger('change');
-})
 
 function tagCheck(input) {
     var ret = true
@@ -442,6 +374,27 @@ function tagCheck(input) {
     })
     return ret; //중복 값 없음
 }
+
+$('#guide-tag').on('click', 'a', function (event) {
+    let tag = event.target.text.substr(1);
+    menu_tag(tag);
+});
+
+$('.select2-tagging').on("select2-open", function () {
+    $(this).select2('positionDropdown', true);
+});
+
+$('.select2-tagging').on('select2:select', function (e) {
+    var val = e.params.data.text;
+    if (tagCheck(val)) {
+        var tagDiv = $('<div class="p-1 mr-1" style="border:1px solid darkgrey; border-radius: 3px" data-value="' + val + '">' + val + '<button class="close deleteTag" onclick="deleteAdd(this)"><span style="color: red" aria-hidden="true">×</span></button>' + '</div>');
+        $('#document-tag-list').append(tagDiv);
+    } else {
+        alert("이미 포함되어 있는 태그 입니다.")
+    }
+
+    $('.select2-tagging').val(null).trigger('change');
+});
 
 $('.search-result-item').on('click', function () {
     var doc_key = $(this).attr('value');

@@ -20,7 +20,7 @@ import java.util.Map;
 @RequestMapping("/admin/**/**")
 public class AdminController {
 
-    private Logger logger = LoggerFactory.getLogger(CommonController.class);
+    private Logger logger = LoggerFactory.getLogger(AdminController.class);
 
     @Autowired
     private AdminService adminService;

@@ -22,7 +22,7 @@ import java.util.List;
 @RequestMapping("/guide/**")
 public class GuideController {
 
-    private Logger logger = LoggerFactory.getLogger(CommonController.class);
+    private Logger logger = LoggerFactory.getLogger(GuideController.class);
 
     @Autowired
     private GuideDocService guideDocService;

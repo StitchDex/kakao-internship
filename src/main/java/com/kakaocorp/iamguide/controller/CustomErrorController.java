@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CustomErrorController implements ErrorController {
 
     private static final String ERROR_PATH = "/error";
-    private Logger logger = LoggerFactory.getLogger(ErrorController.class);
+    private Logger logger = LoggerFactory.getLogger(CustomErrorController.class);
 
     @Override
     public String getErrorPath() {
@@ -30,7 +30,9 @@ public class CustomErrorController implements ErrorController {
     @RequestMapping(ERROR_PATH)
     public String handleError(HttpServletRequest request, Model model) {
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
+        HttpStatus httpStatus = HttpStatus.valueOf(Integer.valueOf(status.toString()));
         model.addAttribute("code", status.toString());
+        model.addAttribute("msg", httpStatus.getReasonPhrase());
         model.addAttribute("timestamp", new Date());
         logger.info("{}",status.toString());
         return "/error";
