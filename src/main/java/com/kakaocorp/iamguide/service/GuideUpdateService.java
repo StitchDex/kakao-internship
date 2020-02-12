@@ -1,5 +1,6 @@
 package com.kakaocorp.iamguide.service;
 
+import com.kakaocorp.iamguide.IamUtils;
 import com.kakaocorp.iamguide.dao.GuideUpdateMapper;
 import com.kakaocorp.iamguide.model.GuideUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,10 @@ public class GuideUpdateService {
     private GuideUpdateMapper guideUpdateMapper;
     
     public String retrieveGuideUpdate(String DOCUMENT_KEY) {
+
         GuideUpdate temp = guideUpdateMapper.retrieveGuideUpdate(DOCUMENT_KEY);
-        String retrieveUpdate = temp.getADMIN_ID() + " " + temp.getUPDATE_TYPE_CUD() + " at " + temp.getUPDATE_TIME();
+        String retrieveUpdate = temp.getADMIN_ID() + " " + temp.getUPDATE_TYPE_CUD() + " at "
+                + IamUtils.timeConverting(temp.getUPDATE_TIME());
         return retrieveUpdate;
     }
 
