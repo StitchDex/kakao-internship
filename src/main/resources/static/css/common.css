@@ -178,3 +178,29 @@ main {
     float: left;
     margin-left: 10px;
 }
+
+.search-result-item .search-result-title{
+    color: #0092ff;
+    font-size: xx-large;
+}
+
+.search-result-item .search-result-title:hover{
+    cursor: pointer;
+    color: #0092ff;
+    border-bottom: 2px solid;
+}
+
+.search-result-item .searched{
+    background: #f6f906; color: red;
+}
+
+.search-result-item .search-result-tag:hover{
+    cursor: pointer;
+    border-bottom: 1px solid;
+}
+
+.search-result-item .searched:hover{
+    cursor: pointer;
+    background: #f6f906; color: red;
+    border-bottom: 1px solid;
+}

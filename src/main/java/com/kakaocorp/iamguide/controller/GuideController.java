@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -79,11 +80,22 @@ public class GuideController {
      */
     @GetMapping(value = "search")
     public String getSearchResults(@RequestParam("tag") String tag, Model model) {
+        ArrayList<GuideDoc> documentList = (ArrayList<GuideDoc>) guideTagService.retrieveGuideList(tag);
+        for (int i = 0; i < documentList.size(); i++) {
+            String id = documentList.get(i).getId();
+            documentList.get(i).setTags(guideTagService.retrieveGuideTagList(id));
+        }
 
-        ArrayList<GuideDoc> result = (ArrayList<GuideDoc>) guideTagService.retrieveGuideList(tag);
-        for (int i = 0; i < result.size(); i++) {
-            String id = result.get(i).getId();
-            result.get(i).setTags(guideTagService.retrieveGuideTagList(id));
+        HashMap<String, ArrayList<GuideDoc>> result = new HashMap<>();
+        for(GuideDoc document : documentList) {
+            if(!result.containsKey(document.getParent())) {
+                ArrayList<GuideDoc> temp = new ArrayList<>();
+                temp.add(document);
+                result.put(document.getParent(), temp);
+            }
+            else {
+                result.get(document.getParent()).add(document);
+            }
         }
 
         model.addAttribute("Results", result);
@@ -91,6 +103,5 @@ public class GuideController {
         model.addAttribute("tag", tag);
         return "search-result";
     }
-
 }
 

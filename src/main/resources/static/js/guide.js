@@ -2,7 +2,7 @@ let doc_editor; // for users
 let admin_editor; // for admin
 let selectedData; //current guide_document id
 let selectedText; //current guide_document title
-
+let isEditing;
 var hidden_num;
 var hidden = new Array();
 var beforeTags = new Set();
@@ -17,7 +17,7 @@ $(function () {
     hidden_num = 0;
     depth2Dir = 0;
     documentKey = $('#selected').val();
-
+    isEditing = false;
     $('#jstree').jstree({
         'core': {
             'multiple': false,
@@ -113,6 +113,8 @@ function loadDoc(search_key) {
 
 //admin_edit_button click
 function edit_button_click() {
+    isEditing = !isEditing;
+    isEditing ? $('#edit_button').text('취소') : location.reload();
     var temp = doc_editor.getData();
     beforeImageUrl = new Set(UrlParse(temp));
     doc_editor.destroy(true);
@@ -396,7 +398,7 @@ $('.select2-tagging').on('select2:select', function (e) {
     $('.select2-tagging').val(null).trigger('change');
 });
 
-$('.search-result-item').on('click', function () {
+$('.search-result-title').on('click', function () {
     var doc_key = $(this).attr('value');
     if (window.location.pathname.startsWith("/admin")) {
         location.href = '/admin/document?doc_key=' + doc_key;

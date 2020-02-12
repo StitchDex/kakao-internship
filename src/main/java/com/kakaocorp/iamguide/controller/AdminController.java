@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -180,10 +181,22 @@ public class AdminController {
 
     @GetMapping(value = "search")
     public String getSearchResults(@RequestParam("tag") String tag, Model model) {
-        ArrayList<GuideDoc> result = (ArrayList<GuideDoc>) guideTagService.retrieveGuideList(tag);
-        for (int i = 0; i < result.size(); i++) {
-            String id = result.get(i).getId();
-            result.get(i).setTags(guideTagService.retrieveGuideTagList(id));
+        ArrayList<GuideDoc> documentList = (ArrayList<GuideDoc>) guideTagService.retrieveGuideList(tag);
+        for (int i = 0; i < documentList.size(); i++) {
+            String id = documentList.get(i).getId();
+            documentList.get(i).setTags(guideTagService.retrieveGuideTagList(id));
+        }
+
+        HashMap<String, ArrayList<GuideDoc>> result = new HashMap<>();
+        for(GuideDoc document : documentList) {
+            if(!result.containsKey(document.getParent())) {
+                ArrayList<GuideDoc> temp = new ArrayList<>();
+                temp.add(document);
+                result.put(document.getParent(), temp);
+            }
+            else {
+                result.get(document.getParent()).add(document);
+            }
         }
 
         model.addAttribute("Results", result);
