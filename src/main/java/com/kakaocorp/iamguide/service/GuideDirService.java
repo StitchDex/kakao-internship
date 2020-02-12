@@ -11,13 +11,13 @@ public class GuideDirService {
     private GuideDirMapper guideDirMapper;
 
     @CacheEvict(cacheNames ="treeCache",allEntries = true)
-    public void createGuideDir(String parent, String text, boolean state) {
+    public void createGuideDir(String parent, String text, boolean state, String order) {
 
         if (parent.equals("#")) {
-            guideDirMapper.createGuideRootDir(text, state);
+            guideDirMapper.createGuideRootDir(text, state, Integer.parseInt(order));
         } else {
             parent=parent.substring(3);
-            guideDirMapper.createGuideDir(parent, text, state);
+            guideDirMapper.createGuideDir(parent, text, state, Integer.parseInt(order));
         }
     }
     @CacheEvict(cacheNames ="treeCache",allEntries = true)
@@ -27,13 +27,13 @@ public class GuideDirService {
     }
 
     @CacheEvict(cacheNames ="treeCache",allEntries = true)
-    public void updateGuideDir(String key, String parent, String text, boolean state) {
+    public void updateGuideDir(String key, String parent, String text, boolean state, String order) {
         key = key.substring(3);
         if (parent.length() > 1) {
             parent = parent.substring(3);
         } else {
             parent = key;
         }
-        guideDirMapper.updateGuideDir(key, parent, text, state);
+        guideDirMapper.updateGuideDir(key, parent, text, state, Integer.parseInt(order));
     }
 }

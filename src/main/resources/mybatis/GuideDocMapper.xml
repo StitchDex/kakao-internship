@@ -11,21 +11,21 @@
         update GUIDE_DOCUMENT SET DOCUMENT_TEXT=#{content} where DOCUMENT_KEY=#{id}
     </update>
     <select id="retrieveGuideTreeList" resultType="com.kakaocorp.iamguide.model.GuideDoc">
-        select concat("DOC",gd.DOCUMENT_KEY) as id, gd.DOCUMENT_TITLE as text, concat("DIR",gdr.DIR_KEY) as parent, gd.DOCUMENT_STATE as state
+        select concat("DOC",gd.DOCUMENT_KEY) as id, gd.DOCUMENT_TITLE as text, concat("DIR",gdr.DIR_KEY) as parent, gd.DOCUMENT_STATE as state, gd.DOCUMENT_SEQ as orders
         from GUIDE_DOCUMENT as gd
         inner join GUIDE_DIR as gdr
         on gd.DIRECTORY_KEY = gdr.DIR_KEY
         union
-        select concat("DIR", gdr.DIR_KEY), gdr.DIR_NAME, if(gdr.DIR_KEY = gdr.DIR_PARENT_KEY , "#", concat("DIR",gdr.DIR_PARENT_KEY)),gdr.DIR_STATE
+        select concat("DIR", gdr.DIR_KEY), gdr.DIR_NAME, if(gdr.DIR_KEY = gdr.DIR_PARENT_KEY , "#", concat("DIR",gdr.DIR_PARENT_KEY)),gdr.DIR_STATE,gdr.DIR_SEQ
         from GUIDE_DIR as gdr
     </select>
     <insert id="createGuideTree" useGeneratedKeys="true" keyProperty="id" parameterType="com.kakaocorp.iamguide.model.GuideDoc">
-        insert into GUIDE_DOCUMENT(DIRECTORY_KEY,DOCUMENT_TITLE,DOCUMENT_TEXT,DOCUMENT_STATE)
-        values(#{parent},#{title},#{text},#{state})
+        insert into GUIDE_DOCUMENT(DIRECTORY_KEY,DOCUMENT_TITLE,DOCUMENT_TEXT,DOCUMENT_STATE,DOCUMENT_SEQ)
+        values(#{parent},#{title},#{text},#{state},#{orders})
     </insert>
 
     <update id="updateGuideTree">
-        update GUIDE_DOCUMENT SET DOCUMENT_TITLE=#{text}, DIRECTORY_KEY=#{parent}, DOCUMENT_STATE=#{state}
+        update GUIDE_DOCUMENT SET DOCUMENT_TITLE=#{text}, DIRECTORY_KEY=#{parent}, DOCUMENT_STATE=#{state}, DOCUMENT_SEQ=#{order}
         where DOCUMENT_KEY=#{key}
     </update>
 

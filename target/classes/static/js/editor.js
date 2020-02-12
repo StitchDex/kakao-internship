@@ -66,17 +66,52 @@ function MyCustomUploadAdapterPlugin(editor) {
 }
 
 //make user editor and set html data
-function make_editor(res) {
+function makeGuideEditor(res) {
     ClassicEditor
         .create(document.querySelector('#Guide_Doc'),
         )
         .then(editor => {
             editor.set('isReadOnly', true);
-            doc_editor = editor;
-            doc_editor.setData(res);
+            guideEditor = editor;
+            guideEditor.setData(res);
         })
         .catch(error => {
                 console.error(error);
+            }
+        );
+
+}
+
+function makeAdminEditor() {
+    ClassicEditor
+        .create(document.querySelector('#Guide_Doc'), {
+                extraPlugins: [MyCustomUploadAdapterPlugin],
+                toolbar: ["bold", "heading", "imageTextAlternative", "imageStyle:full", "imageUpload", "indent", "outdent",
+                    "italic", "link", "numberedList", "bulletedList", "insertTable", "tableColumn", "tableRow", "mergeTableCells", "alignment:left",
+                    "alignment:right", "alignment:center", "alignment:justify", "alignment", "fontSize", "underline", "undo", "redo"],
+                image: {
+                    toolbar: ['imageTextAlternative', '|', 'imageStyle:alignLeft', 'imageStyle:full', 'imageStyle:alignRight'],
+                    styles: [
+                        'full',
+                        'alignLeft',
+                        'alignRight'
+                    ]
+                },
+                heading: {
+                    options: [
+                        {model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph'},
+                        {model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1'},
+                        {model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2'},
+                        {model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3'}
+                    ]
+                }
+            }
+        )
+        .then(editor => {
+            adminEditor = editor;
+        })
+        .catch(error => {
+                alert("편집 버튼 에디터 오류");
             }
         );
 

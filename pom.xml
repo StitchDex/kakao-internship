@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.kakaocorp</groupId>
-    <artifactId>iam-guide</artifactId>
+    <artifactId>ROOT</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>iam-guide</name>

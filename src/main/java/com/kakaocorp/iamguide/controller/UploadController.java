@@ -35,7 +35,6 @@ public class UploadController {
         printWriter.println(json);
         printWriter.flush();
         logger.info("{},{}", "imageUpload", upload.getOriginalFilename());
-
     }
 
     @RequestMapping(value = "get_image/{uuid}", method = RequestMethod.GET)

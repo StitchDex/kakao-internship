@@ -4,10 +4,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.kakaocorp.iamguide.dao.GuideTagMapper">
     <select id="retrieveGuideList" resultType="com.kakaocorp.iamguide.model.GuideDoc">
-        SELECT GD.DOCUMENT_KEY as id, GD.DOCUMENT_TITLE as title, GD.DOCUMENT_TEXT as text
+        SELECT GD.DOCUMENT_KEY as id, GD.DOCUMENT_TITLE as title, GD.DOCUMENT_TEXT as text, GD.DIRECTORY_KEY as parent ,GDR.DIR_NAME as parentTitle
         FROM GUIDE_TAGGING as GT
         JOIN GUIDE_DOCUMENT as GD
         ON GT.DOCUMENT_KEY = GD.DOCUMENT_KEY
+        JOIN GUIDE_DIR as GDR
+        ON GDR.DIR_KEY = GD.DIRECTORY_KEY
         WHERE GT.TAG = #{tag} AND GD.DOCUMENT_STATE=1;
     </select>
     <select id="retrieveGuideTagList" resultType="com.kakaocorp.iamguide.model.GuideTag">

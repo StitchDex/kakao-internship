@@ -1,8 +1,9 @@
-var hidden_num;
+var hiddenNum;
 var hidden = new Array();
 var token = $("meta[name='_csrf']").attr("content");
+let curPosition;
 $(function () {
-    hidden_num = 0;
+    hiddenNum = 0;
     $('#edit_tree').jstree({
         'core': {
             'multiple': false,
@@ -17,7 +18,7 @@ $(function () {
                     for (i = 0; i < data.length; i++) {
                         var temp = (data[i].state);
                         if (!temp) {
-                            hidden[hidden_num++] = data[i].id;
+                            hidden[hiddenNum++] = data[i].id;
                         }
                     }
                     console.log(data);
@@ -66,11 +67,7 @@ $(function () {
                                             'disabled': false
                                         }
                                     });
-                                    tree.select_node($node);
-
-                                    var data = get_json_data(tree, $node);
-                                    create_node(data);
-
+                                    createNode(getCreateJson(tree, $node));
                                 }
                             },
                             "Folder": {
@@ -86,8 +83,7 @@ $(function () {
                                             'disabled': false
                                         }
                                     });
-                                    tree.select_node($node);
-                                    create_node(get_json_data(tree, $node));
+                                    createNode(getCreateJson(tree, $node));
                                 }
                             }
                         }
@@ -103,7 +99,15 @@ $(function () {
                                     location.reload();
                                     return;
                                 } else {
-                                    update_node(get_json_data(tree, node), node.type);
+                                    var jsonData = {
+                                        'id': node.id,
+                                        'parent': node.parent,
+                                        'text': node.text,
+                                        'type': node.type,
+                                        'order': node.original.orders,
+                                        'state': !node.state.disabled
+                                    };
+                                    updateNode(jsonData, node.type);
                                 }
                             });
                         }
@@ -117,13 +121,13 @@ $(function () {
                             if (del) {
                                 if ($node.type != "DIR") {
                                     tree.delete_node($node);
-                                    delete_node(delnode, title, "DOC");
+                                    deleteNode(delnode, title, "DOC");
                                 } else {
                                     if ($node.children.length > 0)
                                         alert('하위 파일이 존재합니다');
                                     else {
                                         tree.delete_node($node);
-                                        delete_node(delnode, title, "DIR");
+                                        deleteNode(delnode, title, "DIR");
                                     }
                                 }
 
@@ -134,6 +138,14 @@ $(function () {
                         "label": "숨김",
                         "action": function (data) {
                             var cur = $node.state.disabled;
+                            var jsonData = {
+                                'id': $node.id,
+                                'parent': $node.parent,
+                                'text': $node.text,
+                                'type': $node.type,
+                                'order': $node.original.orders,
+                                'state': $node.state.disabled
+                            };
                             if ($node.children.length > 0) {
                                 alert('하위 파일이 존재합니다');
                             } else if ($node.type != "DIR") {
@@ -142,14 +154,14 @@ $(function () {
                                 else {
                                     tree.enable_node($node);
                                 }
-                                update_node(get_json_data(tree, $node), $node.type);
+                                updateNode(jsonData, $node.type);
                             } else {
                                 if (!cur)
                                     tree.disable_node($node);
                                 else {
                                     tree.enable_node($node);
                                 }
-                                update_node(get_json_data(tree, $node), $node.type);
+                                updateNode(jsonData, $node.type);
                             }
 
                         }
@@ -157,27 +169,50 @@ $(function () {
                 }
             }
 
+        }, 'sort': function (a, b) {
+            var a1 = this.get_node(a);
+            var b1 = this.get_node(b);
+            if (a1.parent === b1.parent) {
+                return (a1.original.orders > b1.original.orders) ? 1 : -1;
+            }
         },
-        'plugins': ["types", "dnd", "contextmenu", "cookies"]
+        'plugins': ["types", "dnd", "contextmenu", "cookies", 'sort']
     }).on('ready.jstree', function () {
-        make_disable();
+        makeDisable();
         $(this).jstree('open_all')
     })
         .bind("move_node.jstree", function (e, data) {
+            console.log(data);
             var temp = {
                 'id': data.node.id,
                 'parent': data.node.parent,
                 'text': data.node.text,
                 'type': data.node.type,
-                'state': true
+                'order': data.position,
+                'state': !data.node.state.disabled
             };
-            update_node(temp);
+            updateNode(temp);
         })
+        .on("select_node.jstree", function (e, data) {
+            curPosition = data.node.children.length;
+            console.log(data.node, curPosition);
+        });
 
 });
 
+$('#edit_tree').on('select_node.jstree', function (e, data) {
+
+    selectedData = data.node.id;
+    selectedText = data.node.text;
+
+    if (selectedData.startsWith("DIR")) {//click dir_node
+        data.node.state.opened ? $(this).jstree('close_node', selectedData)
+            : $(this).jstree('open_node', selectedData);
+    }
+});
+
 //hidden -> disable
-function make_disable() {
+function makeDisable() {
     for (var i = 0; i < hidden.length; i++) {
         var node = $('#edit_tree').jstree(true).get_node(hidden[i]);
         $("#edit_tree").jstree(true).disable_node(node);
@@ -185,19 +220,20 @@ function make_disable() {
     }
 }
 
-function get_json_data(tree, $node) {
+function getCreateJson(tree, $node) {
     var temp = tree.get_node($node);
-    var json_data = {
+    var jsonData = {
         'id': temp.id,
         'parent': temp.parent,
         'text': temp.text,
         'type': temp.type,
+        'order': curPosition,
         'state': !temp.state.disabled
     };
-    return json_data;
+    return jsonData;
 }
 
-function create_node(sendData) {
+function createNode(sendData) {
     var title = sendData.text;
     sendData = JSON.stringify(sendData);
     $.ajax({
@@ -209,12 +245,12 @@ function create_node(sendData) {
         contentType: 'application/json',
         success: function (res) {
             if (res > 0) {
-                set_Guide_update(title, res, 'create');
+                setGuideUpdate(title, res, 'create');
                 alert("파일 생성 성공");
                 opener.document.location.reload();
                 location.reload();
             } else {
-                set_Guide_update(title, null
+                setGuideUpdate(title, null
                     , 'create');
                 alert("폴더 생성 성공");
                 opener.document.location.reload();
@@ -227,7 +263,7 @@ function create_node(sendData) {
     });
 }
 
-function update_node(sendData) {
+function updateNode(sendData) {
     var title = sendData.text;
     sendData = JSON.stringify(sendData);
     $.ajax({
@@ -239,8 +275,7 @@ function update_node(sendData) {
         contentType: 'application/json',
         success: function (res) {
             var temp = JSON.parse(sendData);
-            console.log(temp.id);
-            set_Guide_update(title, temp.id, 'change');
+            setGuideUpdate(title, temp.id, 'change');
             alert("트리 업데이트 성공");
             opener.document.location.reload();
             location.reload();
@@ -251,7 +286,7 @@ function update_node(sendData) {
     });
 }
 
-function delete_node(sendData, title, what) {
+function deleteNode(sendData, title, what) {
     sendData = JSON.stringify({'id': sendData, 'type': what});
     $.ajax({
         url: '/admin/admin_tree/delete',
@@ -262,7 +297,7 @@ function delete_node(sendData, title, what) {
         contentType: 'application/json',
         success: function (res) {
             var temp = JSON.parse(sendData);
-            set_Guide_update(title, temp.id, 'delete');
+            setGuideUpdate(title, temp.id, 'delete');
             alert("트리 삭제 성공");
             opener.document.location.reload();
             location.reload();
@@ -273,12 +308,15 @@ function delete_node(sendData, title, what) {
     });
 }
 
-function create_root() {
+function createRootJson() {
+    var temp = $("#edit_tree").jstree("get_node", '#');
+    curPosition = temp.children.length;
     var json_data = {
         'parent': '#',
         'text': 'New Root',
         'type': 'DIR',
-        'state': false
+        'state': false,
+        'order': curPosition
     };
-    create_node(json_data);
+    createNode(json_data);
 }

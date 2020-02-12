@@ -12,6 +12,7 @@ public class GuideDoc implements Serializable {
     private String parent;
     private String parentTitle;
     private String title;
+    private int orders;
     private String text;
     private String type;
     private boolean state;

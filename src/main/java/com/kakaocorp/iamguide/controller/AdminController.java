@@ -47,7 +47,7 @@ public class AdminController {
 
 
     @GetMapping("admin_tree")
-    public String admin_treePage() {
+    public String adminTreePage() {
         return "admin_tree";
     }
 
@@ -58,12 +58,13 @@ public class AdminController {
         String parent = (String) parm.get("parent");
         String text = (String) parm.get("text");
         String type = (String) parm.get("type");
+        String order = parm.get("order").toString();
         boolean state = (boolean) parm.get("state");
 
         if (type.equals("DOC")) {
-            return Integer.parseInt(guideDocService.createGuideTree(parent, text, state));
+            return Integer.parseInt(guideDocService.createGuideTree(parent, text, state, order));
         } else {
-            guideDirService.createGuideDir(parent, text, state);
+            guideDirService.createGuideDir(parent, text, state, order);
         }
         return -1;
     }
@@ -74,13 +75,14 @@ public class AdminController {
         String key = (String) parm.get("id");
         String parent = (String) parm.get("parent");
         String text = (String) parm.get("text");
+        String order = parm.get("order").toString();
         boolean state = (boolean) parm.get("state");
         String type = (String) parm.get("type");
 
         if (type.equals("DOC")) {
-            guideDocService.updateGuideTree(key, parent, text, state);
+            guideDocService.updateGuideTree(key, parent, text, state, order);
         } else {
-            guideDirService.updateGuideDir(key, parent, text, state);
+            guideDirService.updateGuideDir(key, parent, text, state, order);
         }
         return "redirect:admin/admin_tree";
     }
@@ -104,7 +106,7 @@ public class AdminController {
      */
     @PostMapping(value = "edit_doc", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-        boolean updateGuideDoc(HttpServletRequest req, @RequestBody Map<String, Object> parm) throws Exception {
+    boolean updateGuideDoc(HttpServletRequest req, @RequestBody Map<String, Object> parm) throws Exception {
 
         String id = (String) parm.get("id");
         String content = (String) parm.get("content");
@@ -134,7 +136,7 @@ public class AdminController {
     }
 
     @GetMapping("admin_auth")
-    public String admin_authPage() {
+    public String adminAuthPage() {
         return "admin_auth";
     }
 
@@ -144,7 +146,7 @@ public class AdminController {
      */
     @RequestMapping("suggest")
     public @ResponseBody
-    List suggest(HttpServletRequest req, @RequestParam String accountId) throws Exception {
+    List suggestId(HttpServletRequest req, @RequestParam String accountId) throws Exception {
         logger.debug("Query : {}", accountId);
         if (accountId != null && !accountId.isEmpty()) {
             List ret = adminService.suggest(accountId);
@@ -188,13 +190,12 @@ public class AdminController {
         }
 
         HashMap<String, ArrayList<GuideDoc>> result = new HashMap<>();
-        for(GuideDoc document : documentList) {
-            if(!result.containsKey(document.getParent())) {
+        for (GuideDoc document : documentList) {
+            if (!result.containsKey(document.getParent())) {
                 ArrayList<GuideDoc> temp = new ArrayList<>();
                 temp.add(document);
                 result.put(document.getParent(), temp);
-            }
-            else {
+            } else {
                 result.get(document.getParent()).add(document);
             }
         }

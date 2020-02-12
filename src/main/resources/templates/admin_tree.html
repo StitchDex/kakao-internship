@@ -30,7 +30,7 @@
 <input type="hidden" id="admin_name" th:if="${#authentication.getDetails() != null}"
        th:value="${#authentication.getName()}"/>
 <div id="edit_tree" style="margin-top:10px;border-bottom-style: groove"></div>
-    <input class="btn btn-outline-dark my-2 my-sm-0 ml-2" type="button" id="save_tree_button" onclick="create_root();"
+    <input class="btn btn-outline-dark my-2 my-sm-0 ml-2" type="button" id="save_tree_button" onclick="createRootJson();"
            value="루트 폴더 생성">
     <p class="text-info ml-2">마우스 우클릭과 드래그 앤 드랍을 통해 트리를 수정할 수 있습니다.</p>
 <script type="text/javascript" th:src="@{/js/jquery.min.js}" src="../../static/js/jquery.min.js"></script>

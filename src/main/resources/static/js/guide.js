@@ -1,9 +1,9 @@
-let doc_editor; // for users
-let admin_editor; // for admin
+let guideEditor; // for users
+let adminEditor; // for admin
 let selectedData; //current guide_document id
 let selectedText; //current guide_document title
 let isEditing;
-var hidden_num;
+var hiddenNum;
 var hidden = new Array();
 var beforeTags = new Set();
 var afterTags;
@@ -12,9 +12,8 @@ var afterImageUrl = new Set();
 var depth2Dir = new Array();
 var documentKey;
 
-//document ready
 $(function () {
-    hidden_num = 0;
+    hiddenNum = 0;
     depth2Dir = 0;
     documentKey = $('#selected').val();
     isEditing = false;
@@ -37,10 +36,9 @@ $(function () {
                     for (i = 0; i < data.length; i++) {
                         var temp = (data[i].state);
                         if (!temp) {
-                            hidden[hidden_num++] = data[i].id;
+                            hidden[hiddenNum++] = data[i].id;
                         }
                     }
-                    console.log(data);
                 }
             }
         },
@@ -52,14 +50,21 @@ $(function () {
                 "icon": "far fa-file",
                 "max_children": 0,
             },
+        },'sort': function (a, b) {
+            var a1 = this.get_node(a);
+            var b1 = this.get_node(b);
+            if (a1.parent === b1.parent) {
+                return (a1.original.orders > b1.original.orders) ? 1 : -1;
+            }
         },
-        'plugins': ["types", "state", "wholerow"]
+
+        'plugins': ["types", "state", "wholerow",'sort']
     }).delegate("a", "dblclick", function () {
         $(this).parents(".jstree:eq(0)").jstree("toggle_node", this);
     }).on('ready.jstree', function () {
-        before_tree_open($(this).jstree('close_all'), open_root());
+        beforeTreeOpen($(this).jstree('close_all'), openRoot());
         if (documentKey != null) {
-            select_open();
+            selectOpen();
         }
 
     });
@@ -77,17 +82,17 @@ $(function () {
             }
             var title = res.title;
             $('#guide-title').text(title);
-            if (admin_editor != null) { // change doc while edit
-                admin_editor.destroy(true);
-                make_editor(res.text);
-            } else if (doc_editor != null) { // change doc
-                doc_editor.destroy();
-                make_editor(res.text);
+            if (adminEditor != null) { // change doc while edit
+                adminEditor.destroy(true);
+                makeGuideEditor(res.text);
+            } else if (guideEditor != null) { // change doc
+                guideEditor.destroy();
+                makeGuideEditor(res.text);
             } else { // document_ready
-                make_editor(res.text);
+                makeGuideEditor(res.text);
             }
-            init_select_tagging();
-            get_Guide_update(documentKey);
+            initSelectTagging();
+            getGuideUpdate(documentKey);
         },
         'error': function () {
         },
@@ -112,43 +117,13 @@ function loadDoc(search_key) {
 }
 
 //admin_edit_button click
-function edit_button_click() {
+function clickEditButton() {
     isEditing = !isEditing;
     isEditing ? $('#edit_button').text('취소') : location.reload();
-    var temp = doc_editor.getData();
+    var temp = guideEditor.getData();
     beforeImageUrl = new Set(UrlParse(temp));
-    doc_editor.destroy(true);
-    ClassicEditor
-        .create(document.querySelector('#Guide_Doc'), {
-                extraPlugins: [MyCustomUploadAdapterPlugin],
-                toolbar: ["bold", "heading", "imageTextAlternative", "imageStyle:full", "imageUpload", "indent", "outdent",
-                    "italic", "link", "numberedList", "bulletedList", "insertTable", "tableColumn", "tableRow", "mergeTableCells", "alignment:left",
-                    "alignment:right", "alignment:center", "alignment:justify", "alignment", "fontSize", "underline", "undo", "redo"],
-                image: {
-                    toolbar: ['imageTextAlternative', '|', 'imageStyle:alignLeft', 'imageStyle:full', 'imageStyle:alignRight'],
-                    styles: [
-                        'full',
-                        'alignLeft',
-                        'alignRight'
-                    ]
-                },
-                heading: {
-                    options: [
-                        {model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph'},
-                        {model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1'},
-                        {model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2'},
-                        {model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3'}
-                    ]
-                }
-            }
-        )
-        .then(editor => {
-            admin_editor = editor;
-        })
-        .catch(error => {
-                alert("편집 버튼 에디터 오류");
-            }
-        );
+    guideEditor.destroy(true);
+    makeAdminEditor();
 
     $('select.select2-tagging').prop('disabled', false);
     $("#document-tag-list button.close").attr("disabled", false);
@@ -156,27 +131,27 @@ function edit_button_click() {
 }
 
 //admin edit_save_button click
-function edit_save_button_click() {
-    if (admin_editor == null) {
+function clickSaveButton() {
+    if (adminEditor == null) {
         alert("편집 버튼을 누른 후 저장버튼을 눌러주세요");
     } else {
         //Editor Save
         var dockey = documentKey;
-        var recentUpdate = get_Guide_update(dockey);
+        var recentUpdate = getGuideUpdate(dockey);
         var beforeUpdate = $('#guide-update').text();
         if (recentUpdate != beforeUpdate) {
             var reply = confirm("다른 작업자의 결과물과 충돌이 발생했습니다.\n현재문서를 저장할 경우 문제가 생길 수 있습니다.\n저장하시겠습니까?")
             if (reply == false) return;
         }
 
-        admin_editor.set('isReadOnly', true);
+        adminEditor.set('isReadOnly', true);
         //+)check the doc is edit (if or editor method)
-        const edit_doc = admin_editor.getData();
+        const edit_doc = adminEditor.getData();
         var token = $("meta[name='_csrf']").attr("content");
         //IMAGE URL
         //Get before URL
         //Get after URL
-        afterImageUrl = new Set(UrlParse(admin_editor.getData()));
+        afterImageUrl = new Set(UrlParse(adminEditor.getData()));
         //Extract insertUrl & deleteUrl
         var inserUrl = substract(Array.from(afterImageUrl), Array.from(beforeImageUrl));
         var deleteUrl = substract(Array.from(beforeImageUrl), Array.from(afterImageUrl));
@@ -192,12 +167,13 @@ function edit_save_button_click() {
             url: '/admin/edit_doc',
             headers: {"X-CSRF-TOKEN": token},
             data: sendData,
+            async: false,
             method: 'POST',
             dataType: 'html',
             contentType: 'application/json',
             // refresh page
             success: function (res) {
-                res ? set_Guide_update($('#guide-title').text(), documentKey, 'update') : alert('문서 편집 에러');
+                res ? setGuideUpdate($('#guide-title').text(), documentKey, 'update') : alert('문서 편집 에러');
             }, error: function (error) {
                 alert('저장 실패');
             }
@@ -217,7 +193,7 @@ function edit_save_button_click() {
 
         insertTags = substract(Array.from(afterTags), Array.from(beforeTags));
         deleteTags = substract(Array.from(beforeTags), Array.from(afterTags));
-        set_Guide_update(selectedText, 'update');
+        setGuideUpdate(selectedText,documentKey, 'update');
         var issuc = false;
         $.ajax({
             'url': '/admin/updateTags',
@@ -240,7 +216,7 @@ function edit_save_button_click() {
 }
 
 //get guide_update on load
-function get_Guide_update(dockey) {
+function getGuideUpdate(dockey) {
     var returnValue = "";
     console.log(dockey);
     $.ajax({
@@ -259,19 +235,19 @@ function get_Guide_update(dockey) {
 }
 
 //set guide_update when save button clicked
-function set_Guide_update(title, key, type) {
+function setGuideUpdate(title, key, type) {
     var sendData = JSON.stringify({"admin": $('#admin_name').val(), "documentKey": key, "title": title, "CRUD": type});
     console.log(sendData);
     var token = $("meta[name='_csrf']").attr("content");
     $.ajax({
         url: '/admin/set_update',
         headers: {"X-CSRF-TOKEN": token},
+        async : false,
         data: sendData,
         method: 'POST',
         dataType: 'html',
         contentType: 'application/json',
         success: function (res) {
-            console.log("update");
         }, error: function (error) {
             console.log(error);
         }
@@ -279,7 +255,7 @@ function set_Guide_update(title, key, type) {
 }
 
 
-function show_guide_tag(ret) {
+function showGuideTag(ret) {
     let temp = "";
     $.each(ret, function (index, item) {
         $("#guide-tag").append("<a href='#'>" + item + "</a>");
@@ -291,7 +267,7 @@ function deleteAdd(param) {
     $(param).parent("div").remove();
 }
 
-function init_select_tagging() {
+function initSelectTagging() {
     var tagList = [];
     var dockey = documentKey;
 
@@ -312,7 +288,7 @@ function init_select_tagging() {
         }
     });
 
-    window.location.pathname.startsWith("/guide") ? show_guide_tag(tagList) :
+    window.location.pathname.startsWith("/guide") ? showGuideTag(tagList) :
         $('select.select2-tagging').select2(
             {
                 'ajax': {
@@ -362,7 +338,7 @@ function UrlParse(text) {
     return urls;
 }
 
-function menu_tag(tag_name) {
+function clickMainTag(tag_name) {
     location.href = "/guide/search?tag=%23" + tag_name;
 }
 
@@ -379,7 +355,7 @@ function tagCheck(input) {
 
 $('#guide-tag').on('click', 'a', function (event) {
     let tag = event.target.text.substr(1);
-    menu_tag(tag);
+    clickMainTag(tag);
 });
 
 $('.select2-tagging').on("select2-open", function () {

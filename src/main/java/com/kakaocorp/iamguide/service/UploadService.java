@@ -48,10 +48,7 @@ public class UploadService {
     @Autowired
     private UploadMapper uploadMapper;
 
-    @Autowired
-    PlatformTransactionManager txManager;
 
-    //need Transactions
     public JSONObject createImage(MultipartFile upload, Authentication auth) throws IOException, JSONException {
         final String PREFIX = "/get_image/";
         JSONObject json = new JSONObject();

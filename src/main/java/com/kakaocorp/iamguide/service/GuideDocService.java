@@ -33,7 +33,7 @@ public class GuideDocService {
         return guideTreeList;
     }
 
-    public String createGuideTree(String parent, String text, boolean state) {
+    public String createGuideTree(String parent, String text, boolean state,String order) {
         final String EMPTY_STRING = " ";
         if (parent.length() < 1)
             parent = "0";
@@ -43,7 +43,7 @@ public class GuideDocService {
         guideDoc.setText(EMPTY_STRING);
         guideDoc.setTitle(text);
         guideDoc.setState(true);
-
+        guideDoc.setOrders(Integer.parseInt(order));
         guideDocMapper.createGuideTree(guideDoc);
         return guideDoc.getId();
     }
@@ -53,13 +53,13 @@ public class GuideDocService {
         guideDocMapper.deleteGuideTree(key);
     }
 
-    public void updateGuideTree(String key, String parent, String text, boolean state) {
+    public void updateGuideTree(String key, String parent, String text, boolean state,String order) {
         key = key.substring(3);
         if (parent.length() < 1)
             parent = "0";
         parent = parent.substring(3);
-        logger.info("{},{},{},{}", key, parent, text, state);
-        guideDocMapper.updateGuideTree(key, parent, text, state);
+        logger.info("{},{},{},{},{}", key, parent, text, state,order);
+        guideDocMapper.updateGuideTree(key, parent, text, state,Integer.parseInt(order));
     }
 
     public GuideDoc retrieveGuideDoc(String doc_key) {
