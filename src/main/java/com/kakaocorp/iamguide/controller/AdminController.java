@@ -46,12 +46,14 @@ public class AdminController {
         return "admin-document";
     }
 
-
     @GetMapping("admin_tree")
     public ModelAndView adminTreePage(ModelAndView model) {
-        String main_key = guideDocService.selectMain("2");
+        String mainKey = guideDocService.selectMain("2");
+        if(mainKey == null) {
+            mainKey = guideDocService.selectMain("1");
+        }
         model.setViewName("admin_tree");
-        model.addObject("mainDocument",main_key);
+        model.addObject("mainDocument",mainKey);
         return model;
     }
 
