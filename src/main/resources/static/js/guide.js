@@ -63,14 +63,13 @@ $(function () {
         $(this).parents(".jstree:eq(0)").jstree("toggle_node", this);
     }).on('ready.jstree', function () {
         beforeTreeOpen($(this).jstree('close_all'), openRoot());
-        if (documentKey != null) {
+        if (documentKey != 0) {
             selectOpen();
         }
-
     });
     $('#jstree').jstree('clear_state');
-    if (documentKey == null) { // admin_main, guide_main
-        return;
+    if(documentKey == 0){
+
     }
     $.ajax({
         'url': '/guide/menu',
@@ -82,10 +81,7 @@ $(function () {
             }
             var title = res.title;
             $('#guide-title').text(title);
-            if (adminEditor != null) { // change doc while edit
-                adminEditor.destroy(true);
-                makeGuideEditor(res.text);
-            } else if (guideEditor != null) { // change doc
+             if (guideEditor != null) { // change doc
                 guideEditor.destroy();
                 makeGuideEditor(res.text);
             } else { // document_ready
@@ -94,7 +90,9 @@ $(function () {
             initSelectTagging();
             getGuideUpdate(documentKey);
         },
-        'error': function () {
+        'error': function (error) {
+            console.log(error);
+            location.reload();
         },
     });
 });
@@ -148,6 +146,7 @@ function clickSaveButton() {
         //+)check the doc is edit (if or editor method)
         const edit_doc = adminEditor.getData();
         var token = $("meta[name='_csrf']").attr("content");
+
         //IMAGE URL
         //Get before URL
         //Get after URL

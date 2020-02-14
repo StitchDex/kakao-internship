@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -21,8 +22,8 @@ public class CommonController {
     }
 
     @GetMapping("/login")
-    public ModelAndView loginPage() {
-        return new ModelAndView("login");
+    public String loginPage() {
+        return "login";
     }
 
     @GetMapping("/admin")
@@ -32,8 +33,10 @@ public class CommonController {
     }
 
     @GetMapping("/guide")
-    public String guideMainPage(Authentication auth) {
+    public ModelAndView guideMainPage(Authentication auth,ModelAndView model) {
+        model.setViewName("guide-document");
+        model.addObject("selected", 23);
         logger.info("guideMainPage {}", auth.getName());
-        return "guide-main";
+        return model;
     }
 }

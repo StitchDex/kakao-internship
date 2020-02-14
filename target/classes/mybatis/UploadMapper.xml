@@ -16,7 +16,7 @@
 
     <insert id="createImaging" parameterType="java.util.List">
         INSERT INTO GUIDE_IMAGING(IMAGE_KEY, DOCUMENT_KEY)
-        SELECT IMAGE_KEY, ${docId} as DOCUMENT_KEY
+        SELECT IMAGE_KEY, #{docId} as DOCUMENT_KEY
         FROM GUIDE_IMAGE
         WHERE IMAGE_UUID IN (
         <foreach collection="insert" item="item" separator=",">
@@ -27,7 +27,7 @@
 
     <delete id="deleteImaging" parameterType="java.util.List">
         DELETE FROM GUIDE_IMAGING
-        WHERE DOCUMENT_KEY = ${docId} AND IMAGE_KEY IN(
+        WHERE DOCUMENT_KEY = #{docId} AND IMAGE_KEY IN(
         SELECT IMAGE_KEY FROM GUIDE_IMAGE WHERE IMAGE_UUID IN(
         <foreach collection="delete" item="item" separator=",">
             #{item}

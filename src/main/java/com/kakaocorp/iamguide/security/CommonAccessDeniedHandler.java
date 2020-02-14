@@ -28,7 +28,6 @@ public class CommonAccessDeniedHandler implements AccessDeniedHandler {
             }
             if(req.getRequestURI().equalsIgnoreCase("/login")){
                 res.sendRedirect("/guide");
-                return;
             }
         } else {
             log.info("request, {} {}", req.getMethod(), req.getRequestURL());
