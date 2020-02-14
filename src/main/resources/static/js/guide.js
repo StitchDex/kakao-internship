@@ -13,6 +13,7 @@ var depth2Dir = new Array();
 var documentKey;
 
 $(function () {
+
     hiddenNum = 0;
     depth2Dir = 0;
     documentKey = $('#selected').val();
@@ -63,38 +64,37 @@ $(function () {
         $(this).parents(".jstree:eq(0)").jstree("toggle_node", this);
     }).on('ready.jstree', function () {
         beforeTreeOpen($(this).jstree('close_all'), openRoot());
-        if (documentKey != 0) {
+        if (documentKey != null) {
             selectOpen();
         }
     });
     $('#jstree').jstree('clear_state');
-    if(documentKey == 0){
-
-    }
-    $.ajax({
-        'url': '/guide/menu',
-        'data': {'doc_key': documentKey},
-        'async': false,
-        'success': function (res) {
-            if (res.state == 0 || res === "") { //HIDDEN GUIDE
+    if (documentKey != null) {
+        $.ajax({
+            'url': '/guide/menu',
+            'data': {'doc_key': documentKey},
+            'async': false,
+            'success': function (res) {
+                if (res.state == 0 || res === "") { //HIDDEN GUIDE
+                    location.href = "/error";
+                }
+                var title = res.title;
+                $('#guide-title').text(title);
+                if (guideEditor != null) { // change doc
+                    guideEditor.destroy();
+                    makeGuideEditor(res.text);
+                } else { // document_ready
+                    makeGuideEditor(res.text);
+                }
+                initSelectTagging();
+                getGuideUpdate(documentKey);
+            },
+            'error': function (error) {
+                console.log(error);
                 location.href = "/error";
-            }
-            var title = res.title;
-            $('#guide-title').text(title);
-             if (guideEditor != null) { // change doc
-                guideEditor.destroy();
-                makeGuideEditor(res.text);
-            } else { // document_ready
-                makeGuideEditor(res.text);
-            }
-            initSelectTagging();
-            getGuideUpdate(documentKey);
-        },
-        'error': function (error) {
-            console.log(error);
-            location.reload();
-        },
-    });
+            },
+        });
+    }
 });
 
 function loadDoc(search_key) {

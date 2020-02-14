@@ -58,7 +58,7 @@ $(function () {
                                 "seperator_before": false,
                                 "seperator_after": false,
                                 "label": "File",
-                                action: function (obj) {
+                                action: function () {
                                     $node = tree.create_node($node, {
                                         text: 'NewDOC',
                                         type: 'DOC',
@@ -74,7 +74,7 @@ $(function () {
                                 "seperator_before": false,
                                 "seperator_after": false,
                                 "label": "Folder",
-                                action: function (obj) {
+                                action: function () {
                                     $node = tree.create_node($node, {
                                         text: 'NewDIR',
                                         type: 'DIR',
@@ -90,7 +90,7 @@ $(function () {
                     },
                     "Rename": {
                         "label": "이름수정",
-                        "action": function (data) {
+                        "action": function () {
                             tree.edit($node, null, function (node, status) {
                                 node.text = $.trim(node.text);
                                 var textLength = node.text.length;
@@ -114,7 +114,7 @@ $(function () {
                     },
                     "Delete": {
                         "label": "삭제",
-                        "action": function (data) {
+                        "action": function () {
                             var delnode = $node.id;
                             var title = $node.text;
                             var del = confirm('삭제?');
@@ -136,7 +136,7 @@ $(function () {
                     },
                     "Hidden": {
                         "label": "숨김",
-                        "action": function (data) {
+                        "action": function () {
                             var cur = $node.state.disabled;
                             var jsonData = {
                                 'id': $node.id,
@@ -161,6 +161,27 @@ $(function () {
                                 else {
                                     tree.enable_node($node);
                                 }
+                                updateNode(jsonData, $node.type);
+                            }
+
+                        }
+                    },
+                    "Main": {
+                        "label": "메인 설정",
+                        "action": function () {
+                            var cur = $node.state.disabled;
+                            var jsonData = {
+                                'id': $node.id,
+                                'parent': $node.parent,
+                                'text': $node.text,
+                                'type': $node.type,
+                                'order': $node.original.orders,
+                                'state': $node.state.disabled
+                            };
+                            if ($node.type != "DIR") {
+
+                            } else {
+
                                 updateNode(jsonData, $node.type);
                             }
 

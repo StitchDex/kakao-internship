@@ -34,7 +34,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/guide/document?doc_key=5")
+                .defaultSuccessUrl("/guide")
                 .and()
                 .logout()
                 .deleteCookies("JSESSIONID").invalidateHttpSession(true)
