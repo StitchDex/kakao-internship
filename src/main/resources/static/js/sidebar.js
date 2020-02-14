@@ -128,6 +128,5 @@ function openRoot() {
     let childArray = cur.children;
     $.each(childArray,function (index,item) {
         $('#jstree').jstree('open_node',item);
-        console.log(item);
     })
 }

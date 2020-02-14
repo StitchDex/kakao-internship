@@ -107,7 +107,7 @@ $(function () {
                                         'text': node.text,
                                         'type': node.type,
                                         'orders': node.original.orders,
-                                        'state': node.original.state
+                                        'state': node.original.state+0
                                     };
                                     updateNode(jsonData);
                                 }
@@ -198,7 +198,6 @@ $(function () {
                                 };
                                 updateNode(jsonData);
                             }
-                            console.log($node);
                         }
                     }
                 }
@@ -217,18 +216,36 @@ $(function () {
         $(this).jstree('open_all');
         mainDocument = $(this).jstree('get_node',"DOC"+mainDocument);
         $('.mainDocumentText').text(mainDocument.text);
-    })
-        .bind("move_node.jstree", function (e, data) {
-            console.log(data);
-            var temp = {
-                'id': data.node.id,
-                'parent': data.node.parent,
-                'text': data.node.text,
-                'type': data.node.type,
-                'orders': data.position,
-                'state': !data.node.state.disabled
-            };
-            updateNode(temp);
+    }).bind("move_node.jstree", function (e, data) {
+            var temp = $("#edit_tree").jstree('get_node',data.parent).children[data.position];
+            temp = $("#edit_tree").jstree('get_node',temp);
+            if(data.old_parent === data.parent) { //같은 디렉터리 내 이동
+                var sendData = {
+                    'id': data.node.id,
+                    'parent': data.node.parent,
+                    'text': data.node.text,
+                    'type': data.node.type,
+                    'orders': data.position,
+                    'state': !data.node.state.disabled + 0,
+                    'new_id': temp.id,
+                    'new_parent': temp.parent,
+                    'new_text': temp.text,
+                    'new_type': temp.type,
+                    'new_orders': data.old_position,
+                    'new_state': !temp.state.disabled + 0
+                };
+            }
+            else{ // 다른 디렉터리로 이동
+                var sendData = {
+                    'id': data.node.id,
+                    'parent': data.node.parent,
+                    'text': data.node.text,
+                    'type': data.node.type,
+                    'orders': data.node.parent.children.length,
+                    'state': !data.node.state.disabled + 0
+                };
+            }
+            updateNode(sendData);
         })
         .on("select_node.jstree", function (e, data) {
             curPosition = data.node.children.length;
@@ -263,8 +280,8 @@ function getCreateJson(tree, $node) {
         'parent': temp.parent,
         'text': temp.text,
         'type': temp.type,
-        'orders': curPosition,
-        'state': !temp.state.disabled
+        'orders': 0,
+        'state': !temp.state.disabled + 0
     };
     return jsonData;
 }
@@ -351,7 +368,7 @@ function createRootJson() {
         'parent': '#',
         'text': 'New Root',
         'type': 'DIR',
-        'state': false,
+        'state': 0,
         'orders': curPosition
     };
     createNode(json_data);

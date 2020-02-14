@@ -132,7 +132,6 @@ function clickSaveButton() {
 //get guide_update on load
 function getGuideUpdate(dockey) {
     var returnValue = "";
-    console.log(dockey);
     $.ajax({
         url: '/guide/get_update?documentKey=' + dockey,
         async: false,
@@ -151,7 +150,6 @@ function getGuideUpdate(dockey) {
 //set guide_update when save button clicked
 function setGuideUpdate(title, key, type) {
     var sendData = JSON.stringify({"admin": $('#admin_name').val(), "documentKey": key, "title": title, "CRUD": type});
-    console.log(sendData);
     var token = $("meta[name='_csrf']").attr("content");
     $.ajax({
         url: '/admin/set_update',
