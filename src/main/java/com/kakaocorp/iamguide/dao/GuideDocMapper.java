@@ -11,6 +11,8 @@ import java.util.List;
 
 @Mapper
 public interface GuideDocMapper {
+    String selectMain(@Param("state") String state);
+
     List<GuideDoc> retrieveGuideTreeList();
 
     GuideDoc retrieveGuideDoc(@Param("id") String id); // doc_key
@@ -21,5 +23,5 @@ public interface GuideDocMapper {
 
     void deleteGuideTree(@Param("key") String key);
 
-    void updateGuideTree(@Param("key") String key, @Param("parent") String parent, @Param("text") String text, @Param("state") boolean state,@Param("order") int order);
+    void updateGuideTree(@Param("key") String key, @Param("parent") String parent, @Param("text") String text, @Param("state") boolean state, @Param("order") int order);
 }

@@ -63,14 +63,16 @@ $(function () {
         $(this).parents(".jstree:eq(0)").jstree("toggle_node", this);
     }).on('ready.jstree', function () {
         beforeTreeOpen($(this).jstree('close_all'), openRoot());
-        if (documentKey != 0) {
+        if (documentKey != null) {
             selectOpen();
         }
     });
-    $('#jstree').jstree('clear_state');
-    if(documentKey == 0){
 
+    $('#jstree').jstree('clear_state');
+    if(documentKey == null){
+        return;
     }
+
     $.ajax({
         'url': '/guide/menu',
         'data': {'doc_key': documentKey},
@@ -92,7 +94,7 @@ $(function () {
         },
         'error': function (error) {
             console.log(error);
-            location.reload();
+            location.href = "/error";
         },
     });
 });
