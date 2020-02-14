@@ -3,19 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="693dff65-04db-44d4-98e2-be4ceb57c9cb" name="Default Changelist" comment="tag search request">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kakaocorp/iamguide/controller/CommonController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kakaocorp/iamguide/controller/CommonController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kakaocorp/iamguide/controller/GuideController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kakaocorp/iamguide/controller/GuideController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kakaocorp/iamguide/dao/GuideDocMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kakaocorp/iamguide/dao/GuideDocMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kakaocorp/iamguide/security/SecurityConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kakaocorp/iamguide/security/SecurityConfiguration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/kakaocorp/iamguide/service/GuideDocService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kakaocorp/iamguide/service/GuideDocService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/mybatis/GuideDocMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mybatis/GuideDocMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/guide.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/guide.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/guide-main.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/kakaocorp/iamguide/controller/CommonController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/kakaocorp/iamguide/controller/CommonController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/kakaocorp/iamguide/controller/GuideController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/kakaocorp/iamguide/controller/GuideController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/kakaocorp/iamguide/security/SecurityConfiguration.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/kakaocorp/iamguide/security/SecurityConfiguration.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/mybatis/GuideDocMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mybatis/GuideDocMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/guide-main.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/editor.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/editor.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -203,7 +191,7 @@
       <workItem from="1581572128568" duration="485000" />
       <workItem from="1581577478280" duration="2133000" />
       <workItem from="1581643847557" duration="2489000" />
-      <workItem from="1581647341675" duration="2677000" />
+      <workItem from="1581647341675" duration="3838000" />
     </task>
     <servers />
   </component>

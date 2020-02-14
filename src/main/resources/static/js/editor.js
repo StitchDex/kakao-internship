@@ -19,8 +19,8 @@ class MyUploadAdapter {
     }
     _initRequest() {
         const xhr = this.xhr = new XMLHttpRequest();
-        xhr.open('POST', 'http://guide.at.kakaocorp.com/admin/imageupload', true);
-        //xhr.open( 'POST', 'http://localhost:8080/admin/imageupload', true );
+        //xhr.open('POST', 'http://guide.at.kakaocorp.com/admin/imageupload', true);
+        xhr.open( 'POST', 'http://localhost:8000/admin/imageupload', true );
         xhr.responseType = 'json';
     }
     _initListeners(resolve, reject, file) {
