@@ -62,7 +62,7 @@ $(function () {
             'data': {'doc_key': documentKey},
             'async': false,
             'success': function (res) {
-                if (res.state == 0 || res === "") { //HIDDEN GUIDE
+                if ((window.location.pathname.startsWith("/guide") && res.state == 0) || res === "") { //HIDDEN GUIDE
                     location.href = "/error";
                 }
                 var title = res.title;
@@ -110,6 +110,13 @@ function selectOpen() {
 
 //숨김 상태의 노드를 숨긴다
 function beforeTreeOpen() {
+    if(window.location.pathname.startsWith("/admin")){
+        for (var i = 0; i < hidden.length; i++) {
+            var hideNode = $("#jstree").jstree(true).get_node(hidden[i]);
+            hideNode.text += "(숨김)";
+        }
+        return;
+    }
     for (var i = 0; i < hidden.length; i++) {
         $("#jstree").jstree(true).hide_node(hidden[i]);
     }

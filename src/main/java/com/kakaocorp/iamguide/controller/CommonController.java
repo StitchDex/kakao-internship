@@ -39,12 +39,12 @@ public class CommonController {
 
     @GetMapping("/guide")
     public ModelAndView guideMainPage(Authentication auth, ModelAndView model) {
-        String doc_key = guideDocService.selectMain("2");
-        if(doc_key == null) {
-            doc_key = guideDocService.selectMain("1");
+        String docKey = guideDocService.selectMain("2");
+        if(docKey == null) {
+            docKey = guideDocService.selectMain("1");
         }
         model.setViewName("guide-document");
-        model.addObject("selected", doc_key);
+        model.addObject("selected", docKey);
         logger.info("guideMainPage {}", auth.getName());
         return model;
     }

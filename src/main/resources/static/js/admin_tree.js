@@ -107,7 +107,7 @@ $(function () {
                                         'text': node.text,
                                         'type': node.type,
                                         'orders': node.original.orders,
-                                        'state': !node.state.disabled
+                                        'state': node.original.state
                                     };
                                     updateNode(jsonData);
                                 }
@@ -146,11 +146,15 @@ $(function () {
                                 'text': $node.text,
                                 'type': $node.type,
                                 'orders': $node.original.orders,
-                                'state': $node.state.disabled
+                                'state': cur + 0
                             };
                             if ($node.children.length > 0) {
                                 alert('하위 파일이 존재합니다');
-                            } else if ($node.type != "DIR") {
+                            }
+                            else if($node.original.state == 2){
+                                alert("메인 문서는 숨길수 없습니다.")
+                            }
+                            else if ($node.type != "DIR") {
                                 if (!cur)
                                     tree.disable_node($node);
                                 else {
