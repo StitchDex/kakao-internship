@@ -4,6 +4,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="com.kakaocorp.iamguide.dao.GuideDocMapper">
+    <select id="selectMain" resultType="String">
+        SELECT DOCUMENT_KEY
+        FROM GUIDE_DOCUMENT
+        WHERE DOCUMENT_STATE = #{state}
+        LIMIT 1
+    </select>
     <select id="retrieveGuideDoc" resultType="com.kakaocorp.iamguide.model.GuideDoc">
         select DOCUMENT_TITLE as title, DOCUMENT_TEXT as text, DOCUMENT_STATE as state from GUIDE_DOCUMENT where DOCUMENT_KEY=#{id}
      </select>
@@ -19,6 +25,7 @@
         select concat("DIR", gdr.DIR_KEY), gdr.DIR_NAME, if(gdr.DIR_KEY = gdr.DIR_PARENT_KEY , "#", concat("DIR",gdr.DIR_PARENT_KEY)),gdr.DIR_STATE,gdr.DIR_SEQ
         from GUIDE_DIR as gdr
     </select>
+
     <insert id="createGuideTree" useGeneratedKeys="true" keyProperty="id"
             parameterType="com.kakaocorp.iamguide.model.GuideDoc">
         insert into GUIDE_DOCUMENT(DIRECTORY_KEY,DOCUMENT_TITLE,DOCUMENT_TEXT,DOCUMENT_STATE,DOCUMENT_SEQ)

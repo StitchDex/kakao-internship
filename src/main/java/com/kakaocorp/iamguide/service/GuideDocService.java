@@ -19,11 +19,15 @@ public class GuideDocService {
     @Autowired
     GuideDocMapper guideDocMapper;
 
+    public String selectMain(String state) {
+        return guideDocMapper.selectMain(state);
+    }
+
     public List<GuideDoc> retrieveGuideTreeList() {
         List<GuideDoc> guideTreeList = guideDocMapper.retrieveGuideTreeList();
         for (int i = 0; i < guideTreeList.size(); i++) {
             GuideDoc doc = guideTreeList.get(i);
-            if(doc.getId().startsWith("DIR")){
+            if (doc.getId().startsWith("DIR")) {
                 doc.setType("DIR");
             } else {
                 doc.setType("DOC");
@@ -33,7 +37,7 @@ public class GuideDocService {
         return guideTreeList;
     }
 
-    public String createGuideTree(String parent, String text, boolean state,String order) {
+    public String createGuideTree(String parent, String text, int state, String order) {
         final String EMPTY_STRING = " ";
         if (parent.length() < 1)
             parent = "0";
@@ -42,7 +46,7 @@ public class GuideDocService {
         guideDoc.setParent(parent);
         guideDoc.setText(EMPTY_STRING);
         guideDoc.setTitle(text);
-        guideDoc.setState(true);
+        guideDoc.setState(state);
         guideDoc.setOrders(Integer.parseInt(order));
         guideDocMapper.createGuideTree(guideDoc);
         return guideDoc.getId();
@@ -53,13 +57,13 @@ public class GuideDocService {
         guideDocMapper.deleteGuideTree(key);
     }
 
-    public void updateGuideTree(String key, String parent, String text, boolean state,String order) {
+    public void updateGuideTree(String key, String parent, String text, int state, String order) {
         key = key.substring(3);
         if (parent.length() < 1)
             parent = "0";
         parent = parent.substring(3);
-        logger.info("{},{},{},{},{}", key, parent, text, state,order);
-        guideDocMapper.updateGuideTree(key, parent, text, state,Integer.parseInt(order));
+        logger.info("{},{},{},{},{}", key, parent, text, state, order);
+        guideDocMapper.updateGuideTree(key, parent, text, state, Integer.parseInt(order));
     }
 
     public GuideDoc retrieveGuideDoc(String doc_key) {
@@ -68,7 +72,6 @@ public class GuideDocService {
 
     public void updateGuideDoc(String doc_key, String content) {
         guideDocMapper.updateGuideDoc(doc_key, content);
-        //업데이트 내역, 태그 , 이미지
     }
 
 }
