@@ -37,7 +37,7 @@ public class GuideDocService {
         return guideTreeList;
     }
 
-    public String createGuideTree(String parent, String text, boolean state, String order) {
+    public String createGuideTree(String parent, String text, int state, String order) {
         final String EMPTY_STRING = " ";
         if (parent.length() < 1)
             parent = "0";
@@ -46,7 +46,7 @@ public class GuideDocService {
         guideDoc.setParent(parent);
         guideDoc.setText(EMPTY_STRING);
         guideDoc.setTitle(text);
-        guideDoc.setState(true);
+        guideDoc.setState(state);
         guideDoc.setOrders(Integer.parseInt(order));
         guideDocMapper.createGuideTree(guideDoc);
         return guideDoc.getId();
@@ -57,7 +57,7 @@ public class GuideDocService {
         guideDocMapper.deleteGuideTree(key);
     }
 
-    public void updateGuideTree(String key, String parent, String text, boolean state, String order) {
+    public void updateGuideTree(String key, String parent, String text, int state, String order) {
         key = key.substring(3);
         if (parent.length() < 1)
             parent = "0";
@@ -72,7 +72,6 @@ public class GuideDocService {
 
     public void updateGuideDoc(String doc_key, String content) {
         guideDocMapper.updateGuideDoc(doc_key, content);
-        //업데이트 내역, 태그 , 이미지
     }
 
 }

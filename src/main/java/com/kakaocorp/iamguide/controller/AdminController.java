@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -47,8 +48,11 @@ public class AdminController {
 
 
     @GetMapping("admin_tree")
-    public String adminTreePage() {
-        return "admin_tree";
+    public ModelAndView adminTreePage(ModelAndView model) {
+        String main_key = guideDocService.selectMain("2");
+        model.setViewName("admin_tree");
+        model.addObject("mainDocument",main_key);
+        return model;
     }
 
     @PostMapping(value = "admin_tree/create", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -58,8 +62,8 @@ public class AdminController {
         String parent = (String) parm.get("parent");
         String text = (String) parm.get("text");
         String type = (String) parm.get("type");
-        String order = parm.get("order").toString();
-        boolean state = (boolean) parm.get("state");
+        String order = parm.get("orders").toString();
+        int state = (int) parm.get("state");
 
         if (type.equals("DOC")) {
             return Integer.parseInt(guideDocService.createGuideTree(parent, text, state, order));
@@ -75,15 +79,27 @@ public class AdminController {
         String key = (String) parm.get("id");
         String parent = (String) parm.get("parent");
         String text = (String) parm.get("text");
-        String order = parm.get("order").toString();
-        boolean state = (boolean) parm.get("state");
+        String order = parm.get("orders").toString();
+        int state = (int) parm.get("state");
         String type = (String) parm.get("type");
 
-        if (type.equals("DOC")) {
+        if(parm.size()>6) {
             guideDocService.updateGuideTree(key, parent, text, state, order);
-        } else {
-            guideDirService.updateGuideDir(key, parent, text, state, order);
+            key = (String) parm.get("new_id");
+            parent = (String) parm.get("new_parent");
+            text = (String) parm.get("new_text");
+            order = parm.get("new_orders").toString();
+            state = (int) parm.get("new_state");
+            guideDocService.updateGuideTree(key, parent, text, state, order);
         }
+        else{
+            if (type.equals("DOC")) {
+                guideDocService.updateGuideTree(key, parent, text, state, order);
+            } else {
+                guideDirService.updateGuideDir(key, parent, text, state, order);
+            }
+        }
+
         return "redirect:admin/admin_tree";
     }
 

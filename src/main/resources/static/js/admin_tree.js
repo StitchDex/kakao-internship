@@ -2,8 +2,10 @@ var hiddenNum;
 var hidden = new Array();
 var token = $("meta[name='_csrf']").attr("content");
 let curPosition;
+let mainDocument;
 $(function () {
     hiddenNum = 0;
+    mainDocument = $('#mainDocument').val();
     $('#edit_tree').jstree({
         'core': {
             'multiple': false,
@@ -58,7 +60,7 @@ $(function () {
                                 "seperator_before": false,
                                 "seperator_after": false,
                                 "label": "File",
-                                action: function (obj) {
+                                action: function () {
                                     $node = tree.create_node($node, {
                                         text: 'NewDOC',
                                         type: 'DOC',
@@ -74,7 +76,7 @@ $(function () {
                                 "seperator_before": false,
                                 "seperator_after": false,
                                 "label": "Folder",
-                                action: function (obj) {
+                                action: function () {
                                     $node = tree.create_node($node, {
                                         text: 'NewDIR',
                                         type: 'DIR',
@@ -90,7 +92,7 @@ $(function () {
                     },
                     "Rename": {
                         "label": "이름수정",
-                        "action": function (data) {
+                        "action": function () {
                             tree.edit($node, null, function (node, status) {
                                 node.text = $.trim(node.text);
                                 var textLength = node.text.length;
@@ -104,17 +106,17 @@ $(function () {
                                         'parent': node.parent,
                                         'text': node.text,
                                         'type': node.type,
-                                        'order': node.original.orders,
+                                        'orders': node.original.orders,
                                         'state': !node.state.disabled
                                     };
-                                    updateNode(jsonData, node.type);
+                                    updateNode(jsonData);
                                 }
                             });
                         }
                     },
                     "Delete": {
                         "label": "삭제",
-                        "action": function (data) {
+                        "action": function () {
                             var delnode = $node.id;
                             var title = $node.text;
                             var del = confirm('삭제?');
@@ -136,14 +138,14 @@ $(function () {
                     },
                     "Hidden": {
                         "label": "숨김",
-                        "action": function (data) {
+                        "action": function () {
                             var cur = $node.state.disabled;
                             var jsonData = {
                                 'id': $node.id,
                                 'parent': $node.parent,
                                 'text': $node.text,
                                 'type': $node.type,
-                                'order': $node.original.orders,
+                                'orders': $node.original.orders,
                                 'state': $node.state.disabled
                             };
                             if ($node.children.length > 0) {
@@ -154,16 +156,45 @@ $(function () {
                                 else {
                                     tree.enable_node($node);
                                 }
-                                updateNode(jsonData, $node.type);
+                                updateNode(jsonData);
                             } else {
                                 if (!cur)
                                     tree.disable_node($node);
                                 else {
                                     tree.enable_node($node);
                                 }
-                                updateNode(jsonData, $node.type);
+                                updateNode(jsonData);
                             }
 
+                        }
+                    },
+                    "Main": {
+                        "label": "메인 설정",
+                        "action": function () {
+                            if ($node.type == "DIR") {
+                                alert("문서만 선택 가능합니다.")
+                            }
+                            else if($node.original.state == 2){
+                                alert("이미 선택한 문서입니다.")
+                            }
+                            else {
+                                var jsonData = {
+                                    'new_id': $node.id,
+                                    'new_parent': $node.parent,
+                                    'new_text': $node.text,
+                                    'new_type': $node.type,
+                                    'new_orders': $node.original.orders,
+                                    'new_state': 2,
+                                    'id': mainDocument.id,
+                                    'parent': mainDocument.parent,
+                                    'text': mainDocument.text,
+                                    'type': mainDocument.type,
+                                    'orders': mainDocument.original.orders,
+                                    'state': 1
+                                };
+                                updateNode(jsonData);
+                            }
+                            console.log($node);
                         }
                     }
                 }
@@ -179,7 +210,9 @@ $(function () {
         'plugins': ["types", "dnd", "contextmenu", "cookies", 'sort']
     }).on('ready.jstree', function () {
         makeDisable();
-        $(this).jstree('open_all')
+        $(this).jstree('open_all');
+        mainDocument = $(this).jstree('get_node',"DOC"+mainDocument);
+        $('.mainDocumentText').text(mainDocument.text);
     })
         .bind("move_node.jstree", function (e, data) {
             console.log(data);
@@ -188,14 +221,13 @@ $(function () {
                 'parent': data.node.parent,
                 'text': data.node.text,
                 'type': data.node.type,
-                'order': data.position,
+                'orders': data.position,
                 'state': !data.node.state.disabled
             };
             updateNode(temp);
         })
         .on("select_node.jstree", function (e, data) {
             curPosition = data.node.children.length;
-            console.log(data.node, curPosition);
         });
 
 });
@@ -227,7 +259,7 @@ function getCreateJson(tree, $node) {
         'parent': temp.parent,
         'text': temp.text,
         'type': temp.type,
-        'order': curPosition,
+        'orders': curPosition,
         'state': !temp.state.disabled
     };
     return jsonData;
@@ -273,10 +305,10 @@ function updateNode(sendData) {
         method: 'POST',
         dataType: 'html',
         contentType: 'application/json',
-        success: function (res) {
+        success: function () {
             var temp = JSON.parse(sendData);
             setGuideUpdate(title, temp.id, 'change');
-            alert("트리 업데이트 성공");
+            alert(title + "업데이트 성공");
             opener.document.location.reload();
             location.reload();
         }, error: function (error) {
@@ -295,7 +327,7 @@ function deleteNode(sendData, title, what) {
         method: 'POST',
         dataType: 'html',
         contentType: 'application/json',
-        success: function (res) {
+        success: function () {
             var temp = JSON.parse(sendData);
             setGuideUpdate(title, temp.id, 'delete');
             alert("트리 삭제 성공");
@@ -316,7 +348,7 @@ function createRootJson() {
         'text': 'New Root',
         'type': 'DIR',
         'state': false,
-        'order': curPosition
+        'orders': curPosition
     };
     createNode(json_data);
 }

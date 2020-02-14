@@ -15,7 +15,7 @@ public class GuideDoc implements Serializable {
     private int orders;
     private String text;
     private String type;
-    private boolean state;
+    private int state;
     private ArrayList<String> tags;
 
     public void setTags(List<GuideTag> tags) {

@@ -11,7 +11,7 @@ public class GuideDirService {
     private GuideDirMapper guideDirMapper;
 
     @CacheEvict(cacheNames ="treeCache",allEntries = true)
-    public void createGuideDir(String parent, String text, boolean state, String order) {
+    public void createGuideDir(String parent, String text, int state, String order) {
 
         if (parent.equals("#")) {
             guideDirMapper.createGuideRootDir(text, state, Integer.parseInt(order));
@@ -27,7 +27,7 @@ public class GuideDirService {
     }
 
     @CacheEvict(cacheNames ="treeCache",allEntries = true)
-    public void updateGuideDir(String key, String parent, String text, boolean state, String order) {
+    public void updateGuideDir(String key, String parent, String text, int state, String order) {
         key = key.substring(3);
         if (parent.length() > 1) {
             parent = parent.substring(3);
