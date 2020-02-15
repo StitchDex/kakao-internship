@@ -87,17 +87,27 @@ function clickSaveButton() {
             contentType: 'application/json',
             // refresh page
             success: function (res) {
-                res ? setGuideUpdate($('#guide-title').text(), documentKey, 'update') : alert('문서 편집 에러');
+                if (res) {
+                    setGuideUpdate($('#guide-title').text(), documentKey, "update");
+                    setTags();
+                } else {
+                    alert("편집 에러");
+                    location.reload();
+                }
             }, error: function (error) {
+                console.log(error);
                 alert('저장 실패');
+                location.reload();
             }
         });
+    }
 
+    function setTags() {
         //Tag Select2
         afterTags = new Set();
         $('#document-tag-list').children('div').each(function () {
             afterTags.add($(this).data('value'));
-        })
+        });
         /*$.each($('select.select2-tagging option:selected'), function (key, val) {
             afterTags.add(val.text);
         });*/
@@ -107,7 +117,6 @@ function clickSaveButton() {
 
         insertTags = substract(Array.from(afterTags), Array.from(beforeTags));
         deleteTags = substract(Array.from(beforeTags), Array.from(afterTags));
-        setGuideUpdate(selectedText,documentKey, 'update');
         var issuc = false;
         $.ajax({
             'url': '/admin/updateTags',
@@ -117,6 +126,7 @@ function clickSaveButton() {
             'headers': {"X-CSRF-TOKEN": token},
             'method': 'POST',
             'success': function () {
+
                 issuc = true;
             }
         });
@@ -140,35 +150,34 @@ function getGuideUpdate(dockey) {
             returnValue = res;
             $("#guide-update").text(res);
         }, error: function (error) {
+            alert("업데이트 내역 에러");
             console.log(error);
         }
     });
-
     return returnValue;
 }
 
 //set guide_update when save button clicked
 function setGuideUpdate(title, key, type) {
-    var sendData = JSON.stringify({"admin": $('#admin_name').val(), "documentKey": key, "title": title, "CRUD": type});
+    var sendData = JSON.stringify({"admin": $('#admin_name').val(), "documentKey": key, "title": title, "updateType": type});
     var token = $("meta[name='_csrf']").attr("content");
     $.ajax({
         url: '/admin/set_update',
         headers: {"X-CSRF-TOKEN": token},
-        async : false,
         data: sendData,
         method: 'POST',
         dataType: 'html',
         contentType: 'application/json',
         success: function (res) {
+
         }, error: function (error) {
-            console.log(error);
+            console.log("업데이트 내역 오류");
         }
     });
 }
 
 
 function showGuideTag(ret) {
-    let temp = "";
     $.each(ret, function (index, item) {
         $("#guide-tag").append("<a href='#'>" + item + "</a>");
     });
@@ -250,18 +259,17 @@ function UrlParse(text) {
     return urls;
 }
 
-function clickMainTag(tag_name) {
-    location.href = "/guide/search?tag=%23" + tag_name;
+function clickMainTag(tagName) {
+    location.href = "/guide/search?tag=%23" + tagName;
 }
-
 
 function tagCheck(input) {
     var ret = true
-    $('#document-tag-list').children('div').each(function (index) {
+    $('#document-tag-list').children('div').each(function () {
         if ($(this).data('value') == input) {
             ret = false;
         }
-    })
+    });
     return ret; //중복 값 없음
 }
 

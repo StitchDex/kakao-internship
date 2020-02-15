@@ -16,7 +16,7 @@
             </div>
             <ul style="text-align: left">
                 <section th:each="document : ${result.getValue()}" class="mb-5">
-                    <a th:text="${document.title}" th:attr="value=${document.getId()}"
+                    <a th:text="${document.text}" th:attr="value=${document.getId()}"
                        class="search-result-title"></a>
                     <div>
                         <p style="float: left">TAG : &nbsp</p>

@@ -9,11 +9,11 @@ import java.util.List;
 
 @Mapper
 public interface AdminMapper {
-    String isAdmin(@Param("admin_id") String username) throws Exception;
+    String isAdmin(@Param("adminId") String username) throws Exception;
 
     List<Admin> getAdminList() throws Exception;
 
-    void createAdmin(List admins) throws Exception;
+    void createAdmin(List<Admin> admins) throws Exception;
 
-    void deleteAdmin(List admins) throws Exception;
+    void deleteAdmin(List<Admin> admins) throws Exception;
 }

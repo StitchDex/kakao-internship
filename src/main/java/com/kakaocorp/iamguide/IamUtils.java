@@ -22,6 +22,9 @@ public class IamUtils {
         SimpleDateFormat df = new SimpleDateFormat("yyyy년 MM월 dd일 hh시 mm분 ss초");
         return df.format(date);
     }
+    public static String keyParsing(String key){
+        return key.substring(3);
+    }
     public static boolean isEmpty(String test) {
         return test == null || test.trim().equalsIgnoreCase("");
     }

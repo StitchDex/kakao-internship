@@ -1,5 +1,6 @@
 package com.kakaocorp.iamguide.service;
 
+import com.kakaocorp.iamguide.IamUtils;
 import com.kakaocorp.iamguide.dao.GuideDocMapper;
 import com.kakaocorp.iamguide.model.GuideDoc;
 import org.slf4j.Logger;
@@ -23,6 +24,7 @@ public class GuideDocService {
         return guideDocMapper.selectMain(state);
     }
 
+    @Cacheable(cacheNames = "treeCache")
     public List<GuideDoc> retrieveGuideTreeList() {
         List<GuideDoc> guideTreeList = guideDocMapper.retrieveGuideTreeList();
         for (int i = 0; i < guideTreeList.size(); i++) {
@@ -37,33 +39,29 @@ public class GuideDocService {
         return guideTreeList;
     }
 
-    public String createGuideTree(String parent, String text, int state, String order) {
-        final String EMPTY_STRING = " ";
-        if (parent.length() < 1)
-            parent = "0";
-        parent = parent.substring(3);
-        GuideDoc guideDoc = new GuideDoc();
-        guideDoc.setParent(parent);
-        guideDoc.setText(EMPTY_STRING);
-        guideDoc.setTitle(text);
-        guideDoc.setState(state);
-        guideDoc.setOrders(Integer.parseInt(order));
+    @CacheEvict(cacheNames = "treeCache", allEntries = true)
+    public String createGuideTree(GuideDoc guideDoc) {
+        if (guideDoc.getParent().length() < 1)
+            guideDoc.setParent("0");
+        guideDoc.setParent(guideDoc.getParent().substring(3));
+        guideDoc.setContent(" ");
         guideDocMapper.createGuideTree(guideDoc);
         return guideDoc.getId();
     }
 
+    @CacheEvict(cacheNames = "treeCache", allEntries = true)
     public void deleteGuideTree(String key) {
         key = key.substring(3);
         guideDocMapper.deleteGuideTree(key);
     }
 
-    public void updateGuideTree(String key, String parent, String text, int state, String order) {
-        key = key.substring(3);
-        if (parent.length() < 1)
-            parent = "0";
-        parent = parent.substring(3);
-        logger.info("{},{},{},{},{}", key, parent, text, state, order);
-        guideDocMapper.updateGuideTree(key, parent, text, state, Integer.parseInt(order));
+    @CacheEvict(cacheNames = "treeCache", allEntries = true)
+    public void updateGuideTree(GuideDoc guideDoc) {
+        guideDoc.setId(IamUtils.keyParsing(guideDoc.getId()));
+        if (guideDoc.getParent().length() < 1)
+            guideDoc.setParent("0");
+        guideDoc.setParent(guideDoc.getParent().substring(3));
+        guideDocMapper.updateGuideTree(guideDoc);
     }
 
     public GuideDoc retrieveGuideDoc(String doc_key) {

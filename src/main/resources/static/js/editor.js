@@ -79,7 +79,6 @@ function makeGuideEditor(res) {
                 console.error(error);
             }
         );
-
 }
 
 function makeAdminEditor() {

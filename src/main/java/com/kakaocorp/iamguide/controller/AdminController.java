@@ -1,7 +1,9 @@
 package com.kakaocorp.iamguide.controller;
 
+import com.kakaocorp.iamguide.model.Admin;
 import com.kakaocorp.iamguide.model.GuideDoc;
 
+import com.kakaocorp.iamguide.model.GuideUpdate;
 import com.kakaocorp.iamguide.service.*;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,64 +51,46 @@ public class AdminController {
     @GetMapping("admin_tree")
     public ModelAndView adminTreePage(ModelAndView model) {
         String mainKey = guideDocService.selectMain("2");
-        if(mainKey == null) {
+        if (mainKey == null) {
             mainKey = guideDocService.selectMain("1");
         }
         model.setViewName("admin_tree");
-        model.addObject("mainDocument",mainKey);
+        model.addObject("mainDocument", mainKey);
         return model;
     }
 
     @PostMapping(value = "admin_tree/create", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public int createGuideTree(@RequestBody Map<String, Object> parm) throws Exception {
+    public int createGuideTree(@RequestBody GuideDoc guideDoc) throws Exception {
 
-        String parent = (String) parm.get("parent");
-        String text = (String) parm.get("text");
-        String type = (String) parm.get("type");
-        String order = parm.get("orders").toString();
-        int state = (int) parm.get("state");
-
-        if (type.equals("DOC")) {
-            return Integer.parseInt(guideDocService.createGuideTree(parent, text, state, order));
+        if (guideDoc.getType().equals("DOC")) {
+            return Integer.parseInt(guideDocService.createGuideTree(guideDoc));
         } else {
-            guideDirService.createGuideDir(parent, text, state, order);
+            return Integer.parseInt(guideDirService.createGuideDir(guideDoc));
         }
-        return -1;
     }
 
     @PostMapping(value = "admin_tree/update", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String updateGuideTree(HttpServletRequest res, @RequestBody Map<String, Object> parm) throws Exception {
+    public String updateGuideTree(@RequestBody List<GuideDoc> guideDocList) throws Exception {
 
-        String key = (String) parm.get("id");
-        String parent = (String) parm.get("parent");
-        String text = (String) parm.get("text");
-        String order = parm.get("orders").toString();
-        int state = (int) parm.get("state");
-        String type = (String) parm.get("type");
+        int listSize = guideDocList.size();
 
-        if(parm.size()>6) {
-            guideDocService.updateGuideTree(key, parent, text, state, order);
-            key = (String) parm.get("new_id");
-            parent = (String) parm.get("new_parent");
-            text = (String) parm.get("new_text");
-            order = parm.get("new_orders").toString();
-            state = (int) parm.get("new_state");
-            guideDocService.updateGuideTree(key, parent, text, state, order);
-        }
-        else{
-            if (type.equals("DOC")) {
-                guideDocService.updateGuideTree(key, parent, text, state, order);
+        while (listSize > 0) {
+            GuideDoc guideDoc = guideDocList.get(listSize - 1);
+            if (guideDoc.getType().equals("DOC")) {
+                guideDocService.updateGuideTree(guideDoc);
             } else {
-                guideDirService.updateGuideDir(key, parent, text, state, order);
+                guideDirService.updateGuideDir(guideDoc);
             }
+            listSize--;
         }
-
         return "redirect:admin/admin_tree";
     }
 
+
     @PostMapping(value = "admin_tree/delete", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String deleteGuideTree(HttpServletRequest req, @RequestBody Map<String, Object> parm) throws Exception {
+    public String deleteGuideTree(@RequestBody Map<String, Object> parm) throws Exception {
+
         String key = (String) parm.get("id");
         String type = (String) parm.get("type");
 
@@ -124,12 +108,12 @@ public class AdminController {
      */
     @PostMapping(value = "edit_doc", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    boolean updateGuideDoc(HttpServletRequest req, @RequestBody Map<String, Object> parm) throws Exception {
+    boolean updateGuideDoc(@RequestBody Map<String, Object> parm) throws Exception {
 
         String id = (String) parm.get("id");
         String content = (String) parm.get("content");
 
-        guideDocService.updateGuideDoc(id, content); // guide_doc edit=
+        guideDocService.updateGuideDoc(id, content); // guide_doc edit
         uploadService.updateImaging(id, (List) parm.get("insertUrl"), (List) parm.get("deleteUrl")); // update Imaging table
 
         logger.info("edit : {}", id);
@@ -143,14 +127,8 @@ public class AdminController {
      */
     @PostMapping(value = "set_update", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    void createGuideUpdate(HttpServletRequest req, @RequestBody Map<String, Object> parm) throws Exception {
-
-        String admin = (String) parm.get("admin");
-        String documentKey = (String) parm.get("documentKey");
-        String title = (String) parm.get("title");
-        String CRUD = (String) parm.get("CRUD");
-
-        guideUpdateService.createGuideUpdate(admin, documentKey, title, CRUD); // guide_doc edit
+    void createGuideUpdate(@RequestBody GuideUpdate guideUpdate) throws Exception {
+        guideUpdateService.createGuideUpdate(guideUpdate); // guide_doc edit
     }
 
     @GetMapping("admin_auth")
@@ -189,13 +167,13 @@ public class AdminController {
      */
     @RequestMapping(value = "insertAdmin", method = RequestMethod.POST)
     public @ResponseBody
-    void createAdmin(@RequestBody List<Object> admins) throws Exception {
+    void createAdmin(@RequestBody List<Admin> admins) throws Exception {
         adminService.createAdmin(admins);
     }
 
     @RequestMapping(value = "deleteAdmin", method = RequestMethod.POST)
     public @ResponseBody
-    void deleteAdmin(@RequestBody List<Object> admins) throws Exception {
+    void deleteAdmin(@RequestBody List<Admin> admins) throws Exception {
         adminService.deleteAdmin(admins);
     }
 
