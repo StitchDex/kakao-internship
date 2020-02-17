@@ -35,7 +35,7 @@ public class IamAuthentication implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
-        String username = authentication.getName();
+        /*String username = authentication.getName();
         String password = (String)authentication.getCredentials();
         if(username.equals("local") && password.equals("local")) {
             DevAdmin user = new DevAdmin();
@@ -45,8 +45,8 @@ public class IamAuthentication implements AuthenticationProvider {
             result.setDetails(user);
             return result;
         }
-        throw new BadCredentialsException("인증되지 않은 사용자 입니다.");
-        /*String username = authentication.getName();
+        throw new BadCredentialsException("인증되지 않은 사용자 입니다.");*/
+        String username = authentication.getName();
         String password = (String) authentication.getCredentials();
 
         try {
@@ -72,7 +72,7 @@ public class IamAuthentication implements AuthenticationProvider {
         } catch (Exception e) {
             e.printStackTrace();
             throw new BadCredentialsException(e.getMessage());
-        }*/
+        }
     }
 
     @Override

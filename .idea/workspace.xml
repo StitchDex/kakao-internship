@@ -3,7 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="693dff65-04db-44d4-98e2-be4ceb57c9cb" name="Default Changelist" comment="tag search request">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/admin_tree.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/admin_tree.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kakaocorp/iamguide/security/IamAuthentication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kakaocorp/iamguide/security/IamAuthentication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -194,6 +196,7 @@
       <workItem from="1581659037136" duration="27000" />
       <workItem from="1581695613890" duration="17961000" />
       <workItem from="1581862671064" duration="1558000" />
+      <workItem from="1581901758409" duration="498000" />
     </task>
     <servers />
   </component>
