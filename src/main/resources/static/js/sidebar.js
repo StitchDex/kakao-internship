@@ -113,7 +113,7 @@ function beforeTreeOpen() {
     if(window.location.pathname.startsWith("/admin")){
         for (var i = 0; i < hidden.length; i++) {
             var hideNode = $("#jstree").jstree(true).get_node(hidden[i]);
-            hideNode.text += "(숨김)";
+            hideNode.text = "(숨김)" + hideNode.text;
         }
         return;
     }
