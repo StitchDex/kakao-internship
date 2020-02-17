@@ -23,5 +23,5 @@ public interface GuideDocMapper {
 
     void deleteGuideTree(@Param("key") String key);
 
-    void updateGuideTree(@Param("key") String key, @Param("parent") String parent, @Param("text") String text, @Param("state") int state, @Param("order") int order);
+    void updateGuideTree(GuideDoc guideDoc);
 }

@@ -11,11 +11,9 @@ import java.util.List;
 @Mapper
 public interface GuideUpdateMapper {
 
-    void createGuideUpdate(@Param("ADMIN_ID") String id, @Param("DOCUMENT_KEY") String documentKey, @Param("DOCUMENT_TITLE") String title,
-                           @Param("UPDATE_TYPE_CUD") String crud);
+    void createGuideUpdate(GuideUpdate guideUpdate);
 
     GuideUpdate retrieveGuideUpdate(@Param("documentKey") String documentKey);
-
 
 }
 

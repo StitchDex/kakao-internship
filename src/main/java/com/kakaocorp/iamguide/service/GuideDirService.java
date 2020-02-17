@@ -1,6 +1,7 @@
 package com.kakaocorp.iamguide.service;
 
 import com.kakaocorp.iamguide.dao.GuideDirMapper;
+import com.kakaocorp.iamguide.model.GuideDoc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
@@ -10,30 +11,33 @@ public class GuideDirService {
     @Autowired
     private GuideDirMapper guideDirMapper;
 
-    @CacheEvict(cacheNames ="treeCache",allEntries = true)
-    public void createGuideDir(String parent, String text, int state, String order) {
+    @CacheEvict(cacheNames = "treeCache", allEntries = true)
+    public String createGuideDir(GuideDoc guideDoc) {
 
-        if (parent.equals("#")) {
-            guideDirMapper.createGuideRootDir(text, state, Integer.parseInt(order));
+        if (guideDoc.getParent().equals("#")) {
+            guideDirMapper.createGuideRootDir(guideDoc);
+            return Integer.toString(guideDoc.getDIR_KEY());
         } else {
-            parent=parent.substring(3);
-            guideDirMapper.createGuideDir(parent, text, state, Integer.parseInt(order));
+            guideDoc.setParent(guideDoc.getParent().substring(3));
+            guideDirMapper.createGuideDir(guideDoc);
+            return guideDoc.getId();
         }
     }
-    @CacheEvict(cacheNames ="treeCache",allEntries = true)
+
+    @CacheEvict(cacheNames = "treeCache", allEntries = true)
     public void deleteGuideDir(String key) {
         key = key.substring(3);
         guideDirMapper.deleteGuideDir(key);
     }
 
-    @CacheEvict(cacheNames ="treeCache",allEntries = true)
-    public void updateGuideDir(String key, String parent, String text, int state, String order) {
-        key = key.substring(3);
-        if (parent.length() > 1) {
-            parent = parent.substring(3);
+    @CacheEvict(cacheNames = "treeCache", allEntries = true)
+    public void updateGuideDir(GuideDoc guideDoc) {
+        guideDoc.setId(guideDoc.getId().substring(3));
+        if (guideDoc.getParent().length() > 1) {
+            guideDoc.setParent(guideDoc.getParent().substring(3));
         } else {
-            parent = key;
+            guideDoc.setParent(guideDoc.getId());
         }
-        guideDirMapper.updateGuideDir(key, parent, text, state, Integer.parseInt(order));
+        guideDirMapper.updateGuideDir(guideDoc);
     }
 }

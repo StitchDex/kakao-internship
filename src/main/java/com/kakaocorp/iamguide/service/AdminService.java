@@ -33,11 +33,11 @@ public class AdminService {
         return adminMapper.getAdminList();
     }
 
-    public void createAdmin(List admins) throws Exception {
+    public void createAdmin(List<Admin> admins) throws Exception {
         adminMapper.createAdmin(admins);
     }
 
-    public void deleteAdmin(List admins) throws Exception {
+    public void deleteAdmin(List<Admin> admins) throws Exception {
         adminMapper.deleteAdmin(admins);
     }
 }

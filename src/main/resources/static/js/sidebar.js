@@ -25,6 +25,7 @@ $(function () {
                         var temp = (data[i].state);
                         if (!temp) {
                             hidden[hiddenNum++] = data[i].id;
+                            data[i].text += " (숨김)";
                         }
                     }
                 }
@@ -56,6 +57,7 @@ $(function () {
         }
     });
     $('#jstree').jstree('clear_state');
+
     if (documentKey != null) {
         $.ajax({
             'url': '/guide/menu',
@@ -65,13 +67,13 @@ $(function () {
                 if ((window.location.pathname.startsWith("/guide") && res.state == 0) || res === "") { //HIDDEN GUIDE
                     location.href = "/error";
                 }
-                var title = res.title;
+                var title = res.text;
                 $('#guide-title').text(title);
                 if (guideEditor != null) { // change doc
                     guideEditor.destroy();
-                    makeGuideEditor(res.text);
+                    makeGuideEditor(res.content);
                 } else { // document_ready
-                    makeGuideEditor(res.text);
+                    makeGuideEditor(res.content);
                 }
                 initSelectTagging();
                 getGuideUpdate(documentKey);
@@ -103,23 +105,19 @@ function selectOpen() {
     let cur = $('#jstree').jstree('get_node', "DOC" + documentKey);
     while (cur.parent != "#") {
         $('#jstree').jstree('open_node', cur.parent);
-        let cur_p = cur.parent;
-        cur = $('#jstree').jstree('get_node', cur_p);
+        let curParent = cur.parent;
+        cur = $('#jstree').jstree('get_node', curParent);
     }
 }
 
 //숨김 상태의 노드를 숨긴다
 function beforeTreeOpen() {
-    if(window.location.pathname.startsWith("/admin")){
+    if(window.location.pathname.startsWith("/guide")){
         for (var i = 0; i < hidden.length; i++) {
-            var hideNode = $("#jstree").jstree(true).get_node(hidden[i]);
-            hideNode.text = "(숨김)" + hideNode.text;
+            $("#jstree").jstree(true).hide_node(hidden[i]);
         }
-        return;
     }
-    for (var i = 0; i < hidden.length; i++) {
-        $("#jstree").jstree(true).hide_node(hidden[i]);
-    }
+
 }
 
 //Depth1 노드까지 열어준다
@@ -128,6 +126,5 @@ function openRoot() {
     let childArray = cur.children;
     $.each(childArray,function (index,item) {
         $('#jstree').jstree('open_node',item);
-        console.log(item);
     })
 }

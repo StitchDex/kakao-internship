@@ -7,11 +7,11 @@
 
     <insert id="createGuideUpdate">
             insert into GUIDE_UPDATE(ADMIN_ID,DOCUMENT_KEY, DOCUMENT_TITLE,UPDATE_TIME,UPDATE_TYPE_CUD)
-            values(#{ADMIN_ID},#{DOCUMENT_KEY},#{DOCUMENT_TITLE},CURRENT_TIMESTAMP,#{UPDATE_TYPE_CUD})
+            values(#{admin},#{documentKey},#{title},CURRENT_TIMESTAMP,#{updateType})
     </insert>
 
     <select id="retrieveGuideUpdate" resultType="com.kakaocorp.iamguide.model.GuideUpdate">
-            select ADMIN_ID,UPDATE_TIME,UPDATE_TYPE_CUD
+            select ADMIN_ID as admin,UPDATE_TIME as UPDATE_TIME,UPDATE_TYPE_CUD as updateType
             from GUIDE_UPDATE
             where DOCUMENT_KEY=#{documentKey}
             AND UPDATE_KEY IN(SELECT MAX(UPDATE_KEY) FROM GUIDE_UPDATE WHERE DOCUMENT_KEY=#{documentKey})

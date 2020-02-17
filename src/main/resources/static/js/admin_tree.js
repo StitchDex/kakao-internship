@@ -5,6 +5,7 @@ let curPosition;
 let mainDocument;
 $(function () {
     hiddenNum = 0;
+    let jsonArray = new Array();
     mainDocument = $('#mainDocument').val();
     $('#edit_tree').jstree({
         'core': {
@@ -60,7 +61,7 @@ $(function () {
                                 "seperator_before": false,
                                 "seperator_after": false,
                                 "label": "File",
-                                action: function () {
+                                action: function (data) {
                                     $node = tree.create_node($node, {
                                         text: 'NewDOC',
                                         type: 'DOC',
@@ -76,7 +77,8 @@ $(function () {
                                 "seperator_before": false,
                                 "seperator_after": false,
                                 "label": "Folder",
-                                action: function () {
+                                action: function (data) {
+                                    console.log(data);
                                     $node = tree.create_node($node, {
                                         text: 'NewDIR',
                                         type: 'DIR',
@@ -107,9 +109,10 @@ $(function () {
                                         'text': node.text,
                                         'type': node.type,
                                         'orders': node.original.orders,
-                                        'state': node.original.state
+                                        'state': node.original.state + 0
                                     };
-                                    updateNode(jsonData);
+                                    jsonArray.push(jsonData);
+                                    updateNode(jsonArray);
                                 }
                             });
                         }
@@ -148,26 +151,25 @@ $(function () {
                                 'orders': $node.original.orders,
                                 'state': cur + 0
                             };
+                            jsonArray.push(jsonData);
                             if ($node.children.length > 0) {
                                 alert('하위 파일이 존재합니다');
-                            }
-                            else if($node.original.state == 2){
+                            } else if ($node.original.state == 2) {
                                 alert("메인 문서는 숨길수 없습니다.")
-                            }
-                            else if ($node.type != "DIR") {
+                            } else if ($node.type != "DIR") {
                                 if (!cur)
                                     tree.disable_node($node);
                                 else {
                                     tree.enable_node($node);
                                 }
-                                updateNode(jsonData);
+                                updateNode(jsonArray);
                             } else {
                                 if (!cur)
                                     tree.disable_node($node);
                                 else {
                                     tree.enable_node($node);
                                 }
-                                updateNode(jsonData);
+                                updateNode(jsonArray);
                             }
 
                         }
@@ -177,18 +179,10 @@ $(function () {
                         "action": function () {
                             if ($node.type == "DIR") {
                                 alert("문서만 선택 가능합니다.")
-                            }
-                            else if($node.original.state == 2){
+                            } else if ($node.original.state == 2) {
                                 alert("이미 선택한 문서입니다.")
-                            }
-                            else {
+                            } else {
                                 var jsonData = {
-                                    'new_id': $node.id,
-                                    'new_parent': $node.parent,
-                                    'new_text': $node.text,
-                                    'new_type': $node.type,
-                                    'new_orders': $node.original.orders,
-                                    'new_state': 2,
                                     'id': mainDocument.id,
                                     'parent': mainDocument.parent,
                                     'text': mainDocument.text,
@@ -196,9 +190,18 @@ $(function () {
                                     'orders': mainDocument.original.orders,
                                     'state': 1
                                 };
-                                updateNode(jsonData);
+                                var jsonData1 = {
+                                    'id': $node.id,
+                                    'parent': $node.parent,
+                                    'text': $node.text,
+                                    'type': $node.type,
+                                    'orders': $node.original.orders,
+                                    'state': 2,
+                                };
+                                jsonArray.push(jsonData);
+                                jsonArray.push(jsonData1);
+                                updateNode(jsonArray);
                             }
-                            console.log($node);
                         }
                     }
                 }
@@ -215,24 +218,103 @@ $(function () {
     }).on('ready.jstree', function () {
         makeDisable();
         $(this).jstree('open_all');
-        mainDocument = $(this).jstree('get_node',"DOC"+mainDocument);
+        mainDocument = $(this).jstree('get_node', "DOC" + mainDocument);
         $('.mainDocumentText').text(mainDocument.text);
-    })
-        .bind("move_node.jstree", function (e, data) {
-            console.log(data);
-            var temp = {
-                'id': data.node.id,
-                'parent': data.node.parent,
-                'text': data.node.text,
-                'type': data.node.type,
-                'orders': data.position,
-                'state': !data.node.state.disabled
+    }).bind("move_node.jstree", function (e, data) {
+
+        if (data.old_parent === data.parent) {
+            var nodeParent = $("#edit_tree").jstree('get_node', data.parent); //부모
+            var temp = $("#edit_tree").jstree('get_node', nodeParent.children[data.position]);
+            console.log(temp);
+            var jsonData = {
+                'id': temp.id,
+                'parent': temp.parent,
+                'text': temp.text,
+                'type': temp.type,
+                'orders': data.old_position,
+                'state': !temp.state.disabled + 0
             };
-            updateNode(temp);
-        })
-        .on("select_node.jstree", function (e, data) {
-            curPosition = data.node.children.length;
-        });
+            jsonArray.push(jsonData);
+            temp = $("#edit_tree").jstree('get_node', nodeParent.children[data.old_position]);
+            console.log(temp);
+            jsonData = {
+                'id': temp.id,
+                'parent': temp.parent,
+                'text': temp.text,
+                'type': temp.type,
+                'orders': data.position,
+                'state': !temp.state.disabled + 0
+            };
+            jsonArray.push(jsonData);
+        }
+        else{ //다른 디렉터리 이동
+            nodeParent = $("#edit_tree").jstree('get_node', data.old_parent); //이전 부모
+            var nodeParent1 = $("#edit_tree").jstree('get_node', data.parent); // 바뀐 부모
+            console.log(nodeParent);
+            let len = nodeParent.children.length;
+            let i = 0;
+            while (len > 0) {
+                var temp = $("#edit_tree").jstree('get_node', nodeParent.children[i]);
+                console.log(temp);
+                if (temp.text != data.text) {
+                    var jsonData = {
+                        'id': temp.id,
+                        'parent': temp.parent,
+                        'text': temp.text,
+                        'type': temp.type,
+                        'orders': i,
+                        'state': !temp.state.disabled + 0
+                    };
+                    jsonArray.push(jsonData);
+                    i++;
+                }
+                len--;
+            }
+            len = nodeParent1.children.length;
+            i = 0;
+            while (len > 0) {
+                var temp = $("#edit_tree").jstree('get_node', nodeParent1.children[i]);
+                console.log(temp);
+                if (i == data.position) {
+                    var jsonData = {
+                        'id': data.node.id,
+                        'parent': data.node.parent,
+                        'text': data.node.text,
+                        'type': data.node.type,
+                        'orders': data.position,
+                        'state': !data.node.state.disabled + 0
+                    };
+                    jsonArray.push(jsonData);
+                    var jsonData = {
+                        'id': temp.id,
+                        'parent': temp.parent,
+                        'text': temp.text,
+                        'type': temp.type,
+                        'orders': i+1,
+                        'state': !temp.state.disabled + 0
+                    };
+                    jsonArray.push(jsonData);
+                    i++;
+                }
+                else{
+                    var jsonData = {
+                        'id': temp.id,
+                        'parent': temp.parent,
+                        'text': temp.text,
+                        'type': temp.type,
+                        'orders': i,
+                        'state': !temp.state.disabled + 0
+                    };
+                    jsonArray.push(jsonData);
+                    i++;
+                }
+                len--;
+            }
+        }
+        updateNode(jsonArray);
+    }).on("select_node.jstree", function (e, data) {
+        curPosition = data.node.children.length;
+    });
 
 });
 
@@ -258,15 +340,19 @@ function makeDisable() {
 
 function getCreateJson(tree, $node) {
     var temp = tree.get_node($node);
-    var jsonData = {
-        'id': temp.id,
-        'parent': temp.parent,
-        'text': temp.text,
-        'type': temp.type,
-        'orders': curPosition,
-        'state': !temp.state.disabled
-    };
-    return jsonData;
+    try {
+        var jsonData = {
+            'id': temp.id,
+            'parent': temp.parent,
+            'text': temp.text,
+            'type': temp.type,
+            'orders': curPosition,
+            'state': !temp.state.disabled + 0
+        };
+        return jsonData;
+    } catch {
+        alert('생성은 폴더 클릭시에만 가능합니다.');
+    }
 }
 
 function createNode(sendData) {
@@ -277,35 +363,32 @@ function createNode(sendData) {
         headers: {"X-CSRF-TOKEN": token},
         data: sendData,
         method: 'POST',
+        async: 'false',
         dataType: 'html',
         contentType: 'application/json',
         success: function (res) {
             if (res > 0) {
                 setGuideUpdate(title, res, 'create');
-                alert("파일 생성 성공");
-                opener.document.location.reload();
-                location.reload();
-            } else {
-                setGuideUpdate(title, null
-                    , 'create');
-                alert("폴더 생성 성공");
+                alert(title + "생성 성공");
                 opener.document.location.reload();
                 location.reload();
             }
         }, error: function (error) {
             alert("트리 생성 오류");
             console.log(error);
+            location.reload();
         }
     });
 }
 
 function updateNode(sendData) {
-    var title = sendData.text;
+    var title = sendData[0].text;
     sendData = JSON.stringify(sendData);
     $.ajax({
         url: '/admin/admin_tree/update',
         headers: {"X-CSRF-TOKEN": token},
         data: sendData,
+        async: false,
         method: 'POST',
         dataType: 'html',
         contentType: 'application/json',
@@ -318,6 +401,7 @@ function updateNode(sendData) {
         }, error: function (error) {
             alert("트리 업데이트 오류");
             console.log(error);
+            location.reload();
         }
     });
 }
@@ -329,17 +413,19 @@ function deleteNode(sendData, title, what) {
         headers: {"X-CSRF-TOKEN": token},
         data: sendData,
         method: 'POST',
+        async: 'false',
         dataType: 'html',
         contentType: 'application/json',
         success: function () {
             var temp = JSON.parse(sendData);
             setGuideUpdate(title, temp.id, 'delete');
-            alert("트리 삭제 성공");
+            alert(title + "삭제 성공");
             opener.document.location.reload();
             location.reload();
         }, error: function (error) {
             alert("트리 삭제 오류");
             console.log(error);
+            location.reload();
         }
     });
 }
@@ -347,12 +433,12 @@ function deleteNode(sendData, title, what) {
 function createRootJson() {
     var temp = $("#edit_tree").jstree("get_node", '#');
     curPosition = temp.children.length;
-    var json_data = {
+    var jsonData = {
         'parent': '#',
         'text': 'New Root',
         'type': 'DIR',
-        'state': false,
+        'state': 0,
         'orders': curPosition
     };
-    createNode(json_data);
+    createNode(jsonData);
 }

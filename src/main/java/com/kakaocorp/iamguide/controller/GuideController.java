@@ -9,6 +9,7 @@ import groovy.transform.Trait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +33,7 @@ public class GuideController {
     @Autowired
     private GuideUpdateService guideUpdateService;
 
+
     @GetMapping(value = "tree", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     List<GuideDoc> retrieveGuideTreeList() {
@@ -40,14 +42,14 @@ public class GuideController {
 
     @GetMapping("menu")
     public @ResponseBody
-    GuideDoc retrieveGuideDoc(HttpServletRequest req, @RequestParam("doc_key") String doc_key) {
+    GuideDoc retrieveGuideDoc(@RequestParam("doc_key") String doc_key) {
         logger.info("clicked_menu_num:{}", doc_key);
         return guideDocService.retrieveGuideDoc(doc_key);
     }
 
     @GetMapping("document")
     public String guideDocumentPage(@RequestParam(required = false) String doc_key, Model model) {
-            model.addAttribute("selected", doc_key);
+        model.addAttribute("selected", doc_key);
         return "guide-document";
     }
 
@@ -85,13 +87,12 @@ public class GuideController {
         }
 
         HashMap<String, ArrayList<GuideDoc>> result = new HashMap<>();
-        for(GuideDoc document : documentList) {
-            if(!result.containsKey(document.getParent())) {
+        for (GuideDoc document : documentList) {
+            if (!result.containsKey(document.getParent())) {
                 ArrayList<GuideDoc> temp = new ArrayList<>();
                 temp.add(document);
                 result.put(document.getParent(), temp);
-            }
-            else {
+            } else {
                 result.get(document.getParent()).add(document);
             }
         }

@@ -5,7 +5,7 @@
 
 <mapper namespace="com.kakaocorp.iamguide.dao.AdminMapper">
     <select id="isAdmin" resultType="String">
-        SELECT ADMIN_ACCOUNT_ID FROM ADMIN WHERE ADMIN_ACCOUNT_ID = #{admin_id}
+        SELECT ADMIN_ACCOUNT_ID FROM ADMIN WHERE ADMIN_ACCOUNT_ID = #{adminId}
     </select>
 
     <select id="getAdminList" resultType="com.kakaocorp.iamguide.model.Admin">

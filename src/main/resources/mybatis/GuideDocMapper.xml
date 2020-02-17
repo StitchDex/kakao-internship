@@ -11,7 +11,7 @@
         LIMIT 1
     </select>
     <select id="retrieveGuideDoc" resultType="com.kakaocorp.iamguide.model.GuideDoc">
-        select DOCUMENT_TITLE as title, DOCUMENT_TEXT as text, DOCUMENT_STATE as state from GUIDE_DOCUMENT where DOCUMENT_KEY=#{id}
+        select DOCUMENT_TITLE as text, DOCUMENT_TEXT as content, DOCUMENT_STATE as state from GUIDE_DOCUMENT where DOCUMENT_KEY=#{id}
      </select>
     <update id="updateGuideDoc">
         update GUIDE_DOCUMENT SET DOCUMENT_TEXT=#{content} where DOCUMENT_KEY=#{id}
@@ -29,12 +29,12 @@
     <insert id="createGuideTree" useGeneratedKeys="true" keyProperty="id"
             parameterType="com.kakaocorp.iamguide.model.GuideDoc">
         insert into GUIDE_DOCUMENT(DIRECTORY_KEY,DOCUMENT_TITLE,DOCUMENT_TEXT,DOCUMENT_STATE,DOCUMENT_SEQ)
-        values(#{parent},#{title},#{text},#{state},#{orders})
+        values(#{parent},#{text},#{content},#{state},#{orders})
     </insert>
 
-    <update id="updateGuideTree">
-        update GUIDE_DOCUMENT SET DOCUMENT_TITLE=#{text}, DIRECTORY_KEY=#{parent}, DOCUMENT_STATE=#{state}, DOCUMENT_SEQ=#{order}
-        where DOCUMENT_KEY=#{key}
+    <update id="updateGuideTree" parameterType="com.kakaocorp.iamguide.model.GuideDoc">
+        update GUIDE_DOCUMENT SET DOCUMENT_TITLE=#{text}, DIRECTORY_KEY=#{parent}, DOCUMENT_STATE=#{state}, DOCUMENT_SEQ=#{orders}
+        where DOCUMENT_KEY=#{id}
     </update>
 
     <delete id="deleteGuideTree">
