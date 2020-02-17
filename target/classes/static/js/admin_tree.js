@@ -406,8 +406,8 @@ function updateNode(sendData) {
     });
 }
 
-function deleteNode(sendData, title) {
-    sendData = JSON.stringify({'id': sendData, 'type': 'delete'});
+function deleteNode(sendData, title, what) {
+    sendData = JSON.stringify({'id': sendData, 'type': what});
     $.ajax({
         url: '/admin/admin_tree/delete',
         headers: {"X-CSRF-TOKEN": token},
