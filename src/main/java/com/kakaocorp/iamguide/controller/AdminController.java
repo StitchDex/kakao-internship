@@ -3,6 +3,7 @@ package com.kakaocorp.iamguide.controller;
 import com.kakaocorp.iamguide.model.Admin;
 import com.kakaocorp.iamguide.model.GuideDoc;
 
+import com.kakaocorp.iamguide.model.GuideTag;
 import com.kakaocorp.iamguide.model.GuideUpdate;
 import com.kakaocorp.iamguide.service.*;
 import org.slf4j.LoggerFactory;
@@ -118,7 +119,6 @@ public class AdminController {
 
         logger.info("edit : {}", id);
         return true;
-
     }
 
     /**
@@ -204,7 +204,7 @@ public class AdminController {
 
     @RequestMapping(value = "suggestTags")
     public @ResponseBody
-    List suggestTags(@RequestParam("tag") String tag) {
+    List<GuideTag> suggestTags() {
         return guideTagService.suggestGuideTagList();
     }
 

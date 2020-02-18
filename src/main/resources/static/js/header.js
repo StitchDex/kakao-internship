@@ -1,22 +1,20 @@
 $(document).ready(function() {
-    $('.select2-tag').select2({
-        'ajax' : {
-            'url': '/guide/tag',
-            'data': function (param) {
-                return {'tag' : param.term}
-            },
-            'processResults': function (data) {
-                var ret = $.map(data, function(obj){
-                    obj.id = obj.id || obj.tag;
-                    obj.text = obj.text || obj.tag;
-                    return obj;
-                });
-                return {'results' : ret};
+    var ret = [];
+    $.ajax({
+        'url':'/guide/tag',
+        'async':false,
+        'success': function (data) {
+            ret = $.map(data, function(obj){
+                obj.id = obj.id || obj.tag;
+                obj.text = obj.text || obj.tag;
+                return obj;
+            });
+        }
+    });
 
-            },
-            'delay': 200
-        },
-        'placeholder':"#Tag Search",
+    $('.select2-tag').select2({
+        'placeholder':'#Tag Search',
+        'data':ret,
         'maximumInputLength': 20,
         'minimumInputLength': 1
     });

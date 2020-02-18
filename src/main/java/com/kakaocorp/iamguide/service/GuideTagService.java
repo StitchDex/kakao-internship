@@ -25,7 +25,6 @@ public class GuideTagService {
         return guideTagMapper.retrieveGuideTagList(doc_key);
     }
 
-    @Cacheable(value = "tagCache")
     public List<GuideTag> suggestGuideTagList() {
         return guideTagMapper.suggestGuideTagList();
     }
