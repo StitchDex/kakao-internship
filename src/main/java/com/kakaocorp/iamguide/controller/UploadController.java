@@ -43,7 +43,7 @@ public class UploadController {
         byte[] imageData = null;
         imageData = uploadService.retrieveImage(uuid);
 
-        logger.info("{},{}", "imageUpload", request.getRequestURI());
+        logger.info("{},{}", "imageDownload", request.getRequestURI());
         return imageData;
     }
 }

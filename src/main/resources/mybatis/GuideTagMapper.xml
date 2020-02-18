@@ -10,13 +10,13 @@
         ON GT.DOCUMENT_KEY = GD.DOCUMENT_KEY
         JOIN GUIDE_DIR as GDR
         ON GDR.DIR_KEY = GD.DIRECTORY_KEY
-        WHERE GT.TAG = #{tag} AND GD.DOCUMENT_STATE=1;
+        WHERE GT.TAG = #{tag} AND GD.DOCUMENT_STATE!=0
     </select>
     <select id="retrieveGuideTagList" resultType="com.kakaocorp.iamguide.model.GuideTag">
-        SELECT TAG as tag FROM GUIDE_TAGGING WHERE DOCUMENT_KEY = #{doc_key};
+        SELECT TAG as tag FROM GUIDE_TAGGING WHERE DOCUMENT_KEY = #{doc_key}
     </select>
     <select id="suggestGuideTagList" resultType="com.kakaocorp.iamguide.model.GuideTag">
-        SELECT DISTINCT TAG as tag FROM GUIDE_TAGGING WHERE TAG LIKE CONCAT("%", #{tag}, "%");
+        SELECT DISTINCT TAG as tag FROM GUIDE_TAGGING
     </select>
     <insert id="createTag">
         INSERT IGNORE INTO GUIDE_TAG
@@ -40,10 +40,15 @@
         </foreach>
         )
     </delete>
-    <delete id="deleteTrash">
-        DELETE FROM GUIDE_TAG
-        WHERE TAG NOT IN (
-            SELECT TAG FROM GUIDE_TAGGING
+    <select id = "findTrash" resultType="java.util.List">
+        select TAG from GUIDE_TAG
+        where TAG not in(
+        select TAG from GUIDE_TAGGING
         )
+    </select>
+
+    <delete id="deleteTrash" parameterType="String">
+        DELETE FROM GUIDE_TAG
+        WHERE TAG=#{trashTag}
     </delete>
 </mapper>

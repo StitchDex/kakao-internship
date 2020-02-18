@@ -11,9 +11,9 @@ public class GuideDoc implements Serializable {
     private String id;
     private String parent;
     private String parentTitle;
-    private String text;
+    private String text; //title
     private int orders;
-    private String content;
+    private String content; //text
     private String type;
     private int state;
     private ArrayList<String> tags;
