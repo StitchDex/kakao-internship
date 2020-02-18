@@ -22,5 +22,8 @@ public interface GuideTagMapper {
 
     void createTag(List tag);
 
-    void deleteTrash();
+    List<String> findTrash();
+
+    void deleteTrash(String trashTag);
+
 }

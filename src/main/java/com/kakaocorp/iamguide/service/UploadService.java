@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -35,15 +37,6 @@ public class UploadService {
 
     @Value("${tenth.serviece.name}")
     private String serviceId;
-
-    @Value("${tenth.host}")
-    private String host;
-
-    @Value("${tenth.key.read}")
-    private String readKey;
-
-    @Value("${tenth.key.write}")
-    private String writeKey;
 
     @Autowired
     private UploadMapper uploadMapper;
@@ -75,11 +68,12 @@ public class UploadService {
         }
         json.put("uploaded", 1);
         json.put("fileName", imageName);
-        json.put("url", PREFIX+uuid);
-        uploadMapper.createImage(imagePath,uuid); // Image table Only
+        json.put("url", PREFIX + uuid);
+        uploadMapper.createImage(imagePath, uuid); // Image table Only
         return json;
     }
 
+    @Cacheable(cacheNames = "imageCache", key = "#uuid")
     public byte[] retrieveImage(String uuid) throws IOException {
         byte[] imageData = null;
         String uploadPath = uploadMapper.retrieveImage(uuid);
@@ -90,30 +84,30 @@ public class UploadService {
         return imageData;
     }
 
-    private boolean deleteImage(String path) throws IOException {
+    @CacheEvict(cacheNames = "imageCache", key = "#uuid", condition = "#uuid!=null")
+    public boolean deleteImage(String path, String uuid) throws IOException {
         Tenth2File file = new Tenth2File(path);
         if (file.exists() && file.isFile())
             file.delete();
         return !file.exists();
     }
 
-
     public void updateImaging(String id, List insertUrl, List deleteUrl) throws IOException {
 
         if (!insertUrl.isEmpty()) {
-            for(int i=0;i<insertUrl.size();i++){
+            for (int i = 0; i < insertUrl.size(); i++) {
                 String temp = insertUrl.get(i).toString().substring(11);
-                logger.info("insert_img: {}",temp);
-                insertUrl.set(i,temp);
+                logger.info("insert_img: {}", temp);
+                insertUrl.set(i, temp);
             }
             uploadMapper.createImaging(insertUrl, id); //새로추가된 이미지와 문서 연결 : 이미징 테이블에 추가
         }
 
         if (!deleteUrl.isEmpty()) {
-            for(int i=0;i<deleteUrl.size();i++){
+            for (int i = 0; i < deleteUrl.size(); i++) {
                 String temp = deleteUrl.get(i).toString().substring(11);
-                logger.info("delete_img: {}",temp);
-                deleteUrl.set(i,temp);
+                logger.info("delete_img: {}", temp);
+                deleteUrl.set(i, temp);
             }
             uploadMapper.deleteImaging(deleteUrl, id); //이미징 테이블에서 연결관계 해제
         }
@@ -121,7 +115,7 @@ public class UploadService {
         List<Image> trashList = uploadMapper.findTrash();
         int pn = 0;
         while (pn != trashList.size()) {
-            if (!deleteImage(trashList.get(pn).getPath())) { //DELETE FAIL
+            if (!deleteImage(trashList.get(pn).getPath(), trashList.get(pn).getUuid())) { //DELETE FAIL
                 trashList.remove(pn);
             } else { //DELETE SUCCESS
                 pn++;

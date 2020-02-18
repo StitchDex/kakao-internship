@@ -1,7 +1,6 @@
 package com.kakaocorp.iamguide.model;
 
 import com.daum.mis.remote.client.model.IdentityPersonInfo;
-import lombok.Data;
 
 import java.io.Serializable;
 

@@ -2,6 +2,7 @@ let guideEditor; // for users
 let adminEditor; // for admin
 let selectedData; //current guide_document id
 let selectedText; //current guide_document title
+let beforeContent;
 let isEditing;
 var hiddenNum;
 var hidden = new Array();
@@ -33,8 +34,8 @@ function loadDoc(search_key) {
 function clickEditButton() {
     isEditing = !isEditing;
     isEditing ? $('#edit_button').text('취소') : location.reload();
-    var temp = guideEditor.getData();
-    beforeImageUrl = new Set(UrlParse(temp));
+    beforeContent = guideEditor.getData();
+    beforeImageUrl = new Set(UrlParse(beforeContent));
     guideEditor.destroy(true);
     makeAdminEditor();
 
@@ -45,6 +46,11 @@ function clickEditButton() {
 
 //admin edit_save_button click
 function clickSaveButton() {
+    const afterContent = adminEditor.getData();
+    if(afterContent == beforeContent){
+        alert("변경 내역이 없습니다.");
+        return;
+    }
     if (adminEditor == null) {
         alert("편집 버튼을 누른 후 저장버튼을 눌러주세요");
     } else {
@@ -59,7 +65,7 @@ function clickSaveButton() {
 
         adminEditor.set('isReadOnly', true);
         //+)check the doc is edit (if or editor method)
-        const edit_doc = adminEditor.getData();
+
         var token = $("meta[name='_csrf']").attr("content");
 
         //IMAGE URL
@@ -72,7 +78,7 @@ function clickSaveButton() {
         //Insert URL to DB & Delete URL from DB
         var sendData = JSON.stringify({
             "id": dockey,
-            "content": edit_doc,
+            "content": afterContent,
             "insertUrl": inserUrl,
             "deleteUrl": deleteUrl
         });

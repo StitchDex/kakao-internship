@@ -24,7 +24,7 @@ $(function () {
                         var temp = (data[i].state);
                         if (!temp) {
                             hidden[hiddenNum++] = data[i].id;
-                            data[i].text += " (숨김)";
+                            data[i].text = "(숨김) "+data[i].text;
                         }
                     }
                 }

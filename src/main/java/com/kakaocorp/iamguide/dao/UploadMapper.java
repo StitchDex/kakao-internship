@@ -1,5 +1,6 @@
 package com.kakaocorp.iamguide.dao;
 
+import com.kakaocorp.iamguide.model.Image;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -18,5 +19,5 @@ public interface UploadMapper {
 
     void deleteTrash(List trash);
 
-    List findTrash();
+    List<Image> findTrash();
 }

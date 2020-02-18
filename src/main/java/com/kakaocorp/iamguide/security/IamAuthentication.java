@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Component
 public class IamAuthentication implements AuthenticationProvider {
     private static final String ROLE = "ROLE_";

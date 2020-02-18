@@ -16,6 +16,7 @@ import java.util.List;
 @Service
 public class AdminService {
     private Logger logger = LoggerFactory.getLogger(AdminService.class);
+
     @Autowired
     private AdminMapper adminMapper;
 
