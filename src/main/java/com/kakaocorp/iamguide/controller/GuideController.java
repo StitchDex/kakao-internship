@@ -49,7 +49,10 @@ public class GuideController {
 
     @GetMapping("document")
     public String guideDocumentPage(@RequestParam(required = false) String doc_key, Model model) {
+        GuideDoc document = guideDocService.retrieveGuideDoc(doc_key);
+
         model.addAttribute("selected", doc_key);
+        model.addAttribute("documentText", document.getContent());
         return "guide-document";
     }
 
@@ -71,8 +74,8 @@ public class GuideController {
      */
     @GetMapping(value = "tag")
     public @ResponseBody
-    List getTags(@RequestParam("tag") String tag) {
-        return guideTagService.suggestGuideTagList(tag);
+    List getTags() {
+        return guideTagService.suggestGuideTagList();
     }
 
     /*

@@ -16,7 +16,7 @@ public class GuideTagService {
 
     public List<GuideDoc> retrieveGuideList(String tag){return guideTagMapper.retrieveGuideList(tag);}//for search result
     public List<GuideTag> retrieveGuideTagList(String doc_key) {return guideTagMapper.retrieveGuideTagList(doc_key);}
-    public List<GuideTag> suggestGuideTagList(String tag) {return guideTagMapper.suggestGuideTagList(tag);}
+    public List<GuideTag> suggestGuideTagList() {return guideTagMapper.suggestGuideTagList();}
 
     public void updateGuideTag(Object tags) {
         HashMap temp = (HashMap) tags;

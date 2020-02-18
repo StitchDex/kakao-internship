@@ -14,7 +14,7 @@ public interface GuideTagMapper {
 
     List<GuideTag> retrieveGuideTagList(@Param("doc_key") String doc_key);
 
-    List<GuideTag> suggestGuideTagList(@Param("tag") String tag);
+    List<GuideTag> suggestGuideTagList();
 
     void createTagging(@Param("doc_key") String doc_key, List insert);
 

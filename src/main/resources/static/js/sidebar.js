@@ -1,6 +1,5 @@
 //메뉴 클릭
 $(function () {
-
     hiddenNum = 0;
     depth2Dir = 0;
     documentKey = $('#selected').val();
@@ -87,7 +86,6 @@ $(function () {
 });
 
 $('#jstree').on('select_node.jstree', function (e, data) {
-
     selectedData = data.node.id;
     selectedText = data.node.text;
 
@@ -117,7 +115,6 @@ function beforeTreeOpen() {
             $("#jstree").jstree(true).hide_node(hidden[i]);
         }
     }
-
 }
 
 //Depth1 노드까지 열어준다
