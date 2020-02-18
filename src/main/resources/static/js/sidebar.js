@@ -3,6 +3,7 @@ $(function () {
     hiddenNum = 0;
     depth2Dir = 0;
     documentKey = $('#selected').val();
+    token = $("meta[name='_csrf']").attr("content");
     isEditing = false;
     $('#jstree').jstree({
         'core': {

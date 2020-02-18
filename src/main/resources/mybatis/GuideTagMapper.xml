@@ -16,15 +16,11 @@
         SELECT TAG as tag FROM GUIDE_TAGGING WHERE DOCUMENT_KEY = #{doc_key}
     </select>
     <select id="suggestGuideTagList" resultType="com.kakaocorp.iamguide.model.GuideTag">
-<<<<<<< HEAD
         SELECT DISTINCT TAG as tag
         FROM GUIDE_TAGGING as GT
         JOIN GUIDE_DOCUMENT as GD
         ON GT.DOCUMENT_KEY = GD.DOCUMENT_KEY
         WHERE GD.DOCUMENT_STATE != 0
-=======
-        SELECT DISTINCT TAG as tag FROM GUIDE_TAGGING
->>>>>>> 3d85deadf2d7c3470775c3e13a0eb00802434353
     </select>
     <insert id="createTag">
         INSERT IGNORE INTO GUIDE_TAG

@@ -12,6 +12,7 @@ var beforeImageUrl = new Set();
 var afterImageUrl = new Set();
 var depth2Dir = new Array();
 var documentKey;
+var token;
 
 function loadDoc(search_key) {
     let dockey = selectedData.substring(3, selectedData.length);
@@ -44,20 +45,29 @@ function clickEditButton() {
     $("#document-tag-list *").css("background-color", "#FFFFFF");
 }
 
+function tagIsChanged() {
+    return substract(Array.from(afterTags), Array.from(beforeTags)).length == 0 && substract(Array.from(beforeTags), Array.from(afterTags)).length == 0
+}
+
 //admin edit_save_button click
 function clickSaveButton() {
     const afterContent = adminEditor.getData();
-    if(afterContent == beforeContent){
+    afterTags = new Set();
+    $('#document-tag-list').children('div').each(function () {
+        afterTags.add($(this).data('value'));
+    });
+
+    if(afterContent == beforeContent && tagIsChanged()){
         alert("변경 내역이 없습니다.");
         return;
     }
+
     if (adminEditor == null) {
         alert("편집 버튼을 누른 후 저장버튼을 눌러주세요");
     } else {
         //Editor Save
-        var dockey = documentKey;
-        var recentUpdate = getGuideUpdate(dockey);
         var beforeUpdate = $('#guide-update').text();
+        var recentUpdate = getGuideUpdate(documentKey);
         if (recentUpdate != beforeUpdate) {
             var reply = confirm("다른 작업자의 결과물과 충돌이 발생했습니다.\n현재문서를 저장할 경우 문제가 생길 수 있습니다.\n저장하시겠습니까?")
             if (reply == false) return;
@@ -65,8 +75,6 @@ function clickSaveButton() {
 
         adminEditor.set('isReadOnly', true);
         //+)check the doc is edit (if or editor method)
-
-        var token = $("meta[name='_csrf']").attr("content");
 
         //IMAGE URL
         //Get before URL
@@ -77,7 +85,7 @@ function clickSaveButton() {
         var deleteUrl = substract(Array.from(beforeImageUrl), Array.from(afterImageUrl));
         //Insert URL to DB & Delete URL from DB
         var sendData = JSON.stringify({
-            "id": dockey,
+            "id": documentKey,
             "content": afterContent,
             "insertUrl": inserUrl,
             "deleteUrl": deleteUrl
@@ -98,7 +106,7 @@ function clickSaveButton() {
                     setTags();
                 } else {
                     alert("편집 에러");
-                    location.reload();
+                    //location.reload();
                 }
             }, error: function (error) {
                 console.log(error);
@@ -107,42 +115,33 @@ function clickSaveButton() {
             }
         });
     }
+}
 
-    function setTags() {
-        //Tag Select2
-        afterTags = new Set();
-        $('#document-tag-list').children('div').each(function () {
-            afterTags.add($(this).data('value'));
-        });
-        /*$.each($('select.select2-tagging option:selected'), function (key, val) {
-            afterTags.add(val.text);
-        });*/
+function setTags() {
+    //Tag Select
+    var insertTags = [];
+    var deleteTags = [];
 
-        var insertTags = [];
-        var deleteTags = [];
-
-        insertTags = substract(Array.from(afterTags), Array.from(beforeTags));
-        deleteTags = substract(Array.from(beforeTags), Array.from(afterTags));
-        var issuc = false;
-        $.ajax({
-            'url': '/admin/updateTags',
-            'contentType': 'application/json',
-            'async': false,
-            'data': JSON.stringify({'insert': insertTags, 'delete': deleteTags, 'doc_key': dockey}),
-            'headers': {"X-CSRF-TOKEN": token},
-            'method': 'POST',
-            'success': function () {
-
-                issuc = true;
-            }
-        });
-        if (issuc) {
-            beforeTags = new Set(afterTags);
+    insertTags = substract(Array.from(afterTags), Array.from(beforeTags));
+    deleteTags = substract(Array.from(beforeTags), Array.from(afterTags));
+    var issuc = false;
+    $.ajax({
+        'url': '/admin/updateTags',
+        'contentType': 'application/json',
+        'async': false,
+        'data': JSON.stringify({'insert': insertTags, 'delete': deleteTags, 'doc_key': documentKey}),
+        'headers': {"X-CSRF-TOKEN": token},
+        'method': 'POST',
+        'success': function () {
+            issuc = true;
         }
-        alert("저장 성공");
-        self.close();
-        location.reload();
+    });
+    if (issuc) {
+        beforeTags = new Set(afterTags);
     }
+    alert("저장 성공");
+    self.close();
+    location.reload();
 }
 
 //get guide_update on load
@@ -166,7 +165,6 @@ function getGuideUpdate(dockey) {
 //set guide_update when save button clicked
 function setGuideUpdate(title, key, type) {
     var sendData = JSON.stringify({"admin": $('#admin_name').val(), "documentKey": key, "title": title, "updateType": type});
-    var token = $("meta[name='_csrf']").attr("content");
     $.ajax({
         url: '/admin/set_update',
         headers: {"X-CSRF-TOKEN": token},
