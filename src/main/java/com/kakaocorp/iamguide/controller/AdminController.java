@@ -205,7 +205,7 @@ public class AdminController {
     @RequestMapping(value = "suggestTags")
     public @ResponseBody
     List suggestTags(@RequestParam("tag") String tag) {
-        return guideTagService.suggestGuideTagList(tag);
+        return guideTagService.suggestGuideTagList();
     }
 
     @RequestMapping(value = "updateTags", method = RequestMethod.POST)

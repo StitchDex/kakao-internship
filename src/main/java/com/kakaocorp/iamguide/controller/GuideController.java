@@ -72,7 +72,7 @@ public class GuideController {
     @GetMapping(value = "tag")
     public @ResponseBody
     List getTags(@RequestParam("tag") String tag) {
-        return guideTagService.suggestGuideTagList(tag);
+        return guideTagService.suggestGuideTagList();
     }
 
     /*

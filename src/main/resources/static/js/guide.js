@@ -56,8 +56,8 @@ function clickSaveButton() {
     } else {
         //Editor Save
         var dockey = documentKey;
-        var recentUpdate = getGuideUpdate(dockey);
         var beforeUpdate = $('#guide-update').text();
+        var recentUpdate = getGuideUpdate(dockey);
         if (recentUpdate != beforeUpdate) {
             var reply = confirm("다른 작업자의 결과물과 충돌이 발생했습니다.\n현재문서를 저장할 경우 문제가 생길 수 있습니다.\n저장하시겠습니까?")
             if (reply == false) return;
@@ -67,7 +67,7 @@ function clickSaveButton() {
         //+)check the doc is edit (if or editor method)
 
         var token = $("meta[name='_csrf']").attr("content");
-
+        
         //IMAGE URL
         //Get before URL
         //Get after URL
