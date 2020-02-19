@@ -11,13 +11,13 @@
         maxDepthExceededBehavior = "continue" :  초과 된 최대 깊이에 대해 경고하지만 크기가 조정 된 요소를 계속 탐색
         maxDepthExceededBehavior = "abort" : 순회를 중지하고 부분적으로 계산 된 크기를 즉시 반환
     -->
-    <sizeOfPolicy maxDepth="100000" maxDepthExceededBehavior="continue"/>
+    <sizeOfPolicy maxDepth="1000" maxDepthExceededBehavior="continue"/>
 
     <!-- default Cache 설정 (반드시 선언해야 하는 Cache) -->
     <defaultCache
             eternal="false"
             timeToIdleSeconds="0"
-            timeToLiveSeconds="1200"
+            timeToLiveSeconds="3600"
             overflowToDisk="false"
             diskPersistent="false"
             diskExpiryThreadIntervalSeconds="120"
@@ -28,7 +28,7 @@
     <cache name="treeCache"
            eternal="false"
            timeToIdleSeconds="0"
-           timeToLiveSeconds="1200"
+           timeToLiveSeconds="3600"
            overflowToDisk="false"
            diskPersistent="false"
            diskExpiryThreadIntervalSeconds="120"
@@ -38,7 +38,7 @@
     <cache name="misCache"
            eternal="false"
            timeToIdleSeconds="0"
-           timeToLiveSeconds="1200"
+           timeToLiveSeconds="3600"
            overflowToDisk="false"
            diskPersistent="false"
            diskExpiryThreadIntervalSeconds="120"
@@ -48,7 +48,7 @@
     <cache name="imageCache"
            eternal="false"
            timeToIdleSeconds="0"
-           timeToLiveSeconds="1200"
+           timeToLiveSeconds="3600"
            overflowToDisk="false"
            diskPersistent="false"
            diskExpiryThreadIntervalSeconds="120"
@@ -58,7 +58,7 @@
     <cache name="tagCache"
            eternal="false"
            timeToIdleSeconds="0"
-           timeToLiveSeconds="1200"
+           timeToLiveSeconds="3600"
            overflowToDisk="false"
            diskPersistent="false"
            diskExpiryThreadIntervalSeconds="120"
