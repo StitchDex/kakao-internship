@@ -1,5 +1,4 @@
 $(document).ready(function() {
-    var ret = [];
     var url = '';
     if(window.location.pathname.startsWith('/guide')) url = '/guide/tag';
     else url = '/admin/suggestTags';
@@ -8,7 +7,7 @@ $(document).ready(function() {
         'url':url,
         'async':false,
         'success': function (data) {
-            ret = $.map(data, function(obj){
+            allTags = $.map(data, function(obj){
                 obj.id = obj.id || obj.tag;
                 obj.text = obj.text || obj.tag;
                 return obj;
@@ -17,11 +16,14 @@ $(document).ready(function() {
     });
 
     $('.select2-tag').select2({
+        'language':'ko',
         'placeholder':'#Tag Search',
-        'data':ret,
+        'data':allTags,
         'maximumInputLength': 20,
         'minimumInputLength': 1
     });
+
+    console.log($('.select2-tag').find('option'));
 });
 //tag select event
 $('.select2-tag').on('select2:select', function (e) {

@@ -43,6 +43,7 @@ public class GuideTagService {
         if (!delete.isEmpty()) {
             guideTagMapper.deleteTagging(id, delete);
         }
+
         List<String> trashTags = guideTagMapper.findTrash();
         if (trashTags.size() > 0) {
             for (String trashTag : trashTags) {

@@ -13,6 +13,7 @@ var afterImageUrl = new Set();
 var depth2Dir = new Array();
 var documentKey;
 var token;
+var allTags;
 
 function loadDoc(search_key) {
     let dockey = selectedData.substring(3, selectedData.length);
@@ -219,23 +220,10 @@ function initSelectTagging() {
         showGuideTag(tagList)
     }
     else {
-        var ret = [];
-        $.ajax({
-            'url':'/admin/suggestTags',
-            'async':false,
-            'success': function (data) {
-                ret = $.map(data, function(obj){
-                    obj.id = obj.id || obj.tag;
-                    obj.text = obj.text || obj.tag;
-                    return obj;
-                });
-            }
-        });
-
         $('select.select2-tagging').select2(
             {
                 'placeholder':'#태그 : 스페이스바로 생성 가능합니다.',
-                'data':ret,
+                'data':allTags,
                 'tags': true,
                 'allowClear': true,
                 'disabled': true,
