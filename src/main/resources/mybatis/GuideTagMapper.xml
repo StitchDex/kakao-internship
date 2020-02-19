@@ -10,7 +10,8 @@
         ON GT.DOCUMENT_KEY = GD.DOCUMENT_KEY
         JOIN GUIDE_DIR as GDR
         ON GDR.DIR_KEY = GD.DIRECTORY_KEY
-        WHERE GT.TAG = #{tag} AND GD.DOCUMENT_STATE!=0
+        WHERE GT.TAG = #{tag}
+            AND IF(#{pathName}='guide', 0, -1) != GD.DOCUMENT_STATE
     </select>
     <select id="retrieveGuideTagList" resultType="com.kakaocorp.iamguide.model.GuideTag">
         SELECT TAG as tag FROM GUIDE_TAGGING WHERE DOCUMENT_KEY = #{doc_key}
@@ -20,7 +21,7 @@
         FROM GUIDE_TAGGING as GT
         JOIN GUIDE_DOCUMENT as GD
         ON GT.DOCUMENT_KEY = GD.DOCUMENT_KEY
-        WHERE GD.DOCUMENT_STATE != 0
+        WHERE IF(#{pathName}='guide', 0, -1) != GD.DOCUMENT_STATE
     </select>
     <insert id="createTag">
         INSERT IGNORE INTO GUIDE_TAG

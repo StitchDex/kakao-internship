@@ -1,7 +1,11 @@
 $(document).ready(function() {
     var ret = [];
+    var url = '';
+    if(window.location.pathname.startsWith('/guide')) url = '/guide/tag';
+    else url = '/admin/suggestTags';
+
     $.ajax({
-        'url':'/guide/tag',
+        'url':url,
         'async':false,
         'success': function (data) {
             ret = $.map(data, function(obj){

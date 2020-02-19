@@ -17,16 +17,16 @@ public class GuideTagService {
     @Autowired
     private GuideTagMapper guideTagMapper;
 
-    public List<GuideDoc> retrieveGuideList(String tag) {
-        return guideTagMapper.retrieveGuideList(tag);
+    public List<GuideDoc> retrieveGuideList(String tag, String pathName) {
+        return guideTagMapper.retrieveGuideList(tag, pathName);
     }//for search result
 
     public List<GuideTag> retrieveGuideTagList(String doc_key) {
         return guideTagMapper.retrieveGuideTagList(doc_key);
     }
 
-    public List<GuideTag> suggestGuideTagList() {
-        return guideTagMapper.suggestGuideTagList();
+    public List<GuideTag> suggestGuideTagList(String pathName) {
+        return guideTagMapper.suggestGuideTagList(pathName);
     }
 
     @CacheEvict(value = "tagCache", allEntries = true)
