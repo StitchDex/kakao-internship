@@ -25,13 +25,14 @@ public class GuideTagService {
         return guideTagMapper.retrieveGuideTagList(doc_key);
     }
 
+    @Cacheable(value = "tagCache", key = "#pathName")
     public List<GuideTag> suggestGuideTagList(String pathName) {
         return guideTagMapper.suggestGuideTagList(pathName);
     }
 
     @CacheEvict(value = "tagCache", allEntries = true)
     public void updateGuideTag(Object tags) {
-        HashMap temp = (HashMap) tags;
+        HashMap<String,Object> temp = (HashMap<String,Object>) tags;
         String id = (String) temp.get("doc_key");
         ArrayList<String> insert = (ArrayList<String>) temp.get("insert");
         ArrayList<String> delete = (ArrayList<String>) temp.get("delete");

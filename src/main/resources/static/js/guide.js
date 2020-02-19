@@ -15,20 +15,21 @@ var documentKey;
 var token;
 var allTags;
 
-function loadDoc(search_key) {
-    let dockey = selectedData.substring(3, selectedData.length);
+function loadDoc(selectKey) {
+    let docKey = selectedData.substring(3, selectedData.length);
 
-    if (search_key != null) {
-        dockey = search_key;
+    if (selectKey != null) {
+        docKey = selectKey;
     }
-    if (!isNaN(dockey)) {
+    if (!isNaN(docKey)) {
         if (window.location.pathname.startsWith("/admin")) {
-            location.href = '/admin/document?doc_key=' + dockey;
+            location.href = '/admin/document?doc_key=' + docKey;
         } else {
-            location.href = '/guide/document?doc_key=' + dockey;
+            location.href = '/guide/document?doc_key=' + docKey;
         }
     } else {
         console.log("document key error");
+        location.href='/error';
     }
 }
 
@@ -259,11 +260,11 @@ function UrlParse(text) {
 }
 
 function clickMainTag(tagName) {
-    location.href = "/guide/search?tag=%23" + tagName;
+    location.href = "/guide/search?tag=%23" +tagName;
 }
 
 function tagCheck(input) {
-    var ret = true
+    var ret = true;
     $('#document-tag-list').children('div').each(function () {
         if ($(this).data('value') == input) {
             ret = false;
