@@ -272,11 +272,11 @@ function UrlParse(text) {
 }
 
 function clickMainTag(tagName) {
-    location.href = "/guide/search?tag=%23" + tagName;
+    location.href = "/guide/search?tag=%23" +tagName;
 }
 
 function tagCheck(input) {
-    var ret = true
+    var ret = true;
     $('#document-tag-list').children('div').each(function () {
         if ($(this).data('value') == input) {
             ret = false;

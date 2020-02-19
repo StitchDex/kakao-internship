@@ -45,11 +45,9 @@
         </foreach>
         )
     </delete>
-    <select id = "findTrash" resultType="java.util.List">
+    <select id = "findTrash" resultType="String">
         select TAG from GUIDE_TAG
-        where TAG not in(
-        select TAG from GUIDE_TAGGING
-        )
+        where TAG not in( select TAG from GUIDE_TAGGING)
     </select>
 
     <delete id="deleteTrash" parameterType="String">
