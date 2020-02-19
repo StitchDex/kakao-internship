@@ -179,7 +179,7 @@ public class AdminController {
 
     @GetMapping(value = "search")
     public String getSearchResults(@RequestParam("tag") String tag, Model model) {
-        ArrayList<GuideDoc> documentList = (ArrayList<GuideDoc>) guideTagService.retrieveGuideList(tag);
+        ArrayList<GuideDoc> documentList = (ArrayList<GuideDoc>) guideTagService.retrieveGuideList(tag, "admin");
         for (int i = 0; i < documentList.size(); i++) {
             String id = documentList.get(i).getId();
             documentList.get(i).setTags(guideTagService.retrieveGuideTagList(id));
@@ -197,7 +197,6 @@ public class AdminController {
         }
 
         model.addAttribute("Results", result);
-        model.addAttribute("test", "test");
         model.addAttribute("tag", tag);
         return "search-result";
     }
@@ -205,7 +204,7 @@ public class AdminController {
     @RequestMapping(value = "suggestTags")
     public @ResponseBody
     List<GuideTag> suggestTags() {
-        return guideTagService.suggestGuideTagList();
+        return guideTagService.suggestGuideTagList("admin");
     }
 
     @RequestMapping(value = "updateTags", method = RequestMethod.POST)

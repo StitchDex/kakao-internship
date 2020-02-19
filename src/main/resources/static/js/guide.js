@@ -109,7 +109,7 @@ function clickSaveButton() {
                     setTags();
                 } else {
                     alert("편집 에러");
-                    //location.reload();
+                    location.reload();
                 }
             }, error: function (error) {
                 console.log(error);
@@ -216,27 +216,31 @@ function initSelectTagging() {
         }
     });
 
-    window.location.pathname.startsWith("/guide") ? showGuideTag(tagList) :
+    if(window.location.pathname.startsWith("/guide")) {
+        showGuideTag(tagList)
+    }
+    else {
+        var ret = [];
+        $.ajax({
+            'url':'/admin/suggestTags',
+            'async':false,
+            'success': function (data) {
+                ret = $.map(data, function(obj){
+                    obj.id = obj.id || obj.tag;
+                    obj.text = obj.text || obj.tag;
+                    return obj;
+                });
+            }
+        });
+
         $('select.select2-tagging').select2(
             {
-                'ajax': {
-                    'url': '/admin/suggestTags',
-                    'data': function (params) {
-                        return {'tag': params.term};
-                    },
-                    'processResults': function (data) {
-                        data = $.map(data, function (obj) {
-                            obj.id = obj.id || obj.tag; // replace pk with your identifier
-                            obj.text = obj.text || obj.tag; // replace pk with your identifier
-                            return obj;
-                        });
-                        return {results: data};
-                    }
-                },
+                'placeholder':'#태그 : 스페이스바로 생성 가능합니다.',
+                'data':ret,
                 'tags': true,
                 'allowClear': true,
                 'disabled': true,
-                'tokenSeparators': [',', ' '], //태그 구분자 추가
+                'tokenSeparators':[' '],
                 'createTag': function (params) { //태그 공백 제거
                     var term = $.trim(params.term);
                     if (term == '') {
@@ -247,6 +251,7 @@ function initSelectTagging() {
                 }
             }
         );
+    }
     beforeTags = new Set(tagList);
 }
 

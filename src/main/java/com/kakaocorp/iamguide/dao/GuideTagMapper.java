@@ -10,11 +10,11 @@ import java.util.List;
 
 @Mapper
 public interface GuideTagMapper {
-    List<GuideDoc> retrieveGuideList(@Param("tag") String tag); // select tag with search bar
+    List<GuideDoc> retrieveGuideList(@Param("tag") String tag, @Param("pathName") String pathName); // select tag with search bar
 
     List<GuideTag> retrieveGuideTagList(@Param("doc_key") String doc_key);
 
-    List<GuideTag> suggestGuideTagList();
+    List<GuideTag> suggestGuideTagList(@Param("pathName") String pathName);
 
     void createTagging(@Param("doc_key") String doc_key, List insert);
 

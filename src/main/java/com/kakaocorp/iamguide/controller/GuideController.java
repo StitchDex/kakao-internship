@@ -50,9 +50,7 @@ public class GuideController {
     @GetMapping("document")
     public String guideDocumentPage(@RequestParam(required = false) String doc_key, Model model) {
         GuideDoc document = guideDocService.retrieveGuideDoc(doc_key);
-
         model.addAttribute("selected", doc_key);
-        model.addAttribute("documentText", document.getContent());
         return "guide-document";
     }
 
@@ -75,7 +73,7 @@ public class GuideController {
     @GetMapping(value = "tag")
     public @ResponseBody
     List<GuideTag> getTags() {
-        return guideTagService.suggestGuideTagList();
+        return guideTagService.suggestGuideTagList("guide");
     }
 
     /*
@@ -83,7 +81,7 @@ public class GuideController {
      */
     @GetMapping(value = "search")
     public String getSearchResults(@RequestParam("tag") String tag, Model model) {
-        ArrayList<GuideDoc> documentList = (ArrayList<GuideDoc>) guideTagService.retrieveGuideList(tag);
+        ArrayList<GuideDoc> documentList = (ArrayList<GuideDoc>) guideTagService.retrieveGuideList(tag, "guide");
         for (int i = 0; i < documentList.size(); i++) {
             String id = documentList.get(i).getId();
             documentList.get(i).setTags(guideTagService.retrieveGuideTagList(id));
@@ -101,7 +99,6 @@ public class GuideController {
         }
 
         model.addAttribute("Results", result);
-        model.addAttribute("test", "test");
         model.addAttribute("tag", tag);
         return "search-result";
     }
