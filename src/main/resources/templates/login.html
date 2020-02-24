@@ -9,7 +9,6 @@
     <link href="../static/css/common.css" th:href="@{/css/common.css}" rel="stylesheet"/>
 </head>
 <body id="loginBody">
-
 <div class="form-signin">
     <div class="form-group mb-5">
         <a href="#" class="link_logo"><span class="ir_wa sr-only">kakao</span></a>
@@ -30,7 +29,7 @@
             <input type="password" name="password" id="inputPassword" placeholder="비밀번호"
                    maxlength="32"
                    class="form-control form-control-lg" autocomplete="current-password"
-                   oninvalid="this.setCustomValidity('사내 계정 비밀번호를 입력해주세요.')"
+                   oninvalid="this.setCustomValidity('사나이 계정 비밀번호를 입력해주세요.')"
                    oninput="setCustomValidity('')"
                    required pattern=".{1,32}"/>
             <div th:if="${param.error}" class="text-danger">
