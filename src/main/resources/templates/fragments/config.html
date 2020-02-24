@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head th:fragment="configFragment">
     <meta charset="UTF-8">
@@ -8,12 +7,10 @@
     <meta name="description" content="IAM GUIDE SYTSTEM">
     <meta name="author" content="@IAM">
     <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
-    <title>IAM | GUIDE</title>
-    <!-- default header name is X-CSRF-TOKEN -->
     <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>IAM | GUIDE</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" />
     <link href="../../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
-    <link href="../../static/css/simple-sidebar.css" th:href="@{/css/simple-sidebar.css}" rel="stylesheet"/>
     <link href="../../static/css/select2.min.css" th:href="@{/css/select2.min.css}" rel="stylesheet" />
     <link href="../../static/css/jstree/style.css" th:href="@{/css/jstree/style.css}" rel="stylesheet" />
     <link href="../../static/css/common.css" th:href="@{/css/common.css}" rel="stylesheet"/>

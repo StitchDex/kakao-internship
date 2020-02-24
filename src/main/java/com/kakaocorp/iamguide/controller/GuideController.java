@@ -6,6 +6,7 @@ import com.kakaocorp.iamguide.service.GuideDocService;
 import com.kakaocorp.iamguide.service.GuideTagService;
 import com.kakaocorp.iamguide.service.GuideUpdateService;
 import groovy.transform.Trait;
+import org.apache.ibatis.jdbc.Null;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,16 +43,18 @@ public class GuideController {
         return guideDocService.retrieveGuideTreeList();
     }
 
-    @GetMapping("menu")
-    public @ResponseBody
-    GuideDoc retrieveGuideDoc(@RequestParam("doc_key") String doc_key) {
-        logger.info("clicked_menu_num:{}", doc_key);
-        return guideDocService.retrieveGuideDoc(doc_key);
-    }
-
     @GetMapping("document")
-    public String guideDocumentPage(@RequestParam(required = false) String doc_key, Model model) {
-        model.addAttribute("selected", doc_key);
+    public String guideDocumentPage(HttpServletResponse res, @RequestParam("doc_key") String docKey, Model model) throws NullPointerException, IOException {
+        GuideDoc guideDoc = guideDocService.retrieveGuideDoc(docKey);
+        model.addAttribute("selected", docKey);
+        try {
+            model.addAttribute("guideTitle", guideDoc.getText());
+            model.addAttribute("guideContent", guideDoc.getContent());
+        }
+        catch (Exception e){
+            logger.info("{} not found",docKey);
+            res.sendError(404);
+        }
         return "guide-document";
     }
 
@@ -62,8 +67,8 @@ public class GuideController {
 
     @RequestMapping(value = "getTags")
     public @ResponseBody
-    List<GuideTag> retrieveTags(@RequestParam("doc_key") String doc_key) {
-        return guideTagService.retrieveGuideTagList(doc_key);
+    List<GuideTag> retrieveTags(@RequestParam("doc_key") String docKey) {
+        return guideTagService.retrieveGuideTagList(docKey);
     }
 
     /*
@@ -71,7 +76,7 @@ public class GuideController {
      */
     @GetMapping(value = "tag")
     public @ResponseBody
-    List<GuideTag> getTags() {
+    List<GuideTag> retrieveSuggestTagList() {
         return guideTagService.suggestGuideTagList("guide");
     }
 

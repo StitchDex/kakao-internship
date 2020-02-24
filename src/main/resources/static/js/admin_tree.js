@@ -220,10 +220,10 @@ $(function () {
         $(this).jstree('open_all');
         mainDocument = $(this).jstree('get_node', "DOC" + mainDocument);
         $('.mainDocumentText').text(mainDocument.text);
-    }).bind("move_node.jstree", function (e, data) {
 
+    }).bind("move_node.jstree", function (e, data) { // 노드 이동
         if (data.old_parent === data.parent) {
-            var nodeParent = $("#edit_tree").jstree('get_node', data.parent); //부모
+            var nodeParent = $("#edit_tree").jstree('get_node', data.parent);
             var temp = $("#edit_tree").jstree('get_node', nodeParent.children[data.position]);
             console.log(temp);
             var jsonData = {
@@ -246,8 +246,7 @@ $(function () {
                 'state': !temp.state.disabled + 0
             };
             jsonArray.push(jsonData);
-        }
-        else{ //다른 디렉터리 이동
+        } else { //다른 디렉터리 이동
             nodeParent = $("#edit_tree").jstree('get_node', data.old_parent); //이전 부모
             var nodeParent1 = $("#edit_tree").jstree('get_node', data.parent); // 바뀐 부모
             console.log(nodeParent);
@@ -290,13 +289,12 @@ $(function () {
                         'parent': temp.parent,
                         'text': temp.text,
                         'type': temp.type,
-                        'orders': i+1,
+                        'orders': i + 1,
                         'state': !temp.state.disabled + 0
                     };
                     jsonArray.push(jsonData);
                     i++;
-                }
-                else{
+                } else {
                     var jsonData = {
                         'id': temp.id,
                         'parent': temp.parent,
@@ -320,9 +318,7 @@ $(function () {
 
 $('#edit_tree').on('select_node.jstree', function (e, data) {
 
-    selectedData = data.node.id;
-    selectedText = data.node.text;
-
+    let selectedData = data.node.id;
     if (selectedData.startsWith("DIR")) {//click dir_node
         data.node.state.opened ? $(this).jstree('close_node', selectedData)
             : $(this).jstree('open_node', selectedData);
@@ -370,7 +366,6 @@ function createNode(sendData) {
             if (res > 0) {
                 setGuideUpdate(title, res, 'create');
                 alert(title + "생성 성공");
-                opener.document.location.reload();
                 location.reload();
             }
         }, error: function (error) {
@@ -392,11 +387,10 @@ function updateNode(sendData) {
         method: 'POST',
         dataType: 'html',
         contentType: 'application/json',
-        success: function () {
+        success: function (res) {
             var temp = JSON.parse(sendData);
             setGuideUpdate(title, temp.id, 'change');
             alert(title + "업데이트 성공");
-            opener.document.location.reload();
             location.reload();
         }, error: function (error) {
             alert("트리 업데이트 오류");
@@ -420,7 +414,6 @@ function deleteNode(sendData, title, what) {
             var temp = JSON.parse(sendData);
             setGuideUpdate(title, temp.id, 'delete');
             alert(title + "삭제 성공");
-            opener.document.location.reload();
             location.reload();
         }, error: function (error) {
             alert("트리 삭제 오류");

@@ -23,7 +23,6 @@ $(document).ready(function() {
         'minimumInputLength': 1
     });
 
-    console.log($('.select2-tag').find('option'));
 });
 //tag select event
 $('.select2-tag').on('select2:select', function (e) {
@@ -37,5 +36,5 @@ $('.select2-tag').on('select2:select', function (e) {
 });
 
 $('#admin_tree_button').on('click', function() {
-    window.open("/admin/admin_tree","","width=500,height=600,resizable=yes,toolbar=yes,status=0,location=no,menubar=no,scrollbars=yes");
+    window.open("/admin/admin_tree","AdminTree","width=500,height=600,resizable=yes,toolbar=yes,status=no,location=no,menubar=no,scrollbars=yes");
 });

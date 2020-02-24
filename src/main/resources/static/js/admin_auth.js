@@ -1,5 +1,12 @@
 var selectAccount = $('select.select2-account');
 
+$(window).on('load', function () {
+    var cur_path = window.location.pathname;
+    if(cur_path === "/admin/admin_auth") {
+        onload();
+    }
+});
+
 selectAccount.select2({
     'ajax' : {
         'url': '/admin/suggest',
@@ -22,15 +29,7 @@ selectAccount.select2({
     'allowClear': true,
 });
 
-$(window).on('load', function () {
-    var cur_path = window.location.pathname;
-    if(cur_path == "/admin/admin_auth") {
-        onload();
-    }
-    else{
 
-    }
-});
 
 function onload() {
     $('select.select-account-all').empty();

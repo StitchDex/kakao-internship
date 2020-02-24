@@ -1,7 +1,5 @@
 let guideEditor; // for users
 let adminEditor; // for admin
-let selectedData; //current guide_document id
-let selectedText; //current guide_document title
 let beforeContent;
 let isEditing;
 var hiddenNum;
@@ -11,16 +9,24 @@ var afterTags;
 var beforeImageUrl = new Set();
 var afterImageUrl = new Set();
 var depth2Dir = new Array();
-var documentKey;
+let documentKey; // current docKey
 var token;
 var allTags;
 
-function loadDoc(selectKey) {
-    let docKey = selectedData.substring(3, selectedData.length);
-
-    if (selectKey != null) {
-        docKey = selectKey;
+$(function () {
+    documentKey = $('#selected').val();
+    if(documentKey != undefined){
+        isEditing = false;
+        documentKey = $('#selected').val();
+        beforeContent = $('#guideContent').val();
+        makeGuideEditor(beforeContent);
+        getGuideUpdate(documentKey);
+        initSelectTagging();
     }
+});
+
+function loadDoc(docKey) {
+    docKey = docKey.substring(3, docKey.length);
     if (!isNaN(docKey)) {
         if (window.location.pathname.startsWith("/admin")) {
             location.href = '/admin/document?doc_key=' + docKey;
@@ -29,7 +35,7 @@ function loadDoc(selectKey) {
         }
     } else {
         console.log("document key error");
-        location.href='/error';
+        location.href = '/error';
     }
 }
 
@@ -37,6 +43,7 @@ function loadDoc(selectKey) {
 function clickEditButton() {
     isEditing = !isEditing;
     isEditing ? $('#edit_button').text('취소') : location.reload();
+
     beforeContent = guideEditor.getData();
     beforeImageUrl = new Set(UrlParse(beforeContent));
     guideEditor.destroy(true);
@@ -59,7 +66,7 @@ function clickSaveButton() {
         afterTags.add($(this).data('value'));
     });
 
-    if(afterContent == beforeContent && tagIsChanged()){
+    if (afterContent == beforeContent && tagIsChanged()) {
         alert("변경 내역이 없습니다.");
         return;
     }
@@ -168,7 +175,12 @@ function getGuideUpdate(dockey) {
 
 //set guide_update when save button clicked
 function setGuideUpdate(title, key, type) {
-    var sendData = JSON.stringify({"admin": $('#admin_name').val(), "documentKey": key, "title": title, "updateType": type});
+    var sendData = JSON.stringify({
+        "admin": $('#admin_name').val(),
+        "documentKey": key,
+        "title": title,
+        "updateType": type
+    });
     $.ajax({
         url: '/admin/set_update',
         headers: {"X-CSRF-TOKEN": token},
@@ -217,18 +229,17 @@ function initSelectTagging() {
         }
     });
 
-    if(window.location.pathname.startsWith("/guide")) {
+    if (window.location.pathname.startsWith("/guide")) {
         showGuideTag(tagList)
-    }
-    else {
+    } else {
         $('select.select2-tagging').select2(
             {
-                'placeholder':'#태그 : 스페이스바로 생성 가능합니다.',
-                'data':allTags,
+                'placeholder': '#태그 : 스페이스바로 생성 가능합니다.',
+                'data': allTags,
                 'tags': true,
                 'allowClear': true,
                 'disabled': true,
-                'tokenSeparators':[' '],
+                'tokenSeparators': [' '],
                 'createTag': function (params) { //태그 공백 제거
                     var term = $.trim(params.term);
                     if (term == '') {
@@ -260,7 +271,7 @@ function UrlParse(text) {
 }
 
 function clickMainTag(tagName) {
-    location.href = "/guide/search?tag=%23" +tagName;
+    location.href = "/guide/search?tag=%23" + tagName;
 }
 
 function tagCheck(input) {

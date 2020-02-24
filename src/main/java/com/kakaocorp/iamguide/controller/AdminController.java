@@ -1,5 +1,6 @@
 package com.kakaocorp.iamguide.controller;
 
+import com.daum.mis.remote.client.model.IdentityPersonInfo;
 import com.kakaocorp.iamguide.model.Admin;
 import com.kakaocorp.iamguide.model.GuideDoc;
 
@@ -16,6 +17,8 @@ import org.slf4j.Logger;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,24 +43,34 @@ public class AdminController {
     @Autowired
     private UploadService uploadService;
 
-
     @GetMapping("document")
-    public String guideDocumentPage(@RequestParam(required = false) String doc_key, Model model) {
-        if (doc_key != null) {
-            model.addAttribute("selected", doc_key);
+    public String guideDocumentPage(HttpServletResponse res, @RequestParam("doc_key") String docKey, Model model) throws NullPointerException, IOException {
+        GuideDoc guideDoc = guideDocService.retrieveGuideDoc(docKey);
+        model.addAttribute("selected", docKey);
+        try {
+            model.addAttribute("guideTitle", guideDoc.getText());
+            model.addAttribute("guideContent", guideDoc.getContent());
+        }
+        catch (Exception e){
+            logger.info("{} not found",docKey);
+            res.sendError(404);
         }
         return "admin-document";
     }
 
     @GetMapping("admin_tree")
-    public ModelAndView adminTreePage(ModelAndView model) {
+    public String adminTreePage(Model model) {
         String mainKey = guideDocService.selectMain("2");
         if (mainKey == null) {
             mainKey = guideDocService.selectMain("1");
         }
-        model.setViewName("admin_tree");
-        model.addObject("mainDocument", mainKey);
-        return model;
+        model.addAttribute("mainDocument", mainKey);
+        return "admin_tree";
+    }
+
+    @GetMapping("admin_auth")
+    public String adminAuthPage() {
+        return "admin_auth";
     }
 
     @PostMapping(value = "admin_tree/create", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -72,35 +85,46 @@ public class AdminController {
     }
 
     @PostMapping(value = "admin_tree/update", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String updateGuideTree(@RequestBody List<GuideDoc> guideDocList) throws Exception {
+    @ResponseBody
+    public boolean updateGuideTree(@RequestBody List<GuideDoc> guideDocList) throws Exception {
 
         int listSize = guideDocList.size();
-
-        while (listSize > 0) {
-            GuideDoc guideDoc = guideDocList.get(listSize - 1);
-            if (guideDoc.getType().equals("DOC")) {
-                guideDocService.updateGuideTree(guideDoc);
-            } else {
-                guideDirService.updateGuideDir(guideDoc);
+        try {
+            while (listSize > 0) {
+                GuideDoc guideDoc = guideDocList.get(listSize - 1);
+                if (guideDoc.getType().equals("DOC")) {
+                    guideDocService.updateGuideTree(guideDoc);
+                } else {
+                    guideDirService.updateGuideDir(guideDoc);
+                }
+                listSize--;
             }
-            listSize--;
         }
-        return "redirect:admin/admin_tree";
+        catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
 
     @PostMapping(value = "admin_tree/delete", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String deleteGuideTree(@RequestBody Map<String, Object> parm) throws Exception {
-
-        String key = (String) parm.get("id");
-        String type = (String) parm.get("type");
-
-        if (type.equals("DOC")) {
-            guideDocService.deleteGuideTree(key);
-        } else {
-            guideDirService.deleteGuideDir(key);
+    @ResponseBody
+    public boolean deleteGuideTree(@RequestBody Map<String, Object> objectMap) throws Exception {
+        String key = (String) objectMap.get("id");
+        String type = (String) objectMap.get("type");
+        try {
+            if (type.equals("DOC")) {
+                guideDocService.deleteGuideTree(key);
+            } else {
+                guideDirService.deleteGuideDir(key);
+            }
         }
-        return "redirect:admin/admin_tree";
+        catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -131,10 +155,6 @@ public class AdminController {
         guideUpdateService.createGuideUpdate(guideUpdate); // guide_doc edit
     }
 
-    @GetMapping("admin_auth")
-    public String adminAuthPage() {
-        return "admin_auth";
-    }
 
     /**
      * AJAX : admin(AUTHENTICATED)
@@ -142,10 +162,10 @@ public class AdminController {
      */
     @RequestMapping("suggest")
     public @ResponseBody
-    List suggestId(HttpServletRequest req, @RequestParam String accountId) throws Exception {
+    List<IdentityPersonInfo> suggestId(@RequestParam String accountId) throws Exception {
         logger.debug("Query : {}", accountId);
         if (accountId != null && !accountId.isEmpty()) {
-            List ret = adminService.suggest(accountId);
+            List<IdentityPersonInfo> ret = adminService.suggest(accountId);
             return ret;
         }
         return new ArrayList<>();
@@ -157,7 +177,7 @@ public class AdminController {
      */
     @RequestMapping("getadminall")
     public @ResponseBody
-    List getAdminList() throws Exception {
+    List<Admin> getAdminList() throws Exception {
         return adminService.getAdminList();
     }
 
@@ -203,7 +223,7 @@ public class AdminController {
 
     @RequestMapping(value = "suggestTags")
     public @ResponseBody
-    List<GuideTag> suggestTags() {
+    List<GuideTag> retrieveSuggestTagList() {
         return guideTagService.suggestGuideTagList("admin");
     }
 

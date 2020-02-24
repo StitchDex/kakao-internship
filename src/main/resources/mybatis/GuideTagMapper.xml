@@ -46,16 +46,11 @@
         )
     </delete>
     <select id = "findTrash" resultType="String">
-<<<<<<< HEAD
         select TAG
         from GUIDE_TAG
         where TAG not in(
             select TAG from GUIDE_TAGGING
         )
-=======
-        select TAG from GUIDE_TAG
-        where TAG not in( select TAG from GUIDE_TAGGING)
->>>>>>> c94395ab57857a9b6ae2d0b775ef7c38cca1760e
     </select>
 
     <delete id="deleteTrash" parameterType="String">

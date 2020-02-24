@@ -6,9 +6,10 @@
 <div layout:fragment="content">
     <div id="guide_content">
         <div class="container">
-            <input id="selected" hidden="hidden" th:value="${selected}">
-            <h1 id="guide-title"></h1>
+            <input type="hidden" id="selected"  th:value="${selected}">
+            <h1 id="guide-title" th:text="${guideTitle}"></h1>
             <p style="font-size: 0.8em" id="guide-update"></p>
+            <input type="hidden" id="guideContent" th:value="${guideContent}"/>
             <div id="Guide_Doc" style="margin-left: 30px"></div>
             <hr>
             <div class="row" id="document-tag-list" style="padding-left: 15px; padding-right: 15px"></div>
@@ -31,4 +32,5 @@
         </div>
     </div>
 </div>
+
 </html>

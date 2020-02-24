@@ -1,5 +1,6 @@
 package com.kakaocorp.iamguide.controller;
 
+import com.kakaocorp.iamguide.model.GuideDoc;
 import com.kakaocorp.iamguide.service.GuideDocService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,20 +33,38 @@ public class CommonController {
     }
 
     @GetMapping("/admin")
-    public String adminPage(Authentication auth) {
-        logger.info("adminPage {}", auth.getName());
-        return "/admin";
+    public ModelAndView adminPage(Authentication auth, ModelAndView model) {
+
+        String docKey = guideDocService.selectMain("2");
+        if (docKey == null) {
+            docKey = guideDocService.selectMain("1");
+        }
+        model.setViewName("admin-document");
+
+        GuideDoc guideDoc = guideDocService.retrieveGuideDoc(docKey);
+        model.addObject("selected", docKey);
+        model.addObject("guideTitle", guideDoc.getText());
+        model.addObject("guideContent", guideDoc.getContent());
+        logger.info("adminMainPage {}", auth.getName());
+        return model;
     }
 
     @GetMapping("/guide")
     public ModelAndView guideMainPage(Authentication auth, ModelAndView model) {
+
         String docKey = guideDocService.selectMain("2");
-        if(docKey == null) {
+        if (docKey == null) {
             docKey = guideDocService.selectMain("1");
         }
         model.setViewName("guide-document");
+
+        GuideDoc guideDoc = guideDocService.retrieveGuideDoc(docKey);
         model.addObject("selected", docKey);
+        model.addObject("guideTitle", guideDoc.getText());
+        model.addObject("guideContent", guideDoc.getContent());
         logger.info("guideMainPage {}", auth.getName());
         return model;
     }
+
+
 }

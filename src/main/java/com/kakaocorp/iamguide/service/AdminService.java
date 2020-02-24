@@ -1,6 +1,7 @@
 package com.kakaocorp.iamguide.service;
 
 import com.daum.mis.remote.client.HelloIdentityServiceClient;
+import com.daum.mis.remote.client.model.IdentityPersonInfo;
 import com.kakaocorp.iamguide.controller.CommonController;
 import com.kakaocorp.iamguide.dao.AdminMapper;
 import com.kakaocorp.iamguide.model.Admin;
@@ -25,7 +26,7 @@ public class AdminService {
     }
 
     @Cacheable(cacheNames = "misCache", key = "#accountId")
-    public List suggest(String accountId) throws Exception {
+    public List<IdentityPersonInfo> suggest(String accountId) throws Exception {
         HelloIdentityServiceClient client = HelloIdentityServiceClient.getHelloIdentityServiceClient();
         return client.getMembersByName(accountId);
     }
