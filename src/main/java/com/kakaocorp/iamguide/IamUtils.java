@@ -1,5 +1,6 @@
 package com.kakaocorp.iamguide;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 
 import java.sql.Timestamp;
@@ -8,6 +9,9 @@ import java.util.Date;
 import java.util.UUID;
 
 public class IamUtils {
+
+
+
     public static String getTenthPath(String serviceId, String originalName, Authentication auth){
         Date now = new Date();
         return String.format("/%s/%s/%s/%s_%d",

@@ -2,14 +2,20 @@ package com.kakaocorp.iamguide.service;
 
 import com.kakaocorp.iamguide.dao.GuideDirMapper;
 import com.kakaocorp.iamguide.model.GuideDoc;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 @Service
 public class GuideDirService {
-    @Autowired
-    private GuideDirMapper guideDirMapper;
+
+    private final GuideDirMapper guideDirMapper;
+
+    public GuideDirService(GuideDirMapper guideDirMapper) {
+        this.guideDirMapper = guideDirMapper;
+    }
+
 
     @CacheEvict(cacheNames = "treeCache", allEntries = true)
     public String createGuideDir(GuideDoc guideDoc) {

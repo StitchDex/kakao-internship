@@ -3,6 +3,7 @@ package com.kakaocorp.iamguide.service;
 import com.kakaocorp.iamguide.IamUtils;
 import com.kakaocorp.iamguide.dao.GuideDocMapper;
 import com.kakaocorp.iamguide.model.GuideDoc;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,13 @@ import java.util.List;
 
 @Service
 public class GuideDocService {
-    private Logger logger = LoggerFactory.getLogger(GuideDocService.class);
 
-    @Autowired
-    GuideDocMapper guideDocMapper;
+    private final GuideDocMapper guideDocMapper;
+
+    public GuideDocService(GuideDocMapper guideDocMapper) {
+        this.guideDocMapper = guideDocMapper;
+    }
+
 
     public String selectMain(String state) {
         return guideDocMapper.selectMain(state);

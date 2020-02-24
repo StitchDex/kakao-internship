@@ -29,13 +29,16 @@ public class GuideController {
 
     private Logger logger = LoggerFactory.getLogger(GuideController.class);
 
-    @Autowired
-    private GuideDocService guideDocService;
-    @Autowired
-    private GuideTagService guideTagService;
-    @Autowired
-    private GuideUpdateService guideUpdateService;
+    private final GuideDocService guideDocService;
+    private final GuideTagService guideTagService;
+    private final GuideUpdateService guideUpdateService;
 
+    @Autowired
+    public GuideController(GuideDocService guideDocService, GuideTagService guideTagService, GuideUpdateService guideUpdateService) {
+        this.guideDocService = guideDocService;
+        this.guideTagService = guideTagService;
+        this.guideUpdateService = guideUpdateService;
+    }
 
     @GetMapping(value = "tree", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
@@ -44,17 +47,17 @@ public class GuideController {
     }
 
     @GetMapping("document")
-    public String guideDocumentPage(HttpServletResponse res, @RequestParam("doc_key") String docKey, Model model) throws NullPointerException, IOException {
+    public String guideDocumentPage(HttpServletResponse res, @RequestParam("doc_key") String docKey, Model model) throws IOException{
+
         GuideDoc guideDoc = guideDocService.retrieveGuideDoc(docKey);
-        model.addAttribute("selected", docKey);
-        try {
-            model.addAttribute("guideTitle", guideDoc.getText());
-            model.addAttribute("guideContent", guideDoc.getContent());
-        }
-        catch (Exception e){
-            logger.info("{} not found",docKey);
+
+        if (guideDoc == null || guideDoc.getState() == 0) {
             res.sendError(404);
+            return "guide-document";
         }
+        model.addAttribute("selected", docKey);
+        model.addAttribute("guideTitle", guideDoc.getText());
+        model.addAttribute("guideContent", guideDoc.getContent());
         return "guide-document";
     }
 

@@ -30,18 +30,22 @@ public class AdminController {
 
     private Logger logger = LoggerFactory.getLogger(AdminController.class);
 
+    private final AdminService adminService;
+    private final GuideDocService guideDocService;
+    private final GuideUpdateService guideUpdateService;
+    private final GuideTagService guideTagService;
+    private final GuideDirService guideDirService;
+    private final UploadService uploadService;
+
     @Autowired
-    private AdminService adminService;
-    @Autowired
-    private GuideDocService guideDocService;
-    @Autowired
-    private GuideUpdateService guideUpdateService;
-    @Autowired
-    private GuideTagService guideTagService;
-    @Autowired
-    private GuideDirService guideDirService;
-    @Autowired
-    private UploadService uploadService;
+    public AdminController(AdminService adminService, GuideDocService guideDocService, GuideUpdateService guideUpdateService, GuideTagService guideTagService, GuideDirService guideDirService, UploadService uploadService) {
+        this.adminService = adminService;
+        this.guideDocService = guideDocService;
+        this.guideUpdateService = guideUpdateService;
+        this.guideTagService = guideTagService;
+        this.guideDirService = guideDirService;
+        this.uploadService = uploadService;
+    }
 
     @GetMapping("document")
     public String guideDocumentPage(HttpServletResponse res, @RequestParam("doc_key") String docKey, Model model) throws NullPointerException, IOException {
@@ -50,9 +54,8 @@ public class AdminController {
         try {
             model.addAttribute("guideTitle", guideDoc.getText());
             model.addAttribute("guideContent", guideDoc.getContent());
-        }
-        catch (Exception e){
-            logger.info("{} not found",docKey);
+        } catch (Exception e) {
+            logger.info("{} not found", docKey);
             res.sendError(404);
         }
         return "admin-document";
@@ -99,8 +102,7 @@ public class AdminController {
                 }
                 listSize--;
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -119,8 +121,7 @@ public class AdminController {
             } else {
                 guideDirService.deleteGuideDir(key);
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }

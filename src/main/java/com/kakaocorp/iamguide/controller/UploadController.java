@@ -22,8 +22,13 @@ public class UploadController {
 
     private Logger logger = LoggerFactory.getLogger(UploadController.class);
 
+    private final UploadService uploadService;
+
     @Autowired
-    private UploadService uploadService;
+    public UploadController(UploadService uploadService) {
+        this.uploadService = uploadService;
+    }
+
 
     @RequestMapping(value = "admin/imageupload", method = RequestMethod.POST)
     public void imageUpload(Authentication auth, HttpServletResponse response, @RequestParam("upload") MultipartFile upload) throws IOException, JSONException {

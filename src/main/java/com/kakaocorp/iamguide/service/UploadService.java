@@ -5,6 +5,7 @@ import com.kakaocorp.iamguide.IamUtils;
 import com.kakaocorp.iamguide.controller.CommonController;
 import com.kakaocorp.iamguide.dao.UploadMapper;
 import com.kakaocorp.iamguide.model.Image;
+import lombok.RequiredArgsConstructor;
 import net.daum.tenth2.Tenth2File;
 import net.daum.tenth2.Tenth2OutputStream;
 import net.daum.tenth2.util.Tenth2Util;
@@ -28,19 +29,15 @@ import java.util.*;
 
 
 @Service
+@RequiredArgsConstructor
 public class UploadService {
-
-    private Logger logger = LoggerFactory.getLogger(UploadService.class);
-
-    @Autowired
-    private TransactionTemplate txTemplate;
 
     @Value("${tenth.serviece.name}")
     private String serviceId;
 
-    @Autowired
-    private UploadMapper uploadMapper;
+    private Logger logger = LoggerFactory.getLogger(UploadService.class);
 
+    private final UploadMapper uploadMapper;
 
     public JSONObject createImage(MultipartFile upload, Authentication auth) throws IOException, JSONException {
         final String PREFIX = "/get_image/";

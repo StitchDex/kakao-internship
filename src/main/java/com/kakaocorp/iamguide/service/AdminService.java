@@ -5,6 +5,7 @@ import com.daum.mis.remote.client.model.IdentityPersonInfo;
 import com.kakaocorp.iamguide.controller.CommonController;
 import com.kakaocorp.iamguide.dao.AdminMapper;
 import com.kakaocorp.iamguide.model.Admin;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,13 @@ import java.util.List;
 
 @Service
 public class AdminService {
-    private Logger logger = LoggerFactory.getLogger(AdminService.class);
 
-    @Autowired
-    private AdminMapper adminMapper;
+    private final AdminMapper adminMapper;
+
+    public AdminService(AdminMapper adminMapper) {
+        this.adminMapper = adminMapper;
+    }
+
 
     public String isAdmin(String username) throws Exception {
         return adminMapper.isAdmin(username);

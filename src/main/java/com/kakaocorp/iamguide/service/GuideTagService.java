@@ -3,6 +3,7 @@ package com.kakaocorp.iamguide.service;
 import com.kakaocorp.iamguide.dao.GuideTagMapper;
 import com.kakaocorp.iamguide.model.GuideDoc;
 import com.kakaocorp.iamguide.model.GuideTag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -14,8 +15,13 @@ import java.util.List;
 
 @Service
 public class GuideTagService {
-    @Autowired
-    private GuideTagMapper guideTagMapper;
+
+    private final GuideTagMapper guideTagMapper;
+
+    public GuideTagService(GuideTagMapper guideTagMapper) {
+        this.guideTagMapper = guideTagMapper;
+    }
+
 
     public List<GuideDoc> retrieveGuideList(String tag, String pathName) {
         return guideTagMapper.retrieveGuideList(tag, pathName);
@@ -32,7 +38,7 @@ public class GuideTagService {
 
     @CacheEvict(value = "tagCache", allEntries = true)
     public void updateGuideTag(Object tags) {
-        HashMap<String,Object> temp = (HashMap<String,Object>) tags;
+        HashMap<String, Object> temp = (HashMap<String, Object>) tags;
         String id = (String) temp.get("doc_key");
         ArrayList<String> insert = (ArrayList<String>) temp.get("insert");
         ArrayList<String> delete = (ArrayList<String>) temp.get("delete");

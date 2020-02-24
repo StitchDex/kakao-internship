@@ -16,8 +16,12 @@ public class CommonController {
 
     private Logger logger = LoggerFactory.getLogger(CommonController.class);
 
+    private final GuideDocService guideDocService;
+
     @Autowired
-    GuideDocService guideDocService;
+    public CommonController(GuideDocService guideDocService) {
+        this.guideDocService = guideDocService;
+    }
 
     @GetMapping("/")
     public String indexPage(Authentication auth) {

@@ -3,6 +3,7 @@ package com.kakaocorp.iamguide.service;
 import com.kakaocorp.iamguide.IamUtils;
 import com.kakaocorp.iamguide.dao.GuideUpdateMapper;
 import com.kakaocorp.iamguide.model.GuideUpdate;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,9 +11,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class GuideUpdateService {
 
-    @Autowired
-    private GuideUpdateMapper guideUpdateMapper;
-    
+    private final GuideUpdateMapper guideUpdateMapper;
+
+    public GuideUpdateService(GuideUpdateMapper guideUpdateMapper) {
+        this.guideUpdateMapper = guideUpdateMapper;
+    }
+
+
     public String retrieveGuideUpdate(String DOCUMENT_KEY) {
 
         GuideUpdate temp = guideUpdateMapper.retrieveGuideUpdate(DOCUMENT_KEY);
